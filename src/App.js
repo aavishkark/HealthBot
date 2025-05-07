@@ -4,9 +4,9 @@ import { MainRoutes } from './Components/MainRoutes';
 
 function App() {
   return (
-    <div className="App">
-      <MainRoutes />
-    </div>
+      <div className="App">
+        <MainRoutes />
+      </div>
   );
 }
 
