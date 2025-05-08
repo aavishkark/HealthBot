@@ -3,14 +3,15 @@ import { Login } from "../Pages/Login/Login";
 import { Signup } from "../Pages/Signup/Signup";
 import { Profile } from "../Pages/Profile";
 import { Home } from "../Pages/Home";
+import { PrivateRoute } from "./PrivateRoute";
 
 export const MainRoutes = () => {
   return (
     <Routes>
-        <Route path="/" element={<Home/>} />
+        <Route path="/" element={<PrivateRoute><Home/></PrivateRoute>} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<PrivateRoute> <Profile /> </PrivateRoute>} />
     </Routes>
   );
 }

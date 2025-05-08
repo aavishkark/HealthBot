@@ -1,7 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
+import { useDispatch} from 'react-redux';
+import { LOGIN_SUCCESS } from "../../Redux/Login/actionType";
 export const Login = () => {
 
+    const dispatch = useDispatch();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
@@ -10,9 +13,10 @@ export const Login = () => {
         const user = { email, password };
         axios.post('https://healthbotbackend.onrender.com/login', user)
         .then((response) => {
-            console.log(response.data.msg);
             if (response.data.msg === "Login Successfull") { 
                 localStorage.setItem("token", response.data.token);
+                dispatch({ type: LOGIN_SUCCESS });
+                localStorage.setItem("isAuth", true);
                 alert("Login successful! Redirecting to dashboard.");
                 window.location.href = '/';
             } else {
