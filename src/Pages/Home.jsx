@@ -35,7 +35,7 @@ export const Home = () => {
   }
 
   const addCalories = () => {
-    const calories = response.split(' ')[0]; // Assuming the first word is the calorie count
+    const calories = response.split(' ')[0];
     fetch('https://healthbotbackend.onrender.com/addcalories', {
       method: 'POST',
       headers: {
