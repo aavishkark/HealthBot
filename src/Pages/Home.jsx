@@ -46,7 +46,6 @@ export const Home = () => {
     })
     .then(res => res.json())
     .then(data => {
-      console.log(data);
       alert('Calories added successfully!');
     })
     .catch(err => {
