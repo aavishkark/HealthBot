@@ -1,7 +1,8 @@
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch} from 'react-redux';
 import { LOGOUT } from '../Redux/Login/actionType';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 export const Home = () => {
   const dispatch = useDispatch();
   const [input, setInput] = useState('');
@@ -15,17 +16,21 @@ export const Home = () => {
     setResponse('');
 
     try {
-      const res = await fetch('https://healthbotbackend.onrender.com/query', {
-        method: 'POST',
+       await axios.post('https://healthbotbackend.onrender.com/query', {
+        query: input,
+      }, {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ query: input }),
+      })
+      .then((response) => {
+        const data = response.data;
+        setResponse(data.reply || 'No response.');
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+        setResponse('Error fetching data.');
       });
-
-      const data = await res.json();
-      setResponse(data.reply || 'No response.');
-      console.log(data.reply);
     } catch (err) {
       console.error(err);
       setResponse('Error fetching data.');
@@ -34,24 +39,34 @@ export const Home = () => {
     }
   }
 
-  const addCalories = () => {
+  async function addCalories () {
     const calories = response.split(' ')[0];
-    fetch('https://healthbotbackend.onrender.com/addcalories', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-      },
-      body: JSON.stringify({ calories }),
+    const email = localStorage.getItem('email');
+    try{
+     await axios.post('https://healthbotbackend.onrender.com/addcalories', {
+        calories,
+        email:email,
+        query: input
+    },
+    {
+        headers: {
+          'Content-Type': 'application/json',
+        }, 
     })
-    .then(res => res.json())
-    .then(data => {
+    .then((response) => {
       alert('Calories added successfully!');
+      setInput('');
+      setResponse('');
     })
     .catch(err => {
       console.error(err);
       alert('Error adding calories.');
     });
+  }
+  catch (err) {
+    console.error(err);
+    alert('Error adding calories.');
+    }
   }
 
   const handleLogout = () => {
