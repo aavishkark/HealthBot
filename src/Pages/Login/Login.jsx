@@ -17,6 +17,7 @@ export const Login = () => {
                 localStorage.setItem("token", response.data.token);
                 dispatch({ type: LOGIN_SUCCESS });
                 localStorage.setItem("isAuth", true);
+                localStorage.setItem("email", email);
                 alert("Login successful! Redirecting to dashboard.");
                 window.location.href = '/';
             } else {
