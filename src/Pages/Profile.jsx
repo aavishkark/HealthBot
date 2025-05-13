@@ -6,6 +6,7 @@ import CalCalendar from "../Components/CaloriesCalender/CalCalender";
 export const Profile =() =>{
     const [calories, setCalories] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedDate, setSelectedDate] = useState(null);
     const email= localStorage.getItem("email");
     useEffect(() => {
         axios.get(`https://healthbotbackend.onrender.com/getProfile`, {
@@ -21,7 +22,7 @@ export const Profile =() =>{
         .catch((error) => {
             console.error("Error fetching user data:", error);
         }); 
-    }, []);
+    }, [email]);
 
     const groupedCalories = useMemo(() => {
   return calories.reduce((acc, entry) => {
@@ -32,8 +33,13 @@ export const Profile =() =>{
   }, {});
 }, [calories]);
 
+const selectedDayEntries = selectedDate
+  ? calories.filter(entry => 
+      new Date(entry.timestamp).toDateString() === new Date(selectedDate).toDateString()
+    )
+  : [];
 
-    console.log(groupedCalories);
+     console.log(selectedDate);
 
     if (loading) return <p>Loading...</p>;
 
@@ -54,7 +60,24 @@ export const Profile =() =>{
       </ul>
     )}
   </div>
-  <CalCalendar calories={calories} />
+  <CalCalendar calories={calories} onDateClick={(date) => setSelectedDate(date)} />
+    {selectedDate && (
+  <div className="selected-day-entries">
+    <h3>Entries for {new Date(selectedDate).toDateString()}</h3>
+    {selectedDayEntries.length === 0 ? (
+      <p>No entries found.</p>
+    ) : (
+      <ul>
+        {selectedDayEntries.map(entry => (
+          <li key={entry._id}>
+            <strong>{entry.query}</strong>: {entry.calories} kcal at{" "}
+            {new Date(entry.timestamp).toLocaleTimeString()}
+          </li>
+        ))}
+      </ul>
+    )}
+  </div>
+)}
   </>
   );
 }

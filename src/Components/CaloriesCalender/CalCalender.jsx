@@ -1,10 +1,10 @@
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useState } from 'react';
+import './calcalender.css';
 
-function CalorieCalendar({ calories }) {
+function CalorieCalendar({ calories, onDateClick }) {
   const [value, setValue] = useState(new Date());
-  console.log(calories);
 
   const groupedCalories = calories.reduce((acc, entry) => {
     const date = new Date(entry.timestamp).toDateString();
@@ -28,16 +28,24 @@ function CalorieCalendar({ calories }) {
     return null;
   };
 
+  const handleDateChange = (date) => {
+    setValue(date);
+    if (onDateClick) {
+      onDateClick(date); 
+    }
+  };
+
   return (
     <div style={{ maxWidth: 500, margin: '0 auto' }}>
       <h2 style={{ textAlign: 'center' }}>Calorie Calendar</h2>
       <Calendar
-        onChange={setValue}
+        onChange={handleDateChange}
         value={value}
         tileContent={tileContent}
       />
     </div>
   );
 }
+
 
 export default CalorieCalendar;
