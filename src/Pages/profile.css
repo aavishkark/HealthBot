@@ -1,0 +1,46 @@
+.calorie-history-container {
+  max-width: 600px;
+  margin: 40px auto;
+  background-color: #f9f9f9;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.calorie-history-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 8px;
+}
+
+.calorie-history-container ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.calorie-history-container li {
+  padding: 12px 15px;
+  margin-bottom: 10px;
+  background-color: #ffffff;
+  border-left: 5px solid #4caf50;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s;
+}
+
+.calorie-history-container li:hover {
+  background-color: #f0fef5;
+}
+
+.calorie-history-container strong {
+  color: #2e7d32;
+}
+
+.calorie-history-container p {
+  font-size: 16px;
+  color: #666;
+}
