@@ -7,6 +7,7 @@ export const Profile =() =>{
     const [calories, setCalories] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(null);
+    const [selectMode, setSelectMode] = useState(0);
     const email= localStorage.getItem("email");
     useEffect(() => {
         axios.get(`https://healthbotbackend.onrender.com/getProfile`, {
@@ -39,13 +40,25 @@ const selectedDayEntries = selectedDate
     )
   : [];
 
-     console.log(selectedDate);
+  const changeMode = (mode) => {
+    console.log(calories);
 
+    if(mode === 0){
+      setSelectMode(1);
+    }
+    else if(mode === 1){
+      setSelectMode(2);
+    }
+    else if(mode === 2){
+      setSelectMode(0);
+    }  
+  }
     if (loading) return <p>Loading...</p>;
 
   return (
     <>
   <div className="calorie-history-container">
+    <button onClick={()=>{changeMode(selectMode)}}>{selectMode}</button>
   <h2>Your Calorie History</h2>
     {calories.length === 0 ? (
       <p>No records found.</p>
