@@ -41,7 +41,6 @@ const selectedDayEntries = selectedDate
   : [];
 
   const changeMode = (mode) => {
-    console.log(calories);
 
     if(mode === 0){
       setSelectMode(1);
