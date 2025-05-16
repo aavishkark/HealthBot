@@ -40,7 +40,6 @@ export const Home = () => {
   }
 
   async function addCalories () {
-    console.log(response)
     const newResponse = response.replace(' calories in', '');
     const resArray = newResponse.split(' ');
     const calories = resArray[0];
@@ -54,7 +53,6 @@ export const Home = () => {
         foodAmount,
         foodItem,
         email:email,
-        query: input
     },
     {
         headers: {

@@ -101,7 +101,7 @@ const selectedDayEntries = selectedDate
       <ul>
         {modeBasedEntries.map((entry) => (
           <li key={entry._id}>
-            <strong>{entry.query}</strong>: {entry.calories} kcal on{" "}
+            <strong>{entry.foodAmount}{" "}{entry.foodItem}</strong>: {entry.calories} kcal on{" "}
             {new Date(entry.timestamp).toLocaleString()}
           </li>
         ))}
@@ -118,8 +118,8 @@ const selectedDayEntries = selectedDate
       <ul>
         {selectedDayEntries.map(entry => (
           <li key={entry._id}>
-            <strong>{entry.query}</strong>: {entry.calories} kcal at{" "}
-            {new Date(entry.timestamp).toLocaleTimeString()}
+            <strong>{entry.foodAmount}{" "}{entry.foodItem}</strong>: {entry.calories} kcal on{" "}
+            {new Date(entry.timestamp).toLocaleString()}
           </li>
         ))}
       </ul>
