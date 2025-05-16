@@ -40,11 +40,19 @@ export const Home = () => {
   }
 
   async function addCalories () {
-    const calories = response.split(' ')[0];
+    console.log(response)
+    const newResponse = response.replace(' calories in', '');
+    const resArray = newResponse.split(' ');
+    const calories = resArray[0];
+    const foodAmount = resArray[1];
+    const foodItem = resArray[2];
+
     const email = localStorage.getItem('email');
     try{
      await axios.post('https://healthbotbackend.onrender.com/addcalories', {
         calories,
+        foodAmount,
+        foodItem,
         email:email,
         query: input
     },
