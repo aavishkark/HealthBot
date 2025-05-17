@@ -113,9 +113,7 @@ export const Home = () => {
             )}
           </div>
           <div>
-            <button onClick={handleLogout} className="bg-blue-500 text-white rounded p-2 hover:bg-blue-600 transition mt-4">
-              Logout
-            </button>
+            
           </div>
     </div>
     )
