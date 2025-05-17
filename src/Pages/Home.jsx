@@ -1,15 +1,14 @@
-import { useState } from 'react';
-import { useDispatch} from 'react-redux';
-import { LOGOUT } from '../Redux/Login/actionType';
-import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 export const Home = () => {
-  const dispatch = useDispatch();
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [calories, setCalories] = useState('');
+  const [foodItem, setFoodItem] = useState('');
+  const [foodAmount, setFoodAmount] = useState('');
   const [mode, setMode] = useState('bot');
-  const navigate = useNavigate();
+
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -76,19 +75,29 @@ export const Home = () => {
     }
   }
 
-  const handleLogout = () => {
-    dispatch({ type: LOGOUT });
-    localStorage.setItem('isAuth', false);
-    localStorage.removeItem('token');
-    navigate('/login');
+  const switchMode = () => {
+    const caloriebot = document.querySelector('.calorie-bot');
+    const manual = document.querySelector('.manual');
+    if (mode === 'bot') {
+      setMode('manual');
+      caloriebot.style.display = 'none';
+      manual.style.display = 'block';
+    } else {
+      setMode('bot');
+      caloriebot.style.display = 'block';
+      manual.style.display = 'none';
+    }
   }
+  useEffect(() => {
+    const manual = document.querySelector('.manual');
+    manual.style.display = 'none';
+  }, []);
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-8">
-          <h1 className="text-2xl font-bold mb-6">🍎 Calorie Bot</h1>
-
-          <form onSubmit={handleSubmit} className="w-full max-w-md flex flex-col gap-4">
+      <>
+        <div className="calorie-bot">
+          <h1>🍎 Calorie Bot</h1>
+          <form onSubmit={handleSubmit}>
             <input
-              className="border rounded p-2 w-full"
               type="text"
               value={input}
               placeholder="e.g., How many calories in a banana?"
@@ -97,24 +106,50 @@ export const Home = () => {
             />
             <button
               type="submit"
-              className="bg-blue-500 text-white rounded p-2 hover:bg-blue-600 transition"
               disabled={loading}
             >
               {loading ? 'Thinking...' : 'Ask'}
             </button>
           </form>
 
-          <div className="mt-6 w-full max-w-md">
+          <div>
             {response && (
-              <div className="border rounded p-4">
+              <div>
                 <strong>Bot:</strong> {response}
                 <button onClick={addCalories}>Add</button>
               </div>
             )}
           </div>
-          <div>
-            
+        </div>
+        <div className='manual'>
+            <input
+              type="number"
+              value={calories}
+              placeholder="Enter calories"
+              onChange={(e) => setCalories(e.target.value)}
+              required
+            /><br />
+            <input
+              type="text"
+              value={foodItem}
+              placeholder="Enter food item"
+              onChange={(e) => setFoodItem(e.target.value)}
+              required
+              /><br />
+            <input
+              type="text"
+              value={foodAmount}
+              placeholder="Enter food amount"
+              onChange={(e) => setFoodAmount(e.target.value)}
+              required
+              /><br />
+            <button onClick={addCalories}>Add Calories</button>
           </div>
-    </div>
+          <div>
+            <button onClick={switchMode} className="switch-mode">
+              Switch
+            </button>
+          </div>
+        </>
     )
 }
