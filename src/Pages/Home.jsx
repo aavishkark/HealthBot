@@ -8,6 +8,7 @@ export const Home = () => {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
+  const [mode, setMode] = useState('bot');
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
