@@ -40,18 +40,19 @@ export const Home = () => {
   }
 
   async function addCalories () {
-    const newResponse = response.replace(' calories in', '');
-    const resArray = newResponse.split(' ');
-    const calories = resArray[0];
-    const foodAmount = resArray[1];
-    const foodItem = resArray[2];
+    
+      const newResponse = response.replace(' calories in', '');
+      const resArray = newResponse.split(' ');
+      const cal = resArray[0];
+      const amount = resArray[1];
+      const item = resArray[2];
 
     const email = localStorage.getItem('email');
     try{
      await axios.post('https://healthbotbackend.onrender.com/addcalories', {
-        calories,
-        foodAmount,
-        foodItem,
+        calories:mode === "bot" ? cal : calories,
+        foodAmount:mode === "manual" ? foodAmount + 'g' : amount,
+        foodItem:mode === "bot" ? item : foodItem,
         email:email,
     },
     {
@@ -63,6 +64,9 @@ export const Home = () => {
       alert('Calories added successfully!');
       setInput('');
       setResponse('');
+      setCalories('');
+      setFoodAmount('');
+      setFoodItem('');
     })
     .catch(err => {
       console.error(err);
@@ -87,6 +91,7 @@ export const Home = () => {
       caloriebot.style.display = 'block';
       manual.style.display = 'none';
     }
+    console.log(calories,foodAmount,foodItem,mode)
   }
   useEffect(() => {
     const manual = document.querySelector('.manual');
