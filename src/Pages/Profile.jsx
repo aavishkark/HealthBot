@@ -9,6 +9,8 @@ export const Profile =() =>{
     const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
     const [selectMode, setSelectMode] = useState(0);
     const [modeBasedEntries, setModeBasedEntries] = useState([]);
+    const [userProfile, setuserProfile] = useState();
+    const [userBmi, setuserbmi] = useState();
     const email= localStorage.getItem("email");
     const [modeName, setModeName] = useState("Today");
     useEffect(() => {
@@ -20,6 +22,7 @@ export const Profile =() =>{
         })
         .then((response) => {
             const userCalories = response.data.user.calories;
+            setuserProfile(response.data.user)
             setCalories(userCalories);
             const today = new Date().getDate();
             const filtered = userCalories.filter(entry => new Date(entry.timestamp).getDate() === today);
@@ -88,10 +91,38 @@ const selectedDayEntries = selectedDate
       setModeName("Today");
     }    
   }
+
+  const heightinmeters = userProfile.height/100;
+  const bmi = userProfile.weight / heightinmeters * heightinmeters;
+  setuserbmi(bmi);
+
     if (loading) return <p>Loading...</p>;
 
   return (
     <>
+    <div>
+      <h2>User Information</h2>
+      <div>
+        <label>Name</label>
+        <div>{userProfile.name}</div><br/>
+      </div>
+      <div>
+        <label>Height</label>
+        <div>{userProfile.height}</div><br/>
+      </div>
+      <div>
+        <label>Weight</label>
+        <div>{userProfile.weight}</div><br/>
+      </div>
+      <div>
+        <label>Age</label>
+        <div>{userProfile.age}</div><br/>
+      </div>
+      <div>
+        <label>BMI</label>
+        <div>{userBmi}</div><br/>
+      </div>
+    </div>
   <div className="calorie-history-container">
     <button onClick={()=>{changeMode(selectMode)}}>{modeName}</button>
   <h2>Your Calorie History</h2>
