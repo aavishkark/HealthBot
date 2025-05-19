@@ -22,7 +22,7 @@ export const Profile =() =>{
         })
         .then((response) => {
             const userCalories = response.data.user.calories;
-            setuserProfile(response.data.user)
+            setuserProfile(response.data.user);
             setCalories(userCalories);
             const today = new Date().getDate();
             const filtered = userCalories.filter(entry => new Date(entry.timestamp).getDate() === today);
@@ -63,6 +63,10 @@ export const Profile =() =>{
           setModeBasedEntries(calories);
         }
       });
+
+      const heightinmeters = userProfile.height / 100;
+      const bmi = userProfile.weight / (heightinmeters * heightinmeters);
+      setuserbmi(bmi.toFixed(2));
         
     }, [selectMode, calories]);
 
@@ -92,9 +96,9 @@ const selectedDayEntries = selectedDate
     }    
   }
 
-  const heightinmeters = userProfile.height/100;
-  const bmi = userProfile.weight / heightinmeters * heightinmeters;
-  setuserbmi(bmi);
+  console.log(userProfile);
+
+   
 
     if (loading) return <p>Loading...</p>;
 
