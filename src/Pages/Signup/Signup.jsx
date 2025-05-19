@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const Signup = () => {
-    const [username, setUsername] = useState('');
+    const [name, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [age, setAge] = useState('');
@@ -14,7 +14,7 @@ export const Signup = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const user = { username, email, password, height, weight, age, gender };
+        const user = { name, email, password, height, weight, age, gender };
         axios.post('https://healthbotbackend.onrender.com/signup', user)
         .then((response) => {
             alert("Signup successful! Please login to continue.");
@@ -29,7 +29,7 @@ export const Signup = () => {
             <h1>Signup</h1>
             <p>Please enter your credentials to signup.</p>
             <label htmlFor="username">Name:</label><br />
-            <input type="text" id="username" placeholder="Your Username" onChange={(e)=>{setUsername(e.target.value)}} value={username}/><br />
+            <input type="text" id="username" placeholder="Your Username" onChange={(e)=>{setUsername(e.target.value)}} value={name}/><br />
             <label htmlFor="age">Age:</label><br/>
             <input type="number" id="age" placeholder="Your Age" onChange={(e)=>{setAge(e.target.value)}} value={age}/><br />
             <label htmlFor="height">Height:</label><br/>
