@@ -13,8 +13,9 @@ export const Profile =() =>{
     const [userBmi, setuserbmi] = useState();
     const email= localStorage.getItem("email");
     const [modeName, setModeName] = useState("Today");
+    const [requiredcalories, setRequiredcalories] = useState('')
     useEffect(() => {
-        axios.get(`https://healthbotbackend.onrender.com/getProfile`, {
+        axios.get(`https://healthbotbackend-production.up.railway.app/getProfile`, {
             params: { email },
             headers: {
                 'Content-Type': 'application/json',
@@ -64,10 +65,6 @@ export const Profile =() =>{
         }
       });
 
-      const heightinmeters = userProfile.height / 100;
-      const bmi = userProfile.weight / (heightinmeters * heightinmeters);
-      setuserbmi(bmi.toFixed(2));
-        
     }, [selectMode, calories]);
 
 const selectedDayEntries = selectedDate
@@ -96,10 +93,19 @@ const selectedDayEntries = selectedDate
     }    
   }
 
-  console.log(userProfile);
+  useEffect(() => {
+  if (userProfile) {
+    const heightInMeters = userProfile.height / 100;
+    const bmi = userProfile.weight / (heightInMeters * heightInMeters);
+    setuserbmi(bmi.toFixed(2));
 
-   
-
+    const bmr = (10 * userProfile.weight) + (6.25 * userProfile.height) - (5 * userProfile.age) + (userProfile.gender === "Male" ? +5 : -162);
+    console.log(bmr);
+    const tdee = bmr * userProfile.activitylevel ;
+    setRequiredcalories(tdee.toFixed(0))
+  }
+}, [userProfile]);
+      
     if (loading) return <p>Loading...</p>;
 
   return (
@@ -126,6 +132,10 @@ const selectedDayEntries = selectedDate
         <label>BMI</label>
         <div>{userBmi}</div><br/>
       </div>
+      <div>
+        <label>Required calories</label>
+        <div>{requiredcalories}</div><br/>
+      </div>
     </div>
   <div className="calorie-history-container">
     <button onClick={()=>{changeMode(selectMode)}}>{modeName}</button>
@@ -143,7 +153,7 @@ const selectedDayEntries = selectedDate
       </ul>
     )}
   </div>
-  <CalCalendar calories={calories} onDateClick={(date) => setSelectedDate(date)} />
+  <CalCalendar calories={calories} requiredcalories={requiredcalories} onDateClick={(date) => setSelectedDate(date)} />
     {selectedDate && (
   <div className="selected-day-entries">
     <h3>Entries for {new Date(selectedDate).toDateString()}</h3>
