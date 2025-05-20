@@ -16,7 +16,7 @@ export const Home = () => {
     setResponse('');
 
     try {
-       await axios.post('https://healthbotbackend.onrender.com/query', {
+       await axios.post('https://healthbotbackend-production.up.railway.app/query', {
         query: input,
       }, {
         headers: {
@@ -49,7 +49,7 @@ export const Home = () => {
 
     const email = localStorage.getItem('email');
     try{
-     await axios.post('https://healthbotbackend.onrender.com/addcalories', {
+     await axios.post('https://healthbotbackend-production.up.railway.app/addcalories', {
         calories:mode === "bot" ? cal : calories,
         foodAmount:mode === "manual" ? foodAmount + 'g' : amount,
         foodItem:mode === "bot" ? item : foodItem,
