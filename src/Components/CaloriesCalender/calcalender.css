@@ -4,5 +4,6 @@
   padding: 10px;
 }
 .react-calendar__tile--active{
-    background-color: black;
+    background-color: rgb(255, 255, 255);
+    color: black;
 }
