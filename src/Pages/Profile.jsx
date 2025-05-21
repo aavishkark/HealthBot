@@ -76,7 +76,6 @@ export const Profile =() =>{
         else if (selectMode === 3) {
           setModeBasedEntries(calories);
         }
-        const weekarr=[0,1,2,3,4,5,6];
 
 const caloriesPerDay = new Array(7).fill(0);
 
