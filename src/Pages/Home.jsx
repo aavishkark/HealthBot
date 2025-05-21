@@ -1,5 +1,28 @@
 import { useEffect, useState } from 'react';
+import { Button, TextField } from '@mui/material';
+import Modal from '@mui/material/Modal';
 import axios from 'axios';
+import React from 'react';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Alert from '@mui/material/Alert';
+import Snackbar from '@mui/material/Snackbar';
+
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 800,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  p: 4,
+  flexGrow:1,
+  borderRadius:"10px",
+  color:"rgb(16, 46, 73)"
+};
+
 export const Home = () => {
   const [input, setInput] = useState('');
   const [response, setResponse] = useState('');
@@ -8,6 +31,12 @@ export const Home = () => {
   const [foodItem, setFoodItem] = useState('');
   const [foodAmount, setFoodAmount] = useState('');
   const [mode, setMode] = useState('bot');
+  const [open, setOpen] = useState(false);
+  const [openalert, setOpenalert] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleClosealert= () => setOpenalert(false);
+  const handleOpenalert= () => setOpenalert(true);
 
 
   async function handleSubmit(e) {
@@ -16,16 +45,17 @@ export const Home = () => {
     setResponse('');
 
     try {
-       await axios.post('https://healthbotbackend-production.up.railway.app/query', {
-        query: input,
-      }, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+          await axios.post('https://healthbotbackend-production.up.railway.app/query', {
+          query: input,
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
       })
       .then((response) => {
         const data = response.data;
         setResponse(data.reply || 'No response.');
+        handleOpen()
       })
       .catch((error) => {
         console.error('Error:', error);
@@ -41,7 +71,7 @@ export const Home = () => {
 
   async function addCalories () {
     
-      const newResponse = response.replace(' calories in', '');
+      const newResponse = response.replace(' Calories In', '');
       const resArray = newResponse.split(' ');
       const cal = resArray[0];
       const amount = resArray[1];
@@ -61,12 +91,13 @@ export const Home = () => {
         }, 
     })
     .then((response) => {
-      alert('Calories added successfully!');
       setInput('');
       setResponse('');
       setCalories('');
       setFoodAmount('');
       setFoodItem('');
+      handleOpenalert();
+      handleClose();
     })
     .catch(err => {
       console.error(err);
@@ -91,7 +122,6 @@ export const Home = () => {
       caloriebot.style.display = 'block';
       manual.style.display = 'none';
     }
-    console.log(calories,foodAmount,foodItem,mode)
   }
   useEffect(() => {
     const manual = document.querySelector('.manual');
@@ -100,31 +130,49 @@ export const Home = () => {
     return (
       <>
         <div className="calorie-bot">
-          <h1>🍎 Calorie Bot</h1>
-          <form onSubmit={handleSubmit}>
-            <input
+          <h2>Hi I am CalBot,</h2>
+          <h2>I'm Here To Make You Healthy.</h2>
+          <form onSubmit={handleSubmit} >
+            <TextField
               type="text"
               value={input}
-              placeholder="e.g., How many calories in a banana?"
+              placeholder="200g Chicken Biryani"
               onChange={(e) => setInput(e.target.value)}
               required
-            />
-            <button
+              id="outlined-required"
+              label="Ask Me"
+            /><br/>
+            <Button
               type="submit"
               disabled={loading}
             >
               {loading ? 'Thinking...' : 'Ask'}
-            </button>
+            </Button>
           </form>
 
-          <div>
-            {response && (
-              <div>
-                <strong>Bot:</strong> {response}
-                <button onClick={addCalories}>Add</button>
-              </div>
+           <div>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}>
+          {response && (
+            <Box sx={{ flexGrow: 1, fontSize:"3rem" }}>
+              <Grid container spacing={2}>
+                <Grid size={10}>
+                  {response}
+                </Grid>
+                <Grid size={2}>
+                  <Button onClick={addCalories}>Consume</Button>
+                </Grid>
+              </Grid>
+            </Box>
             )}
-          </div>
+        </Box>
+      </Modal>
+    </div>
         </div>
         <div className='manual'>
             <input
@@ -148,12 +196,17 @@ export const Home = () => {
               onChange={(e) => setFoodAmount(e.target.value)}
               required
               /><br />
-            <button onClick={addCalories}>Add Calories</button>
+            <Button onClick={addCalories}>Add Calories</Button>
           </div>
           <div>
-            <button onClick={switchMode} className="switch-mode">
+            <Button onClick={switchMode} className="switch-mode">
               Switch
-            </button>
+            </Button>
+            <Snackbar open={openalert} autoHideDuration={3000} onClose={handleClosealert}>
+              <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
+                Calories Consumed!
+              </Alert>
+            </Snackbar>
           </div>
         </>
     )

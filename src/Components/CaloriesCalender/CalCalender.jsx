@@ -1,11 +1,10 @@
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import './calcalender.css';
 
 function CalorieCalendar({ calories, onDateClick, requiredcalories }) {
   const [value, setValue] = useState(new Date());
-  const [daycolor, setDaycolor] = useState();
 
   const groupedCalories = calories.reduce((acc, entry) => {
     const date = new Date(entry.timestamp).toDateString();
