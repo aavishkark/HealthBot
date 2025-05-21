@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import './home.css';
 
 
 const style = {
@@ -175,22 +176,37 @@ export const Home = () => {
     </div>
         </div>
         <div className='manual'>
-            <input
+            <TextField 
+              id="outlined-basic" 
+              label="Enter calories" 
+              variant="outlined"
+              margin="dense"
+              fullWidth
               type="number"
               value={calories}
               placeholder="Enter calories"
               onChange={(e) => setCalories(e.target.value)}
               required
             /><br />
-            <input
+            <TextField 
+              id="outlined-basic" 
+              label="Enter food item" 
+              variant="outlined"
+              margin="dense"
               type="text"
+              fullWidth
               value={foodItem}
               placeholder="Enter food item"
               onChange={(e) => setFoodItem(e.target.value)}
               required
               /><br />
-            <input
+            <TextField 
+              id="outlined-basic" 
+              label="Enter food amount" 
+              variant="outlined"
+              margin="dense"
               type="text"
+              fullWidth
               value={foodAmount}
               placeholder="Enter food amount"
               onChange={(e) => setFoodAmount(e.target.value)}
