@@ -2,6 +2,16 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import './profile.css';
 import CalCalendar from "../Components/CaloriesCalender/CalCalender";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 
 export const Profile =() =>{
     const [calories, setCalories] = useState([]);
@@ -13,7 +23,11 @@ export const Profile =() =>{
     const [userBmi, setuserbmi] = useState();
     const email= localStorage.getItem("email");
     const [modeName, setModeName] = useState("Today");
-    const [requiredcalories, setRequiredcalories] = useState('')
+    const [requiredcalories, setRequiredcalories] = useState('');
+    const [thisWeekCalories, setthisWeekCalories] = useState([]);
+
+    ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
     useEffect(() => {
         axios.get(`https://healthbotbackend-production.up.railway.app/getProfile`, {
             params: { email },
@@ -36,10 +50,6 @@ export const Profile =() =>{
     }, [email]);
 
     useEffect(() => {
-      calories.forEach(() => {
-        if (selectMode === 0) {
-          setModeBasedEntries(calories.filter((entry) => new Date(entry.timestamp).getDate() === new Date().getDate()));
-        } else if (selectMode === 1) {
           const now = new Date();
 
           const startOfWeek = new Date(now);
@@ -50,6 +60,9 @@ export const Profile =() =>{
           endOfWeek.setDate(startOfWeek.getDate() + 6);
           endOfWeek.setHours(23, 59, 59, 999);
 
+        if (selectMode === 0) {
+          setModeBasedEntries(calories.filter((entry) => new Date(entry.timestamp).getDate() === new Date().getDate()));
+        } else if (selectMode === 1) {
           setModeBasedEntries(
             calories.filter((entry) => {
               const entryDate = new Date(entry.timestamp);
@@ -63,8 +76,19 @@ export const Profile =() =>{
         else if (selectMode === 3) {
           setModeBasedEntries(calories);
         }
-      });
+        const weekarr=[0,1,2,3,4,5,6];
 
+const caloriesPerDay = new Array(7).fill(0);
+
+calories.forEach(entry => {
+  const date = new Date(entry.timestamp);
+  const day = date.getDay();
+  const calories = parseInt(entry.calories, 10);
+  const index = (day === 0) ? 6 : day - 1;
+  caloriesPerDay[index] += calories;
+});
+
+setthisWeekCalories(caloriesPerDay)
     }, [selectMode, calories]);
 
 const selectedDayEntries = selectedDate
@@ -100,11 +124,38 @@ const selectedDayEntries = selectedDate
     setuserbmi(bmi.toFixed(2));
 
     const bmr = (10 * userProfile.weight) + (6.25 * userProfile.height) - (5 * userProfile.age) + (userProfile.gender === "Male" ? +5 : -162);
-    console.log(bmr);
     const tdee = bmr * userProfile.activitylevel ;
     setRequiredcalories(tdee.toFixed(0))
   }
 }, [userProfile]);
+
+const BarChart = () => {
+  const data = {
+    labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+    datasets: [
+      {
+        label: 'Calories (kcal)',
+        data: thisWeekCalories,
+        backgroundColor: ['#4ade80'],
+      }
+    ]
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top'
+      },
+      title: {
+        display: true,
+        text: 'Your calorie consumption this week'
+      }
+    }
+  };
+
+  return <div style={{width:"600px", height:"400px"}}><Bar data={data} options={options} /></div>;
+};
       
     if (loading) return <p>Loading...</p>;
 
@@ -171,6 +222,7 @@ const selectedDayEntries = selectedDate
     )}
   </div>
 )}
+<BarChart></BarChart>
   </>
   );
 }

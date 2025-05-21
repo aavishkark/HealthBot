@@ -20,10 +20,9 @@ function CalorieCalendar({ calories, onDateClick, requiredcalories }) {
   const tileContent = ({ date, view }) => {
     const key = date.toDateString();
     const color = groupedCalories[key] === requiredcalories ? "green" : "red";
-    setDaycolor(color)
-    if (view === 'month' && groupedCalories[key] && daycolor) {
+    if (view === 'month' && groupedCalories[key] && color) {
       return (
-        <div style={{ fontSize: '0.7rem', marginTop: 4, backgroundColor: daycolor }}>
+        <div style={{ fontSize: '0.7rem', marginTop: 4, backgroundColor: color }}>
           {groupedCalories[key]} kcal
         </div>
       );
