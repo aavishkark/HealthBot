@@ -3,7 +3,25 @@
     justify-content: space-evenly;
     margin: auto;
     list-style: none;
-    margin: 0;
-    padding: 10px;
+}
+
+ .navbar a {
     text-decoration: none;
+    color: rgb(194, 209, 250);
+    transition: color 0.4s;
+    font-size: large;
+    font-weight: 500;
+}
+
+.navbar {
+    margin-top: 10px;
+    background-color: rgb(16, 46, 73);
+    width: 80%;
+    margin: auto;
+    padding: 1.5rem;
+}
+
+.navbar a:hover {
+    color: white;
+    border-radius: 2px;
 }
