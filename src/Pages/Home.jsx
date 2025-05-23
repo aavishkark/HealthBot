@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Button, TextField } from '@mui/material';
 import Modal from '@mui/material/Modal';
 import axios from 'axios';
-import React from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
@@ -130,100 +129,103 @@ export const Home = () => {
   }, []);
     return (
       <>
-        <div className="calorie-bot">
-          <h2>Hi I am CalBot,</h2>
-          <h2>I'm Here To Make You Healthy.</h2>
-          <form onSubmit={handleSubmit} >
-            <TextField
-              type="text"
-              value={input}
-              placeholder="200g Chicken Biryani"
-              onChange={(e) => setInput(e.target.value)}
-              required
-              id="outlined-required"
-              label="Ask Me"
-            /><br/>
-            <Button
-              type="submit"
-              disabled={loading}
-            >
-              {loading ? 'Thinking...' : 'Ask'}
-            </Button>
-          </form>
+        <div className='container'>
+          <Box sx={{width:"60%",margin:"auto"}} className="calorie-bot">
+            <form onSubmit={handleSubmit} >
+              <TextField
+                type="text"
+                value={input}
+                placeholder="200g Chicken Biryani"
+                onChange={(e) => setInput(e.target.value)}
+                fullWidth
+                required
+                id="outlined-required"
+                label="Ask Me"
+              /><br/>
+              <Button
+                type="submit"
+                disabled={loading}
+              >
+                {loading ? 'Thinking...' : 'Ask'}
+              </Button>
+            </form>
 
-           <div>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box sx={style}>
-          {response && (
-            <Box sx={{ flexGrow: 1, fontSize:"3rem" }}>
-              <Grid container spacing={2}>
-                <Grid size={10}>
-                  {response}
-                </Grid>
-                <Grid size={2}>
-                  <Button onClick={addCalories}>Consume</Button>
-                </Grid>
-              </Grid>
+            <div>
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box sx={style}>
+                  {response && (
+                    <Box sx={{ flexGrow: 1, fontSize:"3rem" }}>
+                      <Grid container spacing={2}>
+                        <Grid size={10}>
+                          {response}
+                        </Grid>
+                        <Grid size={2}>
+                          <Button onClick={addCalories}>Consume</Button>
+                        </Grid>
+                      </Grid>
+                    </Box>
+                    )}
+                </Box>
+              </Modal>
+            </div>
+          </Box>
+          <Box className='manual'>
+              <TextField 
+                id="outlined-basic" 
+                label="Enter calories" 
+                variant="outlined"
+                margin="dense"
+                fullWidth
+                type="number"
+                value={calories}
+                placeholder="Enter calories"
+                onChange={(e) => setCalories(e.target.value)}
+                required
+              /><br />
+              <TextField 
+                id="outlined-basic" 
+                label="Enter food item" 
+                variant="outlined"
+                margin="dense"
+                type="text"
+                fullWidth
+                value={foodItem}
+                placeholder="Enter food item"
+                onChange={(e) => setFoodItem(e.target.value)}
+                required
+                /><br />
+              <TextField 
+                id="outlined-basic" 
+                label="Enter food amount" 
+                variant="outlined"
+                margin="dense"
+                type="text"
+                fullWidth
+                value={foodAmount}
+                placeholder="Enter food amount"
+                onChange={(e) => setFoodAmount(e.target.value)}
+                required
+                /><br />
+              <Button onClick={addCalories}>Add Calories</Button>
             </Box>
-            )}
-        </Box>
-      </Modal>
-    </div>
         </div>
-        <div className='manual'>
-            <TextField 
-              id="outlined-basic" 
-              label="Enter calories" 
-              variant="outlined"
-              margin="dense"
-              fullWidth
-              type="number"
-              value={calories}
-              placeholder="Enter calories"
-              onChange={(e) => setCalories(e.target.value)}
-              required
-            /><br />
-            <TextField 
-              id="outlined-basic" 
-              label="Enter food item" 
-              variant="outlined"
-              margin="dense"
-              type="text"
-              fullWidth
-              value={foodItem}
-              placeholder="Enter food item"
-              onChange={(e) => setFoodItem(e.target.value)}
-              required
-              /><br />
-            <TextField 
-              id="outlined-basic" 
-              label="Enter food amount" 
-              variant="outlined"
-              margin="dense"
-              type="text"
-              fullWidth
-              value={foodAmount}
-              placeholder="Enter food amount"
-              onChange={(e) => setFoodAmount(e.target.value)}
-              required
-              /><br />
-            <Button onClick={addCalories}>Add Calories</Button>
-          </div>
-          <div>
-            <Button onClick={switchMode} className="switch-mode">
-              Switch
-            </Button>
+        <div>
+          <Box sx={{marginBottom:"30px", width:"60%", margin:"auto"}}>
+              <Button onClick={switchMode} className="switch-mode">
+                Switch
+              </Button>
+            </Box>
             <Snackbar open={openalert} autoHideDuration={3000} onClose={handleClosealert}>
-              <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
-                Calories Consumed!
-              </Alert>
+                <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
+                  Calories Consumed!
+                </Alert>
             </Snackbar>
-          </div>
-        </>
+        </div>
+      </>
     )
 }

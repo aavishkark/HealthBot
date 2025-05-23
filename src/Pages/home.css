@@ -1,4 +1,6 @@
-.manual {
-    width:50%;
-    margin: auto;
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
 }
