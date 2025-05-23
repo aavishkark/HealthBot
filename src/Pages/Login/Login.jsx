@@ -2,6 +2,9 @@ import { useState } from "react";
 import axios from "axios";
 import { useDispatch} from 'react-redux';
 import { LOGIN_SUCCESS } from "../../Redux/Login/actionType";
+import { TextField, Button } from "@mui/material";
+import Box from "@mui/material/Box";
+import './login.css';
 export const Login = () => {
 
     const dispatch = useDispatch();
@@ -29,15 +32,23 @@ export const Login = () => {
         });
     }
     return (
-        <div>
+        <Box className="container">
             <h1>Login</h1>
-            <p>Please enter your credentials to log in.</p>
-            <label htmlFor="email">Email:</label><br />
-            <input type="email" id="email" placeholder="Your Email" onChange={(e)=>{setEmail(e.target.value)}} value={email} /><br />
-            <label htmlFor="password">Password:</label><br />
-            <input type="password" id="password" placeholder="Your password" onChange={(e)=>{setPassword(e.target.value)}} value={password} /><br />
-            <button type="submit" onClick={handleSubmit}>Login</button><br />
-            <p>Don't have an account? <a href="/signup">Register here</a></p>
-        </div>
+            <label htmlFor="email">Email</label><br />
+            <TextField 
+                label="Enter Email" 
+                variant="outlined"
+                margin="dense"
+                fullWidth type="email" id="email" placeholder="Your Email" onChange={(e)=>{setEmail(e.target.value)}} value={email} /><br />
+            <label htmlFor="password">Password</label><br />
+            <TextField 
+                id="outlined-basic" 
+                label="Enter Password" 
+                variant="outlined"
+                margin="dense"
+                fullWidth type="password" placeholder="Your password" onChange={(e)=>{setPassword(e.target.value)}} value={password} /><br />
+            <Button type="submit" onClick={handleSubmit}>Login</Button><br />
+            <p>Don't have an account? <Button><a href="/signup">Register here</a></Button></p>
+        </Box>
     )
 }
