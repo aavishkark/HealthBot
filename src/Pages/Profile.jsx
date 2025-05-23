@@ -176,7 +176,7 @@ const BarChart = () => {
     }
   };
 
-  return <div style={{width:"600px", height:"400px"}}><Bar data={data} options={options} /></div>;
+  return <div style={{width:"40%", height:"400px", margin:"auto"}}><Bar data={data} options={options} /></div>;
 };
 
   const columns = [

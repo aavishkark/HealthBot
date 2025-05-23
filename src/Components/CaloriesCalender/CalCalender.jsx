@@ -18,27 +18,41 @@ function CalorieCalendar({ calories, onDateClick, requiredcalories }) {
 
   const tileContent = ({ date, view }) => {
     const key = date.toDateString();
-    const color = groupedCalories[key] === requiredcalories ? "green" : "red";
-    if (view === 'month' && groupedCalories[key] && color) {
-      return (
-        <div style={{ fontSize: '0.7rem', marginTop: 4, backgroundColor: color }}>
-          {groupedCalories[key]} kcal
+    const calorie = groupedCalories[key];
+
+    if (view === 'month') {
+      let bgColor = '';
+      if (calorie === requiredcalories) bgColor = '#4caf50'; // Green
+      else if (calorie > requiredcalories) bgColor = '#ff9800'; // Orange
+      else if (calorie > 0) bgColor = '#f44336'; // Red
+
+      return calorie ? (
+        <div
+          style={{
+            marginTop: 4,
+            fontSize: '0.45rem',
+            backgroundColor: bgColor,
+            color: 'white',
+            borderRadius: '4px',
+            padding: '1px 3px',
+            textAlign: 'center',
+            maxWidth: '100%',
+          }}
+        >
+          {calorie}
         </div>
-      );
+      ) : null;
     }
     return null;
   };
 
   const handleDateChange = (date) => {
     setValue(date);
-    if (onDateClick) {
-      onDateClick(date); 
-    }
+    if (onDateClick) onDateClick(date);
   };
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto' }}>
-      <h2 style={{ textAlign: 'center' }}>Calorie Calendar</h2>
+    <div className='calContainer'>
       <Calendar
         onChange={handleDateChange}
         value={value}
@@ -47,6 +61,5 @@ function CalorieCalendar({ calories, onDateClick, requiredcalories }) {
     </div>
   );
 }
-
 
 export default CalorieCalendar;
