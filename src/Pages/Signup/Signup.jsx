@@ -1,6 +1,10 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { TextField, Button } from "@mui/material";
+import Box from "@mui/material/Box";
+import Select from "@mui/material/Select";
+import './signup.css';
 
 export const Signup = () => {
     const [name, setUsername] = useState('');
@@ -10,7 +14,7 @@ export const Signup = () => {
     const [height, setHeight] = useState('');
     const [weight, setWeight] = useState('');
     const [gender, setGender] = useState('Male');
-    const [activitylevel, setActivityLevel] = useState('')
+    const [activitylevel, setActivityLevel] = useState('1.2')
     const navigate= useNavigate();
 
     const handleSubmit = (e) => {
@@ -26,36 +30,61 @@ export const Signup = () => {
         });
     }
     return (
-        <div>
+        <Box sx={{width:"40%",margin:"auto"}}>
             <h1>Signup</h1>
-            <p>Please enter your credentials to signup.</p>
-            <label htmlFor="username">Name:</label><br />
-            <input type="text" id="username" placeholder="Your Username" onChange={(e)=>{setUsername(e.target.value)}} value={name}/><br />
-            <label htmlFor="age">Age:</label><br/>
-            <input type="number" id="age" placeholder="Your Age" onChange={(e)=>{setAge(e.target.value)}} value={age}/><br />
-            <label htmlFor="height">Height:</label><br/>
-            <input type="number" id="age" placeholder="Your height in centimeters" onChange={(e)=>{setHeight(e.target.value)}} value={height}/><br />
-            <label htmlFor="Weight">Weight:</label><br/>
-            <input type="number" id="weight" placeholder="Your weight in Kilograms" onChange={(e)=>{setWeight(e.target.value)}} value={weight}/><br />
+            <label htmlFor="username">Name</label><br />
+            <TextField 
+                label="Enter Username" 
+                variant="outlined"
+                margin="dense"
+                fullWidth type="text" id="username" placeholder="Your Username" onChange={(e)=>{setUsername(e.target.value)}} value={name}/><br />
+            <label htmlFor="age">Age</label><br/>
+            <TextField 
+                label="Enter Age" 
+                variant="outlined"
+                margin="dense"
+                fullWidth type="number" id="age" placeholder="Your Age" onChange={(e)=>{setAge(e.target.value)}} value={age}/><br />
+            <label htmlFor="height">Height</label><br/>
+            <TextField 
+                label="Enter Height" 
+                variant="outlined"
+                margin="dense"
+                fullWidth type="number" id="height" placeholder="Your height in centimeters" onChange={(e)=>{setHeight(e.target.value)}} value={height}/><br />
+            <label htmlFor="Weight">Weight</label><br/>
+            <TextField 
+                label="Enter Weight" 
+                variant="outlined"
+                margin="dense"
+                fullWidth type="number" id="weight" placeholder="Your weight in Kilograms" onChange={(e)=>{setWeight(e.target.value)}} value={weight}/><br />
             <label htmlFor="gender">Gender</label><br />
-            <select id="gender" onChange={(e)=>{setGender(e.target.value)}} value={gender}>
+            <Select
+                label="Select Gender"
+                id="gender" onChange={(e)=>{setGender(e.target.value)}} value={gender}>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
-            </select><br />
-            <label htmlFor="email">Email:</label><br />
-            <input type="email" id="email" placeholder="Your Email" onChange={(e)=>{setEmail(e.target.value)}} value={email}/><br />
-            <label htmlFor="password">Password:</label><br />
-            <input type="password" id="password" placeholder="Your password" onChange={(e)=>{setPassword(e.target.value)}} value={password}/><br />
-            <label htmlFor="gender">Gender</label><br />
-            <select id="gender" onChange={(e)=>{setActivityLevel(e.target.value)}} value={activitylevel}>
+            </Select><br />
+            <label htmlFor="email">Email</label><br />
+            <TextField 
+                label="Enter Email" 
+                variant="outlined"
+                margin="dense"
+                fullWidth type="email" id="email" placeholder="Your Email" onChange={(e)=>{setEmail(e.target.value)}} value={email}/><br />
+            <label htmlFor="password">Password</label><br />
+            <TextField 
+                label="Enter Password" 
+                variant="outlined"
+                margin="dense"
+                fullWidth type="password" id="password" placeholder="Your password" onChange={(e)=>{setPassword(e.target.value)}} value={password}/><br />
+            <label htmlFor="activity">Choose level of Activity</label><br />
+            <Select id="activity" onChange={(e)=>{setActivityLevel(e.target.value)}} value={activitylevel}>
                 <option value="1.2" title="Little to no exercise">Sedentary</option>
                 <option value="1.375" title="Light exercise/sports 1–3 days/week">Lightly active</option>
                 <option value="1.55" title="Moderate exercise 3–5 days/week">Moderately active</option>
                 <option value="1.725" title="Hard exercise 6–7 days/week">Very active</option>
                 <option value="1.9" title="Very hard exercise and physical job">Super active</option>
-            </select><br />
-            <button type="submit" onClick={handleSubmit}>Sign Up</button><br />
-            <p>Already have an account? <a href="/login">login here</a></p>
-        </div>
+            </Select><br />
+            <Button type="submit" onClick={handleSubmit}>Sign Up</Button><br />
+            Already have an account? <Button><a href="/login">login here</a></Button>
+        </Box>
     )
 }
