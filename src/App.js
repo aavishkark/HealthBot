@@ -2,6 +2,7 @@
 import './App.css';
 import { MainRoutes } from './Components/MainRoutes';
 import { Navbar } from './Components/Navbar';
+import React from 'react';
 
 function App() {
   return (
