@@ -32,8 +32,7 @@ export const Login = () => {
         });
     }
     return (
-        <Box className="container">
-            <h1>Login</h1>
+        <Box className="loginContainer">
             <label htmlFor="email">Email</label><br />
             <TextField 
                 label="Enter Email" 
