@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import './profile.css';
 import CalCalendar from "../Components/CaloriesCalender/CalCalender";
+import { Button } from "@mui/material";
+import { DataGrid } from '@mui/x-data-grid';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -88,7 +90,7 @@ calories.forEach(entry => {
 });
 
 setthisWeekCalories(caloriesPerDay)
-    }, [selectMode, calories]);
+}, [selectMode, calories]);
 
 const selectedDayEntries = selectedDate
   ? calories.filter(entry => 
@@ -128,6 +130,27 @@ const selectedDayEntries = selectedDate
   }
 }, [userProfile]);
 
+const optionsDate = {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: true
+  };
+
+const idedRows = modeBasedEntries.map(row => ({
+  ...row,
+  id: row._id,
+  timestamp: new Date(row.timestamp).toLocaleString( 'en-US', optionsDate )
+}));
+
+const idedRowsTwo = selectedDayEntries.map(row => ({
+  ...row,
+  id: row._id,
+  timestamp: new Date(row.timestamp).toLocaleString( 'en-US', optionsDate )
+}));
+
 const BarChart = () => {
   const data = {
     labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -148,80 +171,142 @@ const BarChart = () => {
       },
       title: {
         display: true,
-        text: 'Your calorie consumption this week'
+        text: 'This Week Calories'
       }
     }
   };
 
   return <div style={{width:"600px", height:"400px"}}><Bar data={data} options={options} /></div>;
 };
+
+  const columns = [
+  { field: 'foodItem', headerName: 'Food Item', width: 150 },
+  { field: 'foodAmount', headerName: 'Food Amount', width: 150 },
+  { field: 'calories', headerName: 'Calories', width: 150 },
+  { field: 'timestamp', headerName: 'Day & Time', width: 200 }
+];
+
+  const paginationModel = { page: 0, pageSize: 4 };
       
     if (loading) return <p>Loading...</p>;
 
   return (
     <>
-    <div>
-      <h2>User Information</h2>
-      <div>
+    <div className="infoContainer">
+      <div className="info">
         <label>Name</label>
         <div>{userProfile.name}</div><br/>
       </div>
-      <div>
+      <div className="info">
         <label>Height</label>
-        <div>{userProfile.height}</div><br/>
+        <div>{userProfile.height}cm</div><br/>
       </div>
-      <div>
+      <div className="info">
         <label>Weight</label>
-        <div>{userProfile.weight}</div><br/>
+        <div>{userProfile.weight}kg</div><br/>
       </div>
-      <div>
+      <div className="info">
         <label>Age</label>
         <div>{userProfile.age}</div><br/>
       </div>
-      <div>
+      <div className="info">
         <label>BMI</label>
         <div>{userBmi}</div><br/>
       </div>
-      <div>
+      <div className="info">
         <label>Required calories</label>
         <div>{requiredcalories}</div><br/>
       </div>
     </div>
   <div className="calorie-history-container">
-    <button onClick={()=>{changeMode(selectMode)}}>{modeName}</button>
-  <h2>Your Calorie History</h2>
+    <Button onClick={()=>{changeMode(selectMode)}}>{modeName}</Button>
     {calories.length === 0 ? (
       <p>No records found.</p>
     ) : (
-      <ul>
-        {modeBasedEntries.map((entry) => (
-          <li key={entry._id}>
-            <strong>{entry.foodAmount}{" "}{entry.foodItem}</strong>: {entry.calories} kcal on{" "}
-            {new Date(entry.timestamp).toLocaleString()}
-          </li>
-        ))}
-      </ul>
+    <DataGrid
+        className="custom-data-grid"
+        rows={idedRows}
+        columns={columns}
+        initialState={{ pagination: { paginationModel } }}
+        pageSizeOptions={[1, 2, 4]}
+        disableColumnMenu
+        disableColumnFilter
+        disableColumnSelector
+        disableColumnResize
+        disableMultipleRowSelection
+        disableRowSelectionOnClick
+        sx={{width:"35%", margin:"auto", border: 1, backgroundColor: 'transparent', padding:"1rem",
+
+              '& .MuiDataGrid-iconButtonContainer': {
+                display: 'none',
+              },
+
+              '& .MuiDataGrid-sortIcon': {
+                display: 'none',
+              },
+
+              '& .MuiDataGrid-columnSeparator': {
+                display: 'none',
+              },
+
+              '& .MuiDataGrid-row:hover': {
+                backgroundColor: 'transparent',
+              },
+        }}
+      />
     )}
   </div>
-  <CalCalendar calories={calories} requiredcalories={requiredcalories} onDateClick={(date) => setSelectedDate(date)} />
+    <CalCalendar calories={calories} requiredcalories={requiredcalories} onDateClick={(date) => setSelectedDate(date)} />
+    <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+        <span style={{ backgroundColor: '#4caf50', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Met</span>
+        <span style={{ backgroundColor: '#ff9800', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Exceeded</span>
+        <span style={{ backgroundColor: '#f44336', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Low</span>
+      </div>
+    </div>
     {selectedDate && (
   <div className="selected-day-entries">
-    <h3>Entries for {new Date(selectedDate).toDateString()}</h3>
+    <p>Entries for {new Date(selectedDate).toDateString()}</p>
     {selectedDayEntries.length === 0 ? (
       <p>No entries found.</p>
     ) : (
-      <ul>
-        {selectedDayEntries.map(entry => (
-          <li key={entry._id}>
-            <strong>{entry.foodAmount}{" "}{entry.foodItem}</strong>: {entry.calories} kcal on{" "}
-            {new Date(entry.timestamp).toLocaleString()}
-          </li>
-        ))}
-      </ul>
+      <DataGrid
+        className="custom-data-grid"
+        rows={idedRowsTwo}
+        columns={columns}
+        initialState={{ pagination: { paginationModel } }}
+        pageSizeOptions={[1, 2, 4]}
+        disableColumnMenu
+        disableColumnFilter
+        disableColumnSelector
+        disableColumnResize
+        disableMultipleRowSelection
+        disableRowSelectionOnClick
+        sx={{width:"35%", margin:"auto", border: 1, backgroundColor: 'transparent', padding:"1rem",
+
+              '& .MuiDataGrid-iconButtonContainer': {
+                display: 'none',
+              },
+
+              '& .MuiDataGrid-sortIcon': {
+                display: 'none',
+              },
+
+              '& .MuiDataGrid-columnSeparator': {
+                display: 'none',
+              },
+
+              '& .MuiDataGrid-row:hover': {
+                backgroundColor: 'transparent',
+              },
+        }}
+      />
     )}
   </div>
 )}
-<BarChart></BarChart>
+<div className="chartContainer">
+  <BarChart></BarChart>
+</div>
   </>
   );
 }
