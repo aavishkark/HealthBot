@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, MenuItem } from "@mui/material";
 import Box from "@mui/material/Box";
 import Select from "@mui/material/Select";
 import './signup.css';
@@ -60,8 +60,8 @@ export const Signup = () => {
             <Select
                 label="Select Gender"
                 id="gender" onChange={(e)=>{setGender(e.target.value)}} value={gender}>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
+                <MenuItem value="Male">Male</MenuItem>
+                <MenuItem value="Female">Female</MenuItem>
             </Select><br />
             <label htmlFor="email">Email</label><br />
             <TextField 
@@ -77,11 +77,11 @@ export const Signup = () => {
                 fullWidth type="password" id="password" placeholder="Your password" onChange={(e)=>{setPassword(e.target.value)}} value={password}/><br />
             <label htmlFor="activity">Choose level of Activity</label><br />
             <Select id="activity" onChange={(e)=>{setActivityLevel(e.target.value)}} value={activitylevel}>
-                <option value="1.2" title="Little to no exercise">Sedentary</option>
-                <option value="1.375" title="Light exercise/sports 1–3 days/week">Lightly active</option>
-                <option value="1.55" title="Moderate exercise 3–5 days/week">Moderately active</option>
-                <option value="1.725" title="Hard exercise 6–7 days/week">Very active</option>
-                <option value="1.9" title="Very hard exercise and physical job">Super active</option>
+                <MenuItem value="1.2" title="Little to no exercise">Sedentary</MenuItem>
+                <MenuItem value="1.375" title="Light exercise/sports 1–3 days/week">Lightly active</MenuItem>
+                <MenuItem value="1.55" title="Moderate exercise 3–5 days/week">Moderately active</MenuItem>
+                <MenuItem value="1.725" title="Hard exercise 6–7 days/week">Very active</MenuItem>
+                <MenuItem value="1.9" title="Very hard exercise and physical job">Super active</MenuItem>
             </Select><br />
             <Button type="submit" onClick={handleSubmit}>Sign Up</Button><br />
             Already have an account? <Button><a href="/login">login here</a></Button>
