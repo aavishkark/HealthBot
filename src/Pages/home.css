@@ -1,10 +1,30 @@
 .botContainer {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     height: 60vh;
 }
 
-.botContainer input {
-    width: 50%;
+.css-1kzo9wa {
+    width: 20% !important;
+    margin: auto;
+}
+
+.css-r13beu-MuiGrid-root {
+    font-size: 1.5rem !important;
+}
+
+.css-zjhuaj-MuiGrid-root div {
+    flex: 1;
+}
+
+.css-15bfe7d-MuiGrid-root {
+    align-self: center;
+    text-align: center;
+}
+
+@media screen and (max-width: 768px) {
+    .css-1kzo9wa {
+        width: 50% !important;
+    }
 }

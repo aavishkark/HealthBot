@@ -129,7 +129,7 @@ export const Home = () => {
     return (
       <>
         <div className='botContainer'>
-          <Box sx={{width:"60%",margin:"auto"}} className="calorie-bot">
+          <Box className="calorie-bot">
             <form onSubmit={handleSubmit} >
               <TextField
                 type="text"
@@ -150,10 +150,9 @@ export const Home = () => {
 
             <div>
               <Modal
+                className='calModal'
                 open={open}
                 onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
               >
                 <Box sx={style}>
                   {response && (
