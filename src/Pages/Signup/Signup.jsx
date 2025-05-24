@@ -21,11 +21,12 @@ export const Signup = () => {
         e.preventDefault();
         const user = { name, email, password, height, weight, age, gender, activitylevel };
         axios.post('https://healthbotbackend-production.up.railway.app/signup', user)
-        .then((response) => {
+        .then(() => {
             alert("Signup successful! Please login to continue.");
             navigate('/login');
         })
         .catch((error) => {
+            console.log(error);
             alert("Signup failed! Please try again.");
         });
     }

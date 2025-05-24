@@ -5,6 +5,7 @@
   width: 60%;
   margin: auto;
   padding: 2rem;
+  gap: 1rem;
 }
 
 .infoContainer label {
@@ -21,16 +22,7 @@
   font-weight: 600;
 }
 
-.custom-data-grid .MuiDataGrid-columnHeader {
-  background-color: rgb(221, 230, 250) !important;
-  background: rgb(221, 230, 250) !important;
-}
-
-.MuiDataGrid-filler, .MuiDataGrid-overlay {
-  background-color: rgb(221, 230, 250) !important;
-}
-
-.calorie-history-container {
+.calorie-history-container, .calorie-history-container-two {
   margin: 2rem;
 }
 
@@ -38,17 +30,54 @@
   margin: 2rem;
 }
 
-.chartContainer {
-  display: flex;
-  justify-content: center;
-  width: 80%;
-  margin: auto;
-}
-
 abbr[title] {
   all: unset;
 }
 
-.react-calendar {
-  font-family:Verdana, Geneva, Tahoma, sans-serif !important;
+.food-table-container {
+  margin: 1rem auto;
+  width: 60% !important;
+  overflow-x: scroll;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.MuiTableHead-root {
+  background: linear-gradient(to right, #4e54c8, #8f94fb);
+}
+
+.MuiTableCell-head {
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.MuiTableCell-body {
+  font-size: 0.95rem;
+}
+
+.chartContainer {
+  width: 60%;
+  margin: auto;
+  position:"relative";
+  padding:"10px"
+}
+
+@media screen and (max-width: 768px) {
+  .food-table-container {
+    width: 100% !important;
+  }
+
+   .calorie-history-container, .selected-day-entries {
+      margin: 0.5rem;
+   }
+
+   .infoContainer {
+      width: 80%;
+   }
+
+   .chartContainer {
+      width: 100%;
+      margin: auto;
+   }
 }

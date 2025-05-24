@@ -38,6 +38,10 @@ export const Home = () => {
   const handleClosealert= () => setOpenalert(false);
   const handleOpenalert= () => setOpenalert(true);
 
+  useEffect(() => {
+    const manual = document.querySelector('.manual');
+    manual.style.display = 'none';
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -45,13 +49,12 @@ export const Home = () => {
     setResponse('');
 
     try {
-          await axios.post('https://healthbotbackend-production.up.railway.app/query', {
-          query: input,
-        }, {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-      })
+      await axios.post('https://healthbotbackend-production.up.railway.app/query', 
+      {
+      query: input}, 
+      {
+      headers: {
+        'Content-Type': 'application/json'}})
       .then((response) => {
         const data = response.data;
         setResponse(data.reply || 'No response.');
@@ -61,53 +64,53 @@ export const Home = () => {
         console.error('Error:', error);
         setResponse('Error fetching data.');
       });
-    } catch (err) {
-      console.error(err);
-      setResponse('Error fetching data.');
-    } finally {
-      setLoading(false);
-    }
+      } catch (err) {
+        console.error(err);
+        setResponse('Error fetching data.');
+      } finally {
+        setLoading(false);
+      }
   }
 
   async function addCalories () {
     
-      const newResponse = response.replace(' Calories In', '');
-      const resArray = newResponse.split(' ');
-      const cal = resArray[0];
-      const amount = resArray[1];
-      const item = resArray[2];
+    const newResponse = response.replace(' Calories In', '');
+    const resArray = newResponse.split(' ');
+    const cal = resArray[0];
+    const amount = resArray[1];
+    const item = resArray[2];
 
     const email = localStorage.getItem('email');
-    try{
-     await axios.post('https://healthbotbackend-production.up.railway.app/addcalories', {
+    
+     try{
+       await axios.post('https://healthbotbackend-production.up.railway.app/addcalories', {
         calories:mode === "bot" ? cal : calories,
         foodAmount:mode === "manual" ? foodAmount + 'g' : amount,
         foodItem:mode === "bot" ? item : foodItem,
-        email:email,
-    },
-    {
-        headers: {
-          'Content-Type': 'application/json',
-        }, 
-    })
-    .then((response) => {
-      setInput('');
-      setResponse('');
-      setCalories('');
-      setFoodAmount('');
-      setFoodItem('');
-      handleOpenalert();
-      handleClose();
-    })
-    .catch(err => {
+        email:email},
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          }, 
+        })
+      .then(() => {
+        setInput('');
+        setResponse('');
+        setCalories('');
+        setFoodAmount('');
+        setFoodItem('');
+        handleOpenalert();
+        handleClose();
+      })
+      .catch(err => {
+        console.error(err);
+        alert('Error adding calories.');
+      });
+    }
+    catch (err) {
       console.error(err);
       alert('Error adding calories.');
-    });
-  }
-  catch (err) {
-    console.error(err);
-    alert('Error adding calories.');
-    }
+      }
   }
 
   const switchMode = () => {
@@ -123,24 +126,19 @@ export const Home = () => {
       manual.style.display = 'none';
     }
   }
-  useEffect(() => {
-    const manual = document.querySelector('.manual');
-    manual.style.display = 'none';
-  }, []);
     return (
       <>
-        <div className='container'>
+        <div className='botContainer'>
           <Box sx={{width:"60%",margin:"auto"}} className="calorie-bot">
             <form onSubmit={handleSubmit} >
               <TextField
                 type="text"
                 value={input}
-                placeholder="200g Chicken Biryani"
+                placeholder="200g Chicken"
                 onChange={(e) => setInput(e.target.value)}
                 fullWidth
                 required
-                id="outlined-required"
-                label="Ask Me"
+                label="Ask Calories"
               /><br/>
               <Button
                 type="submit"

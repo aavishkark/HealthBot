@@ -3,9 +3,10 @@
     justify-content: space-evenly;
     margin: auto;
     list-style: none;
+    padding: 0%;
 }
 
- .navbar a {
+.navbar a {
     text-decoration: none;
     color: rgb(194, 209, 250);
     transition: color 0.4s;

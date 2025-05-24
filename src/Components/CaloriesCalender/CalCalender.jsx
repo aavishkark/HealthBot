@@ -22,15 +22,15 @@ function CalorieCalendar({ calories, onDateClick, requiredcalories }) {
 
     if (view === 'month') {
       let bgColor = '';
-      if (calorie === requiredcalories) bgColor = '#4caf50'; // Green
-      else if (calorie > requiredcalories) bgColor = '#ff9800'; // Orange
-      else if (calorie > 0) bgColor = '#f44336'; // Red
+      if (calorie === requiredcalories) bgColor = '#4caf50';
+      else if (calorie > requiredcalories) bgColor = '#ff9800';
+      else if (calorie > 0) bgColor = '#f44336';
 
       return calorie ? (
         <div
           style={{
             marginTop: 4,
-            fontSize: '0.45rem',
+            fontSize: '0.50rem',
             backgroundColor: bgColor,
             color: 'white',
             borderRadius: '4px',

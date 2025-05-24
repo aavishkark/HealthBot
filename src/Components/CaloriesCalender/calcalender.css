@@ -3,6 +3,7 @@
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   padding: 10px;
   background-color: transparent;
+  font-family: monospace;
 }
 .react-calendar__tile--active{
   background-color: rgb(255, 255, 255);
@@ -14,4 +15,10 @@
   width: 50%;
   margin: auto;
   justify-content: center;
+}
+
+@media screen and (max-width: 768px) {
+  .calContainer {
+    width: 80%;
+  }
 }
