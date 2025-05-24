@@ -5,6 +5,7 @@ import CalCalendar from "../Components/CaloriesCalender/CalCalender";
 import { Button } from "@mui/material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { Bar } from 'react-chartjs-2';
+import { TablePagination } from '@mui/material';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -26,6 +27,11 @@ export const Profile =() =>{
     const [modeName, setModeName] = useState("Today");
     const [requiredcalories, setRequiredcalories] = useState('');
     const [thisWeekCalories, setthisWeekCalories] = useState([]);
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(2);
+    const [pageTwo, setPageTwo] = useState(0);
+    const [rowsPerPageTwo, setRowsPerPageTwo] = useState(2);
+
 
     const email= localStorage.getItem("email");
 
@@ -152,6 +158,25 @@ export const Profile =() =>{
     timestamp: new Date(row.timestamp).toLocaleString( 'en-US', optionsDate )
   }));
 
+  const handleChangePage = (event, newPage) => {
+  setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleChangePageTwo = (event, newPage) => {
+    setPageTwo(newPage);
+  };
+
+  const handleChangeRowsPerPageTwo = (event) => {
+    setRowsPerPageTwo(parseInt(event.target.value, 10));
+    setPageTwo(0);
+  };
+
+
   const BarChart = () => {
     const data = {
       labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
@@ -226,7 +251,7 @@ export const Profile =() =>{
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      {idedRows.map((item) => (
+                      {idedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
                         <TableRow key={item._id}>
                           <TableCell>{item.foodItem}</TableCell>
                           <TableCell align="right">{item.foodAmount}</TableCell>
@@ -236,6 +261,15 @@ export const Profile =() =>{
                       ))}
                     </TableBody>
                   </Table>
+                  <TablePagination
+                    component="div"
+                    count={idedRows.length}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    rowsPerPageOptions={[2, 3, 4]}
+                  />
                 </TableContainer>
             )}
       </div>
@@ -265,7 +299,7 @@ export const Profile =() =>{
                 </TableRow>
               </TableHead>
               <TableBody>
-                {idedRowsTwo.map((item) => (
+                {idedRowsTwo.slice(pageTwo * rowsPerPageTwo, pageTwo * rowsPerPageTwo + rowsPerPageTwo).map((item) => (
                   <TableRow key={item._id}>
                     <TableCell>{item.foodItem}</TableCell>
                     <TableCell align="right">{item.foodAmount}</TableCell>
@@ -275,6 +309,15 @@ export const Profile =() =>{
                 ))}
               </TableBody>
             </Table>
+            <TablePagination
+              component="div"
+              count={idedRowsTwo.length}
+              page={pageTwo}
+              onPageChange={handleChangePageTwo}
+              rowsPerPage={rowsPerPageTwo}
+              onRowsPerPageChange={handleChangeRowsPerPageTwo}
+              rowsPerPageOptions={[2, 3, 4]}
+            />
           </TableContainer>
         </>
         )}

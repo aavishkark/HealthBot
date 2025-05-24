@@ -5,9 +5,17 @@
     height: 60vh;
 }
 
-.css-1kzo9wa {
+.calorie-bot {
+    width: 50%;
+}
+
+.calModal {
+    font-size:large;
+}
+
+/* .css-1kzo9wa {
     width: 20% !important;
-    margin: auto;
+    margin: auto !important;
 }
 
 .css-r13beu-MuiGrid-root {
@@ -15,16 +23,16 @@
 }
 
 .css-zjhuaj-MuiGrid-root div {
-    flex: 1;
+    flex: 1 !important;
 }
 
 .css-15bfe7d-MuiGrid-root {
-    align-self: center;
-    text-align: center;
+    align-self: center !important;
+    text-align: center !important;
 }
 
 @media screen and (max-width: 768px) {
     .css-1kzo9wa {
         width: 50% !important;
     }
-}
+} */

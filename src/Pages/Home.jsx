@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
+import TablePagination from '@mui/material/TablePagination';
 import './home.css';
 
 
@@ -14,11 +15,10 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 800,
   bgcolor: 'background.paper',
   boxShadow: 24,
-  p: 4,
-  flexGrow:1,
+  p: 2,
+  minWidth:"300px",
   borderRadius:"10px",
   color:"rgb(16, 46, 73)"
 };
@@ -129,7 +129,7 @@ export const Home = () => {
     return (
       <>
         <div className='botContainer'>
-          <Box className="calorie-bot">
+          <div className="calorie-bot">
             <form onSubmit={handleSubmit} >
               <TextField
                 type="text"
@@ -150,19 +150,18 @@ export const Home = () => {
 
             <div>
               <Modal
-                className='calModal'
                 open={open}
                 onClose={handleClose}
               >
                 <Box sx={style}>
                   {response && (
-                    <Box sx={{ flexGrow: 1, fontSize:"3rem" }}>
-                      <Grid container spacing={2}>
-                        <Grid size={10}>
+                    <Box sx={{ flexGrow: 1, fontSize:"1.6rem" }}>
+                      <Grid container spacing={2} justifyContent={"space-evenly"}>
+                        <Grid size={5}>
                           {response}
                         </Grid>
-                        <Grid size={2}>
-                          <Button onClick={addCalories}>Consume</Button>
+                        <Grid size={5} alignSelf={"center"}>
+                          <Button onClick={addCalories} className='consumeBtn'>Consume</Button>
                         </Grid>
                       </Grid>
                     </Box>
@@ -170,7 +169,7 @@ export const Home = () => {
                 </Box>
               </Modal>
             </div>
-          </Box>
+          </div>
           <Box className='manual'>
               <TextField 
                 id="outlined-basic" 
