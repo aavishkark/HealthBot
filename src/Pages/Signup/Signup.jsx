@@ -50,13 +50,13 @@ export const Signup = () => {
                 label="Enter Height" 
                 variant="outlined"
                 margin="dense"
-                fullWidth type="number" id="height" placeholder="Your height in centimeters" onChange={(e)=>{setHeight(e.target.value)}} value={height}/><br />
+                fullWidth type="number" id="height" placeholder="In Centimeters" onChange={(e)=>{setHeight(e.target.value)}} value={height}/><br />
             <label htmlFor="Weight">Weight</label><br/>
             <TextField 
                 label="Enter Weight" 
                 variant="outlined"
                 margin="dense"
-                fullWidth type="number" id="weight" placeholder="Your weight in Kilograms" onChange={(e)=>{setWeight(e.target.value)}} value={weight}/><br />
+                fullWidth type="number" id="weight" placeholder="In Kilograms" onChange={(e)=>{setWeight(e.target.value)}} value={weight}/><br />
             <label htmlFor="gender">Gender</label><br />
             <Select
                 label="Select Gender"
