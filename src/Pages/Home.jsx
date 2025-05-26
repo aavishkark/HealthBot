@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
-import TablePagination from '@mui/material/TablePagination';
 import './home.css';
 
 
@@ -28,6 +27,10 @@ export const Home = () => {
   const [response, setResponse] = useState('');
   const [loading, setLoading] = useState(false);
   const [calories, setCalories] = useState('');
+  const [proteins, setProteins] = useState('');
+  const [fats, setFats] = useState('');
+  const [modalResponse, setmodalResponse] = useState('');
+  
   const [foodItem, setFoodItem] = useState('');
   const [foodAmount, setFoodAmount] = useState('');
   const [mode, setMode] = useState('bot');
@@ -72,20 +75,32 @@ export const Home = () => {
       }
   }
 
-  async function addCalories () {
-    
-    const newResponse = response.replace(' Calories In', '');
-    const resArray = newResponse.split(' ');
+    const resArray = response.split(' ');
     const cal = resArray[0];
-    const amount = resArray[1];
-    const item = resArray[2];
+    const pro = resArray[1];
+    const fat = resArray[2];
+    const amount = resArray[3];
+    let item ="";
+
+    for ( let i=4; i<=resArray.length-1; i++ ){
+        item += resArray[i] + " "
+    }
+
+    useEffect(()=>{
+        const modalRes = resArray[0] === "NO!" ? `${response}` : `${resArray[0]+' calories, '+ resArray[1]+'g proteins, ' + resArray[2]+'g fats in ' + resArray[3] + 'g ' + item}`
+        setmodalResponse(modalRes);
+    },[response,item,resArray])
 
     const email = localStorage.getItem('email');
+
+  async function addCalories () {
     
      try{
        await axios.post('https://healthbotbackend-production.up.railway.app/addcalories', {
         calories:mode === "bot" ? cal : calories,
-        foodAmount:mode === "manual" ? foodAmount + 'g' : amount,
+        proteins:mode === "bot" ? pro : proteins,
+        fats:mode === "bot" ? fat : fats,
+        foodAmount:mode === "manual" ? foodAmount : amount,
         foodItem:mode === "bot" ? item : foodItem,
         email:email},
         {
@@ -97,6 +112,8 @@ export const Home = () => {
         setInput('');
         setResponse('');
         setCalories('');
+        setProteins('');
+        setFats('');
         setFoodAmount('');
         setFoodItem('');
         handleOpenalert();
@@ -158,10 +175,10 @@ export const Home = () => {
                     <Box sx={{ flexGrow: 1, fontSize:"1.6rem" }}>
                       <Grid container spacing={2} justifyContent={"space-evenly"}>
                         <Grid size={5}>
-                          {response}
+                          {modalResponse}
                         </Grid>
                         <Grid size={5} alignSelf={"center"}>
-                          <Button onClick={addCalories} className='consumeBtn'>Consume</Button>
+                          {resArray[0] === "NO!" ? <Button onClick={handleClose} className='closeBtn'>Okay</Button> : <Button onClick={addCalories} className='consumeBtn'>Consume</Button>}
                         </Grid>
                       </Grid>
                     </Box>
@@ -173,16 +190,40 @@ export const Home = () => {
           <Box className='manual'>
               <TextField 
                 id="outlined-basic" 
-                label="Enter calories" 
+                label="Enter Calories" 
                 variant="outlined"
                 margin="dense"
                 fullWidth
                 type="number"
                 value={calories}
-                placeholder="Enter calories"
+                placeholder="Enter Calories"
                 onChange={(e) => setCalories(e.target.value)}
                 required
               /><br />
+              <TextField 
+                id="outlined-basic" 
+                label="Enter food Proteins" 
+                variant="outlined"
+                margin="dense"
+                type="text"
+                fullWidth
+                value={proteins}
+                placeholder="Enter food Proteins"
+                onChange={(e) => setProteins(e.target.value)}
+                required
+                /><br />
+                <TextField 
+                id="outlined-basic" 
+                label="Enter food Fats" 
+                variant="outlined"
+                margin="dense"
+                type="text"
+                fullWidth
+                value={proteins}
+                placeholder="Enter food Fats"
+                onChange={(e) => setFats(e.target.value)}
+                required
+                /><br />
               <TextField 
                 id="outlined-basic" 
                 label="Enter food item" 
