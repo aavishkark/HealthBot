@@ -4,6 +4,7 @@ import './profile.css';
 import CalCalendar from "../Components/CaloriesCalender/CalCalender";
 import { Button } from "@mui/material";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { useNavigate } from "react-router-dom";
 import { Bar } from 'react-chartjs-2';
 import { TablePagination } from '@mui/material';
 import {
@@ -14,10 +15,14 @@ import {
   Title,
   Tooltip,
   Legend,
+  ArcElement
 } from 'chart.js';
+import { Pie } from 'react-chartjs-2';
 
 export const Profile =() =>{
     const [calories, setCalories] = useState([]);
+    const [proteins, setProteins] = useState([]);
+    const [fats, setFats] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
     const [selectMode, setSelectMode] = useState(0);
@@ -34,8 +39,9 @@ export const Profile =() =>{
 
 
     const email= localStorage.getItem("email");
+    const navigate = useNavigate();
 
-    ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+    ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
     useEffect(() => {
         axios.get(`https://healthbotbackend-production.up.railway.app/getProfile`, {
@@ -202,14 +208,15 @@ export const Profile =() =>{
       }
     };
 
-    return <div className="chartContainer" style={{}}><Bar data={data} responsive options={options} /></div>;
+    return <div  className="chartContainer" style={{padding:"3rem"}}><Bar data={data} responsive options={options} /></div>;
   };
+
       
   if (loading) return <p>Loading...</p>;
 
   return (
     <>
-      <div className="infoContainer">
+      <div style={{padding:"3rem"}} className="infoContainer">
         <div className="info">
           <label>Name</label>
           <div>{userProfile.name}</div><br/>
@@ -235,9 +242,13 @@ export const Profile =() =>{
           <div>{requiredcalories}</div><br/>
         </div>
       </div>
-      <div className="calorie-history-container">
+      <div>
+        <Button onClick={()=>{navigate('/editprofile')}}>Edit</Button>
+      </div>
+      <hr/>
+      <div style={{padding:"3rem"}} className="calorie-history-container">
         <Button onClick={()=>{changeMode(selectMode)}}>{modeName}</Button>
-        {calories.length === 0 ? (
+        {modeBasedEntries.length === 0 ? (
           <p>No records found.</p>
         ) : (
               <TableContainer className="food-table-container">
@@ -245,8 +256,10 @@ export const Profile =() =>{
                     <TableHead>
                       <TableRow>
                         <TableCell>Food Item</TableCell>
-                        <TableCell align="right">Amount</TableCell>
-                        <TableCell align="right">Calories</TableCell>
+                        <TableCell align="right">Amount(g)</TableCell>
+                        <TableCell align="right">Calories(kcal)</TableCell>
+                        <TableCell align="right">Proteins(g)</TableCell>
+                        <TableCell align="right">Fats(g)</TableCell>
                         <TableCell align="right">Date</TableCell>
                       </TableRow>
                     </TableHead>
@@ -255,7 +268,9 @@ export const Profile =() =>{
                         <TableRow key={item._id}>
                           <TableCell>{item.foodItem}</TableCell>
                           <TableCell align="right">{item.foodAmount}</TableCell>
-                          <TableCell align="right">{item.calories}kcal</TableCell>
+                          <TableCell align="right">{item.calories}</TableCell>
+                          <TableCell align="right">{item.proteins}</TableCell>
+                          <TableCell align="right">{item.fats}</TableCell>
                           <TableCell align="right">{new Date(selectedDate).toDateString(optionsDate)}</TableCell>
                         </TableRow>
                       ))}
@@ -273,6 +288,7 @@ export const Profile =() =>{
                 </TableContainer>
             )}
       </div>
+      <hr/>
       <CalCalendar calories={calories} requiredcalories={requiredcalories} onDateClick={(date) => setSelectedDate(date)} />
       <div style={{ marginTop: '1rem', textAlign: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
@@ -281,9 +297,10 @@ export const Profile =() =>{
           <span style={{ backgroundColor: '#f44336', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Low</span>
         </div>
       </div>
+      <hr/>
     {selectedDate && (
-      <div className="selected-day-entries">
-        <p>Entries for {new Date(selectedDate).toDateString()}</p>
+      <div style={{padding:"3rem"}} className="selected-day-entries">
+        <h3>{new Date(selectedDate).toDateString()}</h3>
         {selectedDayEntries.length === 0 ? (
           <p>No entries found.</p>
         ) : (
@@ -295,6 +312,8 @@ export const Profile =() =>{
                   <TableCell>Food Item</TableCell>
                   <TableCell align="right">Amount</TableCell>
                   <TableCell align="right">Calories</TableCell>
+                  <TableCell align="right">Proteins(g)</TableCell>
+                  <TableCell align="right">Fats(g)</TableCell>
                   <TableCell align="right">Date</TableCell>
                 </TableRow>
               </TableHead>
@@ -304,6 +323,8 @@ export const Profile =() =>{
                     <TableCell>{item.foodItem}</TableCell>
                     <TableCell align="right">{item.foodAmount}</TableCell>
                     <TableCell align="right">{item.calories}</TableCell>
+                    <TableCell align="right">{item.proteins}</TableCell>
+                    <TableCell align="right">{item.fats}</TableCell>
                     <TableCell align="right">{new Date(selectedDate).toDateString(optionsDate)}</TableCell>
                   </TableRow>
                 ))}
@@ -323,7 +344,9 @@ export const Profile =() =>{
         )}
       </div>
     )}
+        <hr/>
         <BarChart></BarChart>
+        {/* <PieChart></PieChart> */}
       </>
     );
 }

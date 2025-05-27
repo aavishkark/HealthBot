@@ -47,7 +47,7 @@ abbr[title] {
 }
 
 .MuiTableCell-head {
-  color: white;
+  color: white !important;
   font-weight: bold;
   font-size: 1rem;
 }
