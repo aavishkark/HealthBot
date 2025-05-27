@@ -19,7 +19,7 @@ export const Navbar = () => {
         <div className='navbar'>
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/profile">Profile</a></li>
+                {isAuth === "true" ? <li><a href="/profile">Profile</a></li> : <li><a href="/signup">Register</a></li>}
                 {isAuth === "true" ? <li onClick={handleLogout}><a href="/login">Logout</a></li> : <li><a href="/login">Login</a></li>}
             </ul>
         </div>

@@ -4,6 +4,7 @@ import { Signup } from "../Pages/Signup/Signup";
 import { Profile } from "../Pages/Profile";
 import { Home } from "../Pages/Home";
 import { PrivateRoute } from "./PrivateRoute";
+import { EditProfile } from "../Pages/EditProfile/EditProfile.jsx";
 
 export const MainRoutes = () => {
   return (
@@ -12,6 +13,7 @@ export const MainRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/profile" element={<PrivateRoute> <Profile /> </PrivateRoute>} />
+        <Route path="/editprofile" element={<PrivateRoute> <EditProfile /> </PrivateRoute>} />
     </Routes>
   );
 }
