@@ -187,7 +187,7 @@ export const Home = () => {
               </Modal>
             </div>
           </div>
-          <Box className='manual'>
+          <form onSubmit={addCalories} className='manual'>
               <TextField 
                 id="outlined-basic" 
                 label="Enter Calories" 
@@ -219,7 +219,7 @@ export const Home = () => {
                 margin="dense"
                 type="text"
                 fullWidth
-                value={proteins}
+                value={fats}
                 placeholder="Enter food Fats"
                 onChange={(e) => setFats(e.target.value)}
                 required
@@ -248,8 +248,8 @@ export const Home = () => {
                 onChange={(e) => setFoodAmount(e.target.value)}
                 required
                 /><br />
-              <Button onClick={addCalories}>Add Calories</Button>
-            </Box>
+              <Button type='submit'>Add Calories</Button>
+          </form>
         </div>
         <div>
           <Box sx={{marginBottom:"30px", width:"60%", margin:"auto"}}>

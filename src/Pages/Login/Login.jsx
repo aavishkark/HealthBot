@@ -32,22 +32,25 @@ export const Login = () => {
         });
     }
     return (
-        <Box className="loginContainer">
-            <label htmlFor="email">Email</label><br />
-            <TextField 
-                label="Enter Email" 
-                variant="outlined"
-                margin="dense"
-                fullWidth type="email" id="email" placeholder="Your Email" onChange={(e)=>{setEmail(e.target.value)}} value={email} /><br />
-            <label htmlFor="password">Password</label><br />
-            <TextField 
-                id="outlined-basic" 
-                label="Enter Password" 
-                variant="outlined"
-                margin="dense"
-                fullWidth type="password" placeholder="Your password" onChange={(e)=>{setPassword(e.target.value)}} value={password} /><br />
-            <Button type="submit" onClick={handleSubmit}>Login</Button><br />
-            <p>Don't have an account? <Button><a href="/signup">Register here</a></Button></p>
-        </Box>
+        <form onSubmit={handleSubmit}>
+            <Box className="loginContainer">
+                <label htmlFor="email">Email</label><br />
+                <TextField 
+                    label="Enter Email" 
+                    variant="outlined"
+                    margin="dense"
+                    required
+                    fullWidth type="email" id="email" placeholder="Your Email" onChange={(e)=>{setEmail(e.target.value)}} value={email} /><br />
+                <label htmlFor="password">Password</label><br />
+                <TextField 
+                    id="outlined-basic" 
+                    label="Enter Password" 
+                    variant="outlined"
+                    margin="dense"
+                    required
+                    fullWidth type="password" placeholder="Your password" onChange={(e)=>{setPassword(e.target.value)}} value={password} /><br />
+                <Button type="submit">Login</Button><br />
+            </Box>
+        </form>
     )
 }
