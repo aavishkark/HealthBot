@@ -4,7 +4,8 @@ import { Signup } from "../Pages/Signup/Signup";
 import { Profile } from "../Pages/Profile";
 import { Home } from "../Pages/Home";
 import { PrivateRoute } from "./PrivateRoute";
-import { EditProfile } from "../Pages/EditProfile/EditProfile.jsx";
+// import { EditProfile } from "../Pages/EditProfile/EditProfile.jsx";
+import { EditProfile } from "../Pages/EditProfile/EditProfile";
 
 export const MainRoutes = () => {
   return (
