@@ -1,0 +1,75 @@
+/* .updateFormContainer {
+  max-width: 500px;
+  margin: 40px auto;
+  padding: 30px 25px;
+  background-color: transparent;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+form div {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+TextField,
+select {
+  padding: 10px 14px;
+  font-size: 14px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+TextField:focus,
+select:focus {
+  border-color: #5c9ded;
+  box-shadow: 0 0 0 3px rgba(92, 157, 237, 0.2);
+  outline: none;
+}
+
+.updateBtn {
+  background-color: #5c9ded;
+  color: white;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.updateBtn:hover {
+  background-color: #4a8bd4;
+}
+
+@media (max-width: 600px) {
+  .updateFormContainer {
+    padding: 20px 15px;
+  }
+
+  TextField,
+  select {
+    font-size: 13px;
+  }
+
+  .updateBtn {
+    font-size: 14px;
+    padding: 10px;
+  }
+} */
