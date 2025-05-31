@@ -4,8 +4,11 @@
   justify-content: space-evenly;
   width: 60%;
   margin: auto;
-  padding: 2rem;
   gap: 1rem;
+}
+
+.editBtn {
+  margin: 30px auto;
 }
 
 .infoContainer label {
@@ -20,18 +23,6 @@
 
 .info div {
   font-weight: 600;
-}
-
-.calorie-history-container, .calorie-history-container-two {
-  margin: 2rem;
-}
-
-.selected-day-entries {
-  margin: 2rem;
-}
-
-abbr[title] {
-  all: unset;
 }
 
 .food-table-container {
@@ -73,11 +64,18 @@ abbr[title] {
    }
 
    .infoContainer {
-      width: 80%;
+      width: 85%;
    }
 
    .chartContainer {
       width: 100%;
       margin: auto;
    }
+
+   th, td {
+      font-size: 0.5rem !important;
+      padding: 5px !important;
+      width: 10px !important;
+   }
+
 }
