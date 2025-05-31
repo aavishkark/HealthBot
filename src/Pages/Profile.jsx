@@ -17,12 +17,11 @@ import {
   Legend,
   ArcElement
 } from 'chart.js';
-import { Pie } from 'react-chartjs-2';
 
 export const Profile =() =>{
     const [calories, setCalories] = useState([]);
-    const [proteins, setProteins] = useState([]);
-    const [fats, setFats] = useState([]);
+    // const [proteins, setProteins] = useState([]);
+    // const [fats, setFats] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedDate, setSelectedDate] = useState(new Date().toDateString());
     const [selectMode, setSelectMode] = useState(0);
@@ -32,6 +31,8 @@ export const Profile =() =>{
     const [modeName, setModeName] = useState("Today");
     const [requiredcalories, setRequiredcalories] = useState('');
     const [thisWeekCalories, setthisWeekCalories] = useState([]);
+    const [thisWeekProteins, setthisWeekProteins] = useState([]);
+    const [thisWeekFats, setthisWeekFats] = useState([]);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(2);
     const [pageTwo, setPageTwo] = useState(0);
@@ -93,6 +94,8 @@ export const Profile =() =>{
       }
 
       const caloriesPerDay = new Array(7).fill(0);
+      const proteinsPerDay = new Array(7).fill(0);
+      const fatsPerDay = new Array(7).fill(0);
 
       calories.forEach(entry => {
         const date = new Date(entry.timestamp);
@@ -102,7 +105,25 @@ export const Profile =() =>{
         caloriesPerDay[index] += calories;
       });
 
-      setthisWeekCalories(caloriesPerDay)
+      calories.forEach(entry => {
+        const date = new Date(entry.timestamp);
+        const day = date.getDay();
+        const proteins = parseInt(entry.proteins, 10);
+        const index = (day === 0) ? 6 : day - 1;
+        proteinsPerDay[index] += proteins;
+      });
+
+      calories.forEach(entry => {
+        const date = new Date(entry.timestamp);
+        const day = date.getDay();
+        const fats = parseInt(entry.fats, 10);
+        const index = (day === 0) ? 6 : day - 1;
+        fatsPerDay[index] += fats;
+      });
+
+      setthisWeekCalories(caloriesPerDay);
+      setthisWeekProteins(proteinsPerDay);
+      setthisWeekFats(fatsPerDay);
     }, [selectMode, calories]);
 
     useEffect(() => {
@@ -168,22 +189,67 @@ export const Profile =() =>{
   setPage(newPage);
   };
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
   const handleChangePageTwo = (event, newPage) => {
     setPageTwo(newPage);
   };
 
-  const handleChangeRowsPerPageTwo = (event) => {
-    setRowsPerPageTwo(parseInt(event.target.value, 10));
-    setPageTwo(0);
+  const ProBarChart = () => {
+    const data = {
+      labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      datasets: [
+        {
+          label: 'Proteins (g)',
+          data: thisWeekProteins,
+          backgroundColor: ['#4ade80'],
+        }
+      ]
+  };
+  
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top'
+        },
+        title: {
+          display: true,
+          text: 'This Week Proteins'
+        }
+      }
+    };
+  
+      return <div  className="chartContainer"><Bar data={data} responsive options={options} /></div>;
+  };
+  
+  const FatBarChart = () => {
+    const data = {
+      labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+      datasets: [
+        {
+          label: 'Fats (g)',
+          data: thisWeekFats,
+          backgroundColor: ['#4ade80'],
+        }
+      ]
+  };
+  
+    const options = {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top'
+        },
+        title: {
+          display: true,
+          text: 'This Week Fats'
+        }
+      }
+    };
+  
+    return <div  className="chartContainer"><Bar data={data} responsive options={options} /></div>;
   };
 
-
-  const BarChart = () => {
+    const CalBarChart = () => {
     const data = {
       labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
       datasets: [
@@ -208,15 +274,14 @@ export const Profile =() =>{
       }
     };
 
-    return <div  className="chartContainer" style={{padding:"3rem"}}><Bar data={data} responsive options={options} /></div>;
+    return <div  className="chartContainer"><Bar data={data} responsive options={options} /></div>;
   };
-
       
   if (loading) return <p>Loading...</p>;
 
   return (
     <>
-      <div style={{padding:"3rem"}} className="infoContainer">
+      <div className="infoContainer">
         <div className="info">
           <label>Name</label>
           <div>{userProfile.name}</div><br/>
@@ -242,11 +307,10 @@ export const Profile =() =>{
           <div>{requiredcalories}</div><br/>
         </div>
       </div>
-      <div>
+      <div className="editBtn">
         <Button onClick={()=>{navigate('/editprofile')}}>Edit</Button>
       </div>
-      <hr/>
-      <div style={{padding:"3rem"}} className="calorie-history-container">
+      <div className="calorie-history-container">
         <Button onClick={()=>{changeMode(selectMode)}}>{modeName}</Button>
         {modeBasedEntries.length === 0 ? (
           <p>No records found.</p>
@@ -281,15 +345,15 @@ export const Profile =() =>{
                     count={idedRows.length}
                     page={page}
                     onPageChange={handleChangePage}
-                    rowsPerPage={rowsPerPage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    rowsPerPageOptions={[2, 3, 4]}
+                    rowsPerPage={4}
+                    onRowsPerPageChange={()=>{}}
+                    rowsPerPageOptions={[]}
+                    className="pagination"
                   />
                 </TableContainer>
             )}
       </div>
-      <hr/>
-      <CalCalendar calories={calories} requiredcalories={requiredcalories} onDateClick={(date) => setSelectedDate(date)} />
+      <CalCalendar handleChangePageTwo={handleChangePageTwo} optionsDate={optionsDate} rowsPerPageTwo={rowsPerPageTwo} pageTwo={pageTwo} idedRowsTwo={idedRowsTwo} selectedDate={selectedDate} selectedDayEntries={selectedDayEntries}  proteinchartData={thisWeekProteins} caloriechartData={thisWeekCalories} fatchartData={thisWeekFats} calories={calories} requiredcalories={requiredcalories} onDateClick={(date) => setSelectedDate(date)} />
       <div style={{ marginTop: '1rem', textAlign: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
           <span style={{ backgroundColor: '#4caf50', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Met</span>
@@ -297,9 +361,8 @@ export const Profile =() =>{
           <span style={{ backgroundColor: '#f44336', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Low</span>
         </div>
       </div>
-      <hr/>
     {selectedDate && (
-      <div style={{padding:"3rem"}} className="selected-day-entries">
+      <div className="selected-day-entries">
         <h3>{new Date(selectedDate).toDateString()}</h3>
         {selectedDayEntries.length === 0 ? (
           <p>No entries found.</p>
@@ -335,18 +398,18 @@ export const Profile =() =>{
               count={idedRowsTwo.length}
               page={pageTwo}
               onPageChange={handleChangePageTwo}
-              rowsPerPage={rowsPerPageTwo}
-              onRowsPerPageChange={handleChangeRowsPerPageTwo}
-              rowsPerPageOptions={[2, 3, 4]}
+              rowsPerPage={4}
+              onRowsPerPageChange={()=>{}}
+              rowsPerPageOptions={[]}
             />
           </TableContainer>
         </>
         )}
       </div>
     )}
-        <hr/>
-        <BarChart></BarChart>
-        {/* <PieChart></PieChart> */}
-      </>
-    );
+      <CalBarChart></CalBarChart>
+      <ProBarChart></ProBarChart>
+      <FatBarChart></FatBarChart>
+    </>
+  );
 }
