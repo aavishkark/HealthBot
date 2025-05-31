@@ -12,9 +12,12 @@
 
 .calContainer {
   display: flex;
-  width: 50%;
   margin: auto;
   justify-content: center;
+}
+
+abbr[title] {
+  all: unset !important;
 }
 
 @media screen and (max-width: 768px) {
