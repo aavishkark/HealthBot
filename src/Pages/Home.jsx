@@ -28,6 +28,7 @@ export const Home = () => {
   const [loading, setLoading] = useState(false);
   const [calories, setCalories] = useState('');
   const [proteins, setProteins] = useState('');
+  const [carbs, setCarbs] = useState('');
   const [fats, setFats] = useState('');
   const [modalResponse, setmodalResponse] = useState('');
   
@@ -61,6 +62,7 @@ export const Home = () => {
       .then((response) => {
         const data = response.data;
         setResponse(data.reply || 'No response.');
+        console.log(data.reply)
         handleOpen()
       })
       .catch((error) => {
@@ -78,16 +80,17 @@ export const Home = () => {
     const resArray = response.split(' ');
     const cal = resArray[0];
     const pro = resArray[1];
-    const fat = resArray[2];
-    const amount = resArray[3];
+    const carb = resArray[2];
+    const fat = resArray[3];
+    const amount = resArray[4];
     let item ="";
 
-    for ( let i=4; i<=resArray.length-1; i++ ){
+    for ( let i=5; i<=resArray.length-1; i++ ){
         item += resArray[i] + " "
     }
 
     useEffect(()=>{
-        const modalRes = resArray[0] === "NO!" ? `${response}` : `${resArray[0]+' calories, '+ resArray[1]+'g proteins, ' + resArray[2]+'g fats in ' + resArray[3] + 'g ' + item}`
+        const modalRes = resArray[0] === "NO!" ? `${response}` : `${resArray[0]+' calories, '+ resArray[1]+'g proteins, ' + resArray[2]+'g carbs & ' + resArray[3]+'g fats in ' + resArray[4] + 'g ' + item}`
         setmodalResponse(modalRes);
     },[response,item,resArray])
 
@@ -99,6 +102,7 @@ export const Home = () => {
        await axios.post('https://healthbotbackend-production.up.railway.app/addcalories', {
         calories:mode === "bot" ? cal : calories,
         proteins:mode === "bot" ? pro : proteins,
+        carbs:mode === "bot" ? carb : carbs,
         fats:mode === "bot" ? fat : fats,
         foodAmount:mode === "manual" ? foodAmount : amount,
         foodItem:mode === "bot" ? item : foodItem,
@@ -114,6 +118,7 @@ export const Home = () => {
         setCalories('');
         setProteins('');
         setFats('');
+        setCarbs('');
         setFoodAmount('');
         setFoodItem('');
         handleOpenalert();
@@ -210,6 +215,18 @@ export const Home = () => {
                 value={proteins}
                 placeholder="Enter food Proteins"
                 onChange={(e) => setProteins(e.target.value)}
+                required
+                /><br />
+                <TextField 
+                id="outlined-basic" 
+                label="Enter food Carbs" 
+                variant="outlined"
+                margin="dense"
+                type="text"
+                fullWidth
+                value={carbs}
+                placeholder="Enter food Carbs"
+                onChange={(e) => setCarbs(e.target.value)}
                 required
                 /><br />
                 <TextField 
