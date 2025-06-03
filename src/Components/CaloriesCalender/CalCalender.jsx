@@ -107,6 +107,7 @@ function CalorieCalendar({ calories, onDateClick, requiredcalories, selectedDayE
                         <Th>Amount(g)</Th>
                         <Th isNumeric>Calories</Th>
                         <Th isNumeric>Proteins(g)</Th>
+                        <Th isNumeric>Carbs(g)</Th>
                         <Th isNumeric>Fats(g)</Th>
                       </Tr>
                     </Thead>
@@ -117,6 +118,7 @@ function CalorieCalendar({ calories, onDateClick, requiredcalories, selectedDayE
                           <Td>{item.foodAmount}</Td>
                           <Td isNumeric>{item.calories}</Td>
                           <Td isNumeric>{item.proteins}</Td>
+                          <Td isNumeric>{item.carbs}</Td>
                           <Td isNumeric>{item.fats}</Td>
                         </Tr>
                       ))}
