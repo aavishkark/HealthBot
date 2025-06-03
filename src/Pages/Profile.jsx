@@ -323,6 +323,7 @@ export const Profile =() =>{
                         <TableCell align="right">Amount(g)</TableCell>
                         <TableCell align="right">Calories(kcal)</TableCell>
                         <TableCell align="right">Proteins(g)</TableCell>
+                        <TableCell align="right">Carbs(g)</TableCell>
                         <TableCell align="right">Fats(g)</TableCell>
                         <TableCell align="right">Date</TableCell>
                       </TableRow>
@@ -334,6 +335,7 @@ export const Profile =() =>{
                           <TableCell align="right">{item.foodAmount}</TableCell>
                           <TableCell align="right">{item.calories}</TableCell>
                           <TableCell align="right">{item.proteins}</TableCell>
+                          <TableCell align="right">{item.carbs}</TableCell>
                           <TableCell align="right">{item.fats}</TableCell>
                           <TableCell align="right">{new Date(selectedDate).toDateString(optionsDate)}</TableCell>
                         </TableRow>
@@ -376,6 +378,7 @@ export const Profile =() =>{
                   <TableCell align="right">Amount</TableCell>
                   <TableCell align="right">Calories</TableCell>
                   <TableCell align="right">Proteins(g)</TableCell>
+                  <TableCell align="right">Carbs(g)</TableCell>
                   <TableCell align="right">Fats(g)</TableCell>
                   <TableCell align="right">Date</TableCell>
                 </TableRow>
@@ -387,6 +390,7 @@ export const Profile =() =>{
                     <TableCell align="right">{item.foodAmount}</TableCell>
                     <TableCell align="right">{item.calories}</TableCell>
                     <TableCell align="right">{item.proteins}</TableCell>
+                    <TableCell align="right">{item.carbs}</TableCell>
                     <TableCell align="right">{item.fats}</TableCell>
                     <TableCell align="right">{new Date(selectedDate).toDateString(optionsDate)}</TableCell>
                   </TableRow>
