@@ -411,9 +411,11 @@ export const Profile =() =>{
         )}
       </div>
     )}
+    <div className="chartsContainer">
       <CalBarChart></CalBarChart>
       <ProBarChart></ProBarChart>
       <FatBarChart></FatBarChart>
+    </div>
     </>
   );
 }

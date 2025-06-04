@@ -2,7 +2,7 @@
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.1);
   padding: 10px;
-  background-color: transparent;
+  background-color: white;
   font-family: monospace;
 }
 .react-calendar__tile--active{
@@ -14,6 +14,10 @@
   display: flex;
   margin: auto;
   justify-content: center;
+  width: 80%;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: rgb(221, 230, 250);
 }
 
 abbr[title] {
@@ -22,6 +26,6 @@ abbr[title] {
 
 @media screen and (max-width: 768px) {
   .calContainer {
-    width: 80%;
+    width: 90%;
   }
 }
