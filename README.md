@@ -60,7 +60,7 @@ Health Bot is a web application that helps users track their daily food intake a
 <img src="https://i.ibb.co/TB1crntH/signup.png" alt="signup" border="0" width="600">
 
 - Login Page
-<img src="https://i.ibb.co/v6sTMHhQ/login.png" alt="login" border="0" width="600">
+<img src="https://i.ibb.co/9kw1dNhV/login.png" alt="login" border="0">
 
 
 
