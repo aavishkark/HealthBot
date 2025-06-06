@@ -9,7 +9,6 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   Box,
 } from '@chakra-ui/react';
 import './calcalender.css';

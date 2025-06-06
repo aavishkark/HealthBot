@@ -8,7 +8,6 @@
   padding-top: 20px;
   padding-bottom: 20px;
   gap: 0.8rem;
-  background-color: rgb(221, 230, 250);
   border-radius: 10px;
 }
 
@@ -50,6 +49,15 @@
 
 .MuiTableCell-body {
   font-size: 0.95rem;
+}
+
+.chartContainer {
+  width: 800px;
+}
+
+.chartsContainer {
+  display: flex;
+  flex-direction: column;
 }
 
 @media screen and (max-width: 768px) {

@@ -206,6 +206,7 @@ export const Profile =() =>{
   };
   
     const options = {
+      MaxWidth:"600px",
       responsive: true,
       plugins: {
         legend: {
