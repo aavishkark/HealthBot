@@ -8,12 +8,6 @@ import {
   Select,
   Box,
   VStack,
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -22,6 +16,7 @@ import {
   ModalCloseButton,
 } from '@chakra-ui/react';
 import './calcalender.css';
+import TableDisplay from '../TableDisplay';
 
 function CalorieCalendar({
   calories,
@@ -129,30 +124,7 @@ function CalorieCalendar({
                 {selectedDayEntries.length === 0 ? (
                   <p>No records found.</p>
                 ) : (
-                  <Table variant="striped" colorScheme="teal" size="md">
-                    <Thead>
-                      <Tr>
-                        <Th>Food Item</Th>
-                        <Th>Amount(g)</Th>
-                        <Th isNumeric>Calories</Th>
-                        <Th isNumeric>Proteins(g)</Th>
-                        <Th isNumeric>Carbs(g)</Th>
-                        <Th isNumeric>Fats(g)</Th>
-                      </Tr>
-                    </Thead>
-                    <Tbody>
-                      {selectedDayEntries.map((item, idx) => (
-                        <Tr key={idx}>
-                          <Td>{item.foodItem}</Td>
-                          <Td>{item.foodAmount}</Td>
-                          <Td isNumeric>{item.calories}</Td>
-                          <Td isNumeric>{item.proteins}</Td>
-                          <Td isNumeric>{item.carbs}</Td>
-                          <Td isNumeric>{item.fats}</Td>
-                        </Tr>
-                      ))}
-                    </Tbody>
-                  </Table>
+                  <TableDisplay selectedDayEntries={selectedDayEntries}/>
                 )}
               </Box>
             </ModalBody>

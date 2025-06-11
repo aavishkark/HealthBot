@@ -1,0 +1,12 @@
+.chakra-modal__close-btn {
+    display: none !important;
+}
+.chakra-button {
+    padding: 5px !important;
+}
+.chakra-modal__content {
+    padding: 10px !important;
+}
+.chakra-modal__content {
+    width: 90% !important;
+}
