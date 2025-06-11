@@ -1,128 +1,90 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import './editprofile.css';
-import { MenuItem } from "@mui/material";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Select from "@mui/material/Select";
-import Button from "@mui/material/Button";
+import { FaUser, FaBirthdayCake, FaRulerVertical, FaWeightHanging, FaVenusMars, FaEnvelope, FaDumbbell } from "react-icons/fa";
 
-export const EditProfile = () =>{
-    const [userEmail, setUserEmail] = useState('');
-    const [userProfile, setUserProfile] = useState('');
-    const [userName, setUserName] = useState('');
-    const [userHeight, setUserHeight] = useState('');
-    const [userWeight, setUserWeight] = useState('');
-    const [userGender,setUserGender]=useState('')
-    const [userAge, setUserAge] = useState('');
-    const [userActivityLevel, setUserActivityLevel] = useState('');
+export const EditProfile = () => {
+  const [userProfile, setUserProfile] = useState({});
+  const [form, setForm] = useState({ name:"", age:"", height:"", weight:"", gender:"", email:"", activity:"" });
+  const email = localStorage.getItem("email");
 
-    const email = localStorage.getItem('email')
+  useEffect(() => {
+    axios.get("https://healthbotbackend-production.up.railway.app/getProfile", { params:{ email }})
+      .then(res => {
+        setUserProfile(res.data.user);
+        setForm({
+          name: res.data.user.name,
+          age: res.data.user.age,
+          height: res.data.user.height,
+          weight: res.data.user.weight,
+          gender: res.data.user.gender,
+          email: res.data.user.email,
+          activity: res.data.user.activitylevel
+        });
+      });
+  }, [email]);
 
+  const handleChange = e => setForm({...form, [e.target.name]: e.target.value});
 
-    useEffect(()=>{
-        
-        axios.get('https://healthbotbackend-production.up.railway.app/getProfile',{
-            params:{email},
-            headers:{
-                'content-type':'application/json',
-            }
-        })
-        .then((res)=>{
-            setUserProfile(res.data.user);
-            setUserName(res.data.user.name);
-            setUserAge(res.data.user.age);
-            setUserHeight(res.data.user.height);
-            setUserWeight(res.data.user.weight);
-            setUserEmail(res.data.user.email);
-            setUserGender(res.data.user.gender);
-            setUserActivityLevel(res.data.user.activitylevel);
-        })
-    },[email])
+  const handleUpdate = e => {
+    e.preventDefault();
+    axios.patch(`https://healthbotbackend-production.up.railway.app/updateProfile/${userProfile._id}`,
+      { ...userProfile, ...form }
+    ).then(console.log).catch(console.error);
+  };
 
-    const handleUpdate = (e) => {
-        e.preventDefault()
-        axios.patch(`http://localhost:8080/updateProfile/${userProfile._id}`,{
-            
-                _id: userProfile._id,
-                email: userEmail,
-                name: userName,
-                password: userProfile.password,
-                weight: userWeight,
-                height: userHeight,
-                age: userAge,
-                gender: userGender,
-                activitylevel: userActivityLevel,
-                calories: userProfile.calories,
-                __v: userProfile.__v
-            
-        })
-        .then((res)=>{
-            console.log(res);
-        })
-        .catch((err)=>{
-            console.log(err);
-        })
+  const fields = [
+    { name:"name", label:"Name", icon: <FaUser /> , type:"text" },
+    { name:"age", label:"Age", icon: <FaBirthdayCake /> , type:"number" },
+    { name:"height", label:"Height (cm)", icon: <FaRulerVertical />, type:"number" },
+    { name:"weight", label:"Weight (kg)", icon: <FaWeightHanging />, type:"number" },
+    { name:"gender", label:"Gender", icon: <FaVenusMars />, type:"select", options:["Male","Female"] },
+    { name:"email", label:"Email", icon: <FaEnvelope />, type:"email" },
+    { name:"activity", label:"Activity Level",icon:<FaDumbbell />, type:"select", 
+      options:["1.2","1.375","1.55","1.725","1.9"], 
+      optionLabels:["Sedentary","Lightly active","Moderately active","Very active","Super active"]
     }
-    
-    return(
-        <>
-        <form onSubmit={handleUpdate}>
-            <Box sx={{width:"50%",margin:"auto", padding:"50px"}}>
-                <label htmlFor="username">Name</label><br />
-                <TextField 
-                    label="Enter Username" 
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth type="text" id="username" placeholder="Your Username" onChange={(e)=>{setUserName(e.target.value)}} value={userName}/><br />
-                <label htmlFor="age">Age</label><br/>
-                <TextField 
-                    label="Enter Age" 
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth type="number" id="age" placeholder="Your Age" onChange={(e)=>{setUserAge(e.target.value)}} value={userAge}/><br />
-                <label htmlFor="height">Height</label><br/>
-                <TextField 
-                    label="Enter Height" 
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth type="number" id="height" placeholder="In Centimeters" onChange={(e)=>{setUserHeight(e.target.value)}} value={userHeight}/><br />
-                <label htmlFor="Weight">Weight</label><br/>
-                <TextField 
-                    label="Enter Weight" 
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth type="number" id="weight" placeholder="In Kilograms" onChange={(e)=>{setUserWeight(e.target.value)}} value={userWeight}/><br />
-                <label htmlFor="gender">Gender</label><br />
-                <Select
-                    label="Select Gender"
-                    required
-                    id="gender" onChange={(e)=>{setUserGender(e.target.value)}} value={userGender}>
-                    <MenuItem value="Male">Male</MenuItem>
-                    <MenuItem value="Female">Female</MenuItem>
-                </Select><br />
-                <label htmlFor="email">Email</label><br />
-                <TextField 
-                    label="Enter Email" 
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth type="email" id="email" placeholder="Your Email" onChange={(e)=>{setUserEmail(e.target.value)}} value={userEmail}/><br />
-                <label htmlFor="activity">Choose level of Activity</label><br />
-                <Select required id="activity" onChange={(e)=>{setUserActivityLevel(e.target.value)}} value={userActivityLevel}>
-                    <MenuItem value="1.2" title="Little to no exercise">Sedentary</MenuItem>
-                    <MenuItem value="1.375" title="Light exercise/sports 1–3 days/week">Lightly active</MenuItem>
-                    <MenuItem value="1.55" title="Moderate exercise 3–5 days/week">Moderately active</MenuItem>
-                    <MenuItem value="1.725" title="Hard exercise 6–7 days/week">Very active</MenuItem>
-                    <MenuItem value="1.9" title="Very hard exercise and physical job">Super active</MenuItem>
-                </Select><br />
-                <Button sx={{padding:'2rem'}} type="submit">Update</Button><br />
-            </Box>
-        </form>
-        </>
-    )
-}
+  ];
+
+  return (
+    <div className=" min-h-screen flex items-center justify-center py-10 px-4">
+      <form onSubmit={handleUpdate} className=" max-w-md w-full p-8 space-y-6">
+        <h2 className="text-2xl font-bold text-gray-800 text-center">Edit Your Profile</h2>
+        {fields.map(f => (
+          <div key={f.name} className="relative">
+            <span className="absolute left-3 top-3 text-blue-600">{f.icon}</span>
+            {f.type === "select" ? (
+              <select
+                name={f.name}
+                value={form[f.name]}
+                required
+                onChange={handleChange}
+                className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-300"
+              >
+                <option value="" disabled>Select {f.label}</option>
+                {f.options.map((opt, i) => (
+                  <option key={opt} value={opt}>{f.optionLabels? f.optionLabels[i] : opt}</option>
+                ))}
+              </select>
+            ) : (
+              <input
+                name={f.name}
+                type={f.type}
+                placeholder={f.label}
+                value={form[f.name]}
+                required
+                onChange={handleChange}
+                className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-300"
+              />
+            )}
+          </div>
+        ))}
+        <button
+          type="submit"
+          className="w-full py-3 rounded-lg bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold hover:from-blue-600 hover:to-purple-700 transition"
+        >
+          Save Changes
+        </button>
+      </form>
+    </div>
+  );
+};

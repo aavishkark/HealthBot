@@ -1,54 +1,74 @@
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useState } from 'react';
-import { useDisclosure, Button, ChakraProvider} from '@chakra-ui/react';
 import {
+  useDisclosure,
+  Button,
+  ChakraProvider,
+  Select,
+  Box,
+  VStack,
   Table,
   Thead,
   Tbody,
   Tr,
   Th,
   Td,
-  Box,
-} from '@chakra-ui/react';
-import './calcalender.css';
-import {Modal} from '@chakra-ui/react' ;
-import { Bar } from 'react-chartjs-2';
-import {
+  Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader,
   ModalFooter,
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
+import './calcalender.css';
 
-function CalorieCalendar({ calories, onDateClick, requiredcalories, selectedDayEntries }) {
+function CalorieCalendar({
+  calories,
+  onDateClick,
+  requiredcalories,
+  requiredProteins,
+  requiredFats,
+  selectedDayEntries,
+}) {
   const [value, setValue] = useState(new Date());
+  const [viewMode, setViewMode] = useState('calories');
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
-  const groupedCalories = calories.reduce((acc, entry) => {
+  const groupedData = calories.reduce((acc, entry) => {
     const date = new Date(entry.timestamp).toDateString();
-    const cal = parseInt(entry.calories);
 
-    if (!acc[date]) acc[date] = cal;
-    else acc[date] += cal;
+    if (!acc[date]) {
+      acc[date] = { calories: 0, proteins: 0, fats: 0 };
+    }
+
+    acc[date].calories += parseInt(entry.calories) || 0;
+    acc[date].proteins += parseFloat(entry.proteins) || 0;
+    acc[date].fats += parseFloat(entry.fats) || 0;
 
     return acc;
   }, {});
 
+  const getRequirement = () => {
+    if (viewMode === 'calories') return requiredcalories;
+    if (viewMode === 'proteins') return requiredProteins;
+    return requiredFats;
+  };
+
   const tileContent = ({ date, view }) => {
     const key = date.toDateString();
-    const calorie = groupedCalories[key];
+    const entry = groupedData[key];
+    const requirement = getRequirement();
 
-    if (view === 'month') {
+    if (view === 'month' && entry) {
+      const value = entry[viewMode];
+
       let bgColor = '';
-      if (calorie === requiredcalories) bgColor = '#4caf50';
-      else if (calorie > requiredcalories) bgColor = '#ff9800';
-      else if (calorie > 0) bgColor = '#f44336';
+      if (value === requirement) bgColor = '#4caf50';
+      else if (value > requirement) bgColor = '#ff9800';
+      else if (value > 0) bgColor = '#f44336';
 
-      return calorie ? (
+      return (
         <div
           style={{
             marginTop: 4,
@@ -61,9 +81,9 @@ function CalorieCalendar({ calories, onDateClick, requiredcalories, selectedDayE
             maxWidth: '100%',
           }}
         >
-          {calorie}
+          {value.toFixed(0)}
         </div>
-      ) : null;
+      );
     }
     return null;
   };
@@ -71,34 +91,44 @@ function CalorieCalendar({ calories, onDateClick, requiredcalories, selectedDayE
   const handleDateChange = (date) => {
     setValue(date);
     if (onDateClick) onDateClick(date);
-    onOpen()
+    onOpen();
   };
-
-  const optionsDate = {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      hour: 'numeric',
-      minute: '2-digit',
-      hour12: true
-    };
 
   return (
     <div className='calContainer'>
-      <Calendar
-        onChange={handleDateChange}
-        value={value}
-        tileContent={tileContent}
-        w="100%"
-      />
       <ChakraProvider>
+        <VStack spacing={4} align="start" mb={4}>
+          <Select
+            value={viewMode}
+            onChange={(e) => setViewMode(e.target.value)}
+            width="200px"
+            borderRadius="md"
+            size="md"
+            variant="outline"
+            alignSelf="Center"
+          >
+            <option value="calories">Calories</option>
+            <option value="proteins">Proteins</option>
+            <option value="fats">Fats</option>
+          </Select>
+
+          <Calendar
+            onChange={handleDateChange}
+            value={value}
+            tileContent={tileContent}
+            w="100%"
+          />
+        </VStack>
+
         <Modal isOpen={isOpen} onClose={onClose} size="5xl">
           <ModalOverlay />
           <ModalContent>
-            <ModalHeader>Modal Title</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-                <Box overflowX="auto">
+              <Box overflowX="auto">
+                {selectedDayEntries.length === 0 ? (
+                  <p>No records found.</p>
+                ) : (
                   <Table variant="striped" colorScheme="teal" size="md">
                     <Thead>
                       <Tr>
@@ -123,10 +153,11 @@ function CalorieCalendar({ calories, onDateClick, requiredcalories, selectedDayE
                       ))}
                     </Tbody>
                   </Table>
-                </Box>
+                )}
+              </Box>
             </ModalBody>
             <ModalFooter>
-              <Button colorScheme='blue' mr={3} onClick={onClose}>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
                 Close
               </Button>
             </ModalFooter>

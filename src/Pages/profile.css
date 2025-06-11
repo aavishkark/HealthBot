@@ -1,32 +1,55 @@
-.infoContainer {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  justify-content: space-evenly;
-  width: 60%;
-  margin: auto;
-  margin-top: 50px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-  gap: 0.8rem;
-  border-radius: 10px;
+.infoContainerWithHeader {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  width: 80%;
+  margin: 3rem auto;
 }
 
-.editBtn {
-  margin: 30px auto;
-}
-
-.infoContainer label {
-  font-size: 0.8rem;
-  margin: 0.5rem;
-}
-
-.info {
+.infoHeader {
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  margin-bottom: 20px;
 }
 
-.info div {
+.infoHeader h2 {
+  font-size: 1.4rem;
   font-weight: 600;
+  color: #333;
+}
+
+.editProfileBtn {
+  font-weight: 500;
+  text-transform: none;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.infoCard {
+  background-color: #f9f9f9;
+  padding: 14px 16px;
+  border-radius: 8px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.infoCard label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.infoCard div {
+  font-size: 1rem;
+  color: #222;
 }
 
 .food-table-container {
@@ -52,12 +75,16 @@
 }
 
 .chartContainer {
-  width: 800px;
+  width: 30%;
+  margin: auto;
 }
 
 .chartsContainer {
   display: flex;
+  width: 90%;
   flex-direction: column;
+  justify-content: center;
+  margin: auto;
 }
 
 @media screen and (max-width: 768px) {

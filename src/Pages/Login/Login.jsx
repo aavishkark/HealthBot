@@ -1,56 +1,93 @@
 import { useState } from "react";
 import axios from "axios";
-import { useDispatch} from 'react-redux';
+import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../Redux/Login/actionType";
-import { TextField, Button } from "@mui/material";
-import Box from "@mui/material/Box";
-import './login.css';
+import { useNavigate } from "react-router-dom";
+import { FaEnvelope, FaLock } from "react-icons/fa";
+
 export const Login = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-    const dispatch = useDispatch();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const user = { email, password };
-        axios.post('https://healthbotbackend-production.up.railway.app/login', user)
-        .then((response) => {
-            if (response.data.msg === "Login Successfull") { 
-                localStorage.setItem("token", response.data.token);
-                dispatch({ type: LOGIN_SUCCESS });
-                localStorage.setItem("isAuth", true);
-                localStorage.setItem("email", email);
-                alert("Login successful! Redirecting to dashboard.");
-                window.location.href = '/';
-            } else {
-                alert("Login failed! Please check your credentials.");
-            }
-        })
-        .catch((error) => {
-            alert("Login failed! Please try again.");
-        });
-    }
-    return (
-        <form onSubmit={handleSubmit}>
-            <Box className="loginContainer">
-                <label htmlFor="email">Email</label><br />
-                <TextField 
-                    label="Enter Email" 
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth type="email" id="email" placeholder="Your Email" onChange={(e)=>{setEmail(e.target.value)}} value={email} /><br />
-                <label htmlFor="password">Password</label><br />
-                <TextField 
-                    id="outlined-basic" 
-                    label="Enter Password" 
-                    variant="outlined"
-                    margin="dense"
-                    required
-                    fullWidth type="password" placeholder="Your password" onChange={(e)=>{setPassword(e.target.value)}} value={password} /><br />
-                <Button type="submit">Login</Button><br />
-            </Box>
-        </form>
-    )
-}
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const user = { email, password };
+    axios
+      .post("https://healthbotbackend-production.up.railway.app/login", user)
+      .then((response) => {
+        if (response.data.msg === "Login Successfull") {
+          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("isAuth", true);
+          localStorage.setItem("email", email);
+          dispatch({ type: LOGIN_SUCCESS });
+          alert("Login successful! Redirecting to dashboard.");
+          navigate("/");
+        } else {
+          alert("Login failed! Please check your credentials.");
+        }
+      })
+      .catch(() => {
+        alert("Login failed! Please try again.");
+      });
+  };
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-6">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-white/40 backdrop-blur-lg rounded-xl shadow-xl p-8 space-y-6"
+      >
+        <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
+
+        <div className="relative">
+          <span className="absolute left-3 top-3 text-blue-600">
+            <FaEnvelope />
+          </span>
+          <input
+            type="email"
+            required
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+
+        <div className="relative">
+          <span className="absolute left-3 top-3 text-blue-600">
+            <FaLock />
+          </span>
+          <input
+            type="password"
+            required
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-3 rounded-lg bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition"
+        >
+          Login
+        </button>
+
+        <p className="text-center text-sm text-gray-600">
+          Don't have an account?
+          <button
+            type="button"
+            className="ml-2 text-blue-700 hover:underline font-medium"
+            onClick={() => navigate("/signup")}
+          >
+            Sign up
+          </button>
+        </p>
+      </form>
+    </div>
+  );
+};
