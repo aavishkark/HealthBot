@@ -1,28 +1,34 @@
+.navbar {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    width: 100%;
+    padding: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 .navbar > ul {
     display: flex;
-    justify-content: space-evenly;
-    margin: auto;
+    justify-content: center;
+    gap: 2rem;
+    margin: 0 auto;
     list-style: none;
-    padding: 0%;
+    padding: 0;
+    max-width: 1000px;
 }
 
 .navbar a {
     text-decoration: none;
-    color: rgb(194, 209, 250);
-    transition: color 0.4s;
+    color: #1a1a1a;
+    transition: color 0.3s ease;
     font-size: large;
     font-weight: 500;
 }
 
-.navbar {
-    margin-top: 10px;
-    background-color: rgb(16, 46, 73);
-    width: 80%;
-    margin: auto;
-    padding: 1.5rem;
-}
-
 .navbar a:hover {
-    color: white;
+    color: #0056ff;
     border-radius: 2px;
 }

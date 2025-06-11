@@ -1,8 +1,9 @@
 import './navbar.css';
 import { useSelector } from 'react-redux';
-import { useDispatch} from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { LOGOUT } from '../Redux/Login/actionType';
 import { useNavigate } from 'react-router-dom';
+
 export const Navbar = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -15,6 +16,7 @@ export const Navbar = () => {
         localStorage.removeItem('token');
         navigate('/login');
     }
+
     return (
         <div className='navbar'>
             <ul>
@@ -23,5 +25,5 @@ export const Navbar = () => {
                 {isAuth === "true" ? <li onClick={handleLogout}><a href="/login">Logout</a></li> : <li><a href="/login">Login</a></li>}
             </ul>
         </div>
-    )
-}
+    );
+};
