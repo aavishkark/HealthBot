@@ -21,6 +21,7 @@ import {
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import axios from 'axios';
+import ClipLoader from "react-spinners/ClipLoader";
 
 const modalStyle = {
   position: 'absolute',
@@ -136,121 +137,129 @@ export const Home = () => {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 5, px: 2 }}>
-      <Box sx={{ border: '1px solid #ddd', borderRadius: 3, p: 4, boxShadow: 1 }}>
-        <Box textAlign="center" mb={3}>
-          <Button
-            variant="outlined"
-            startIcon={<SwapHorizIcon />}
-            onClick={switchMode}
-            size="small"
-          >
-            Switch to {mode === 'bot' ? 'Manual' : 'Bot'} Mode
-          </Button>
-        </Box>
+    <>
+    {loading ? (
+        <div className="flex justify-center items-center h-40">
+          <ClipLoader size={40} color="#36d7b7" />
+        </div>
+      ) : (
+            <Container maxWidth="sm" sx={{ mt: 5, px: 2 }}>
+              <Box sx={{ border: '1px solid #ddd', borderRadius: 3, p: 4, boxShadow: 1 }}>
+                <Box textAlign="center" mb={3}>
+                  <Button
+                    variant="outlined"
+                    startIcon={<SwapHorizIcon />}
+                    onClick={switchMode}
+                    size="small"
+                  >
+                    Switch to {mode === 'bot' ? 'Manual' : 'Bot'} Mode
+                  </Button>
+                </Box>
 
-        <Divider sx={{ mb: 2 }} />
+                <Divider sx={{ mb: 2 }} />
 
-        {mode === 'bot' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <form onSubmit={handleSubmit}>
-              <TextField
-                type="text"
-                value={input}
-                fullWidth
-                margin="normal"
-                label="e.g. 200g Museli"
-                onChange={(e) => setInput(e.target.value)}
-                required
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <Button
-                className='bg-gradient-to-r from-green-500 to-teal-600'
-                type="submit"
-                fullWidth
-                sx={{ mt: 2, color:"white" }}
-                disabled={loading}
-                endIcon={loading ? <CircularProgress size={20} /> : <SendIcon />}
+                {mode === 'bot' && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <form onSubmit={handleSubmit}>
+                      <TextField
+                        type="text"
+                        value={input}
+                        fullWidth
+                        margin="normal"
+                        label="e.g. 200g Museli"
+                        onChange={(e) => setInput(e.target.value)}
+                        required
+                        InputProps={{
+                          startAdornment: (
+                            <InputAdornment position="start">
+                            </InputAdornment>
+                          )
+                        }}
+                      />
+                      <Button
+                        className='bg-gradient-to-r from-green-500 to-teal-600'
+                        type="submit"
+                        fullWidth
+                        sx={{ mt: 2, color:"white" }}
+                        disabled={loading}
+                        endIcon={loading ? <CircularProgress size={20} /> : <SendIcon />}
+                      >
+                        {loading ? 'Thinking...' : 'Ask'}
+                      </Button>
+                    </form>
+                  </motion.div>
+                )}
+
+                {mode === 'manual' && (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                    <form onSubmit={addCalories}>
+                      {[
+                        ['Calories', calories, setCalories],
+                        ['Proteins', proteins, setProteins],
+                        ['Carbs', carbs, setCarbs],
+                        ['Fats', fats, setFats],
+                        ['Food Item', foodItem, setFoodItem],
+                        ['Food Amount (g)', foodAmount, setFoodAmount]
+                      ].map(([label, value, setter, icon], idx) => (
+                        <TextField
+                          key={idx}
+                          fullWidth
+                          label={label}
+                          margin="dense"
+                          value={value}
+                          onChange={(e) => setter(e.target.value)}
+                          required
+                          InputProps={{
+                            startAdornment: <InputAdornment position="start">{icon}</InputAdornment>
+                          }}
+                        />
+                      ))}
+                      <Button className='bg-gradient-to-r from-green-500 to-teal-600' type="submit" fullWidth sx={{ mt: 2 }} variant="contained">
+                        Add Calories
+                      </Button>
+                    </form>
+                  </motion.div>
+                )}
+              </Box>
+
+              <Modal open={open} onClose={handleClose}>
+                <Box sx={modalStyle}>
+                  <Grid container spacing={2} justifyContent="center">
+                    <Grid item xs={12}>
+                      {resArray[0] === 'NO!' ? (
+                        <Typography color="error">
+                          <CancelIcon fontSize="large" /> {modalResponse}
+                        </Typography>
+                      ) : (
+                        <Typography>
+                          <CheckCircleIcon color="success" fontSize="large" /> {modalResponse}
+                        </Typography>
+                      )}
+                    </Grid>
+                    <Grid item>
+                      <Button
+                        onClick={resArray[0] === 'NO!' ? handleClose : addCalories}
+                        variant="contained"
+                      >
+                        {resArray[0] === 'NO!' ? 'Okay' : 'Consume'}
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </Modal>
+
+              <Snackbar
+                open={openalert}
+                autoHideDuration={3000}
+                onClose={handleClosealert}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
               >
-                {loading ? 'Thinking...' : 'Ask'}
-              </Button>
-            </form>
-          </motion.div>
-        )}
-
-        {mode === 'manual' && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <form onSubmit={addCalories}>
-              {[
-                ['Calories', calories, setCalories],
-                ['Proteins', proteins, setProteins],
-                ['Carbs', carbs, setCarbs],
-                ['Fats', fats, setFats],
-                ['Food Item', foodItem, setFoodItem],
-                ['Food Amount (g)', foodAmount, setFoodAmount]
-              ].map(([label, value, setter, icon], idx) => (
-                <TextField
-                  key={idx}
-                  fullWidth
-                  label={label}
-                  margin="dense"
-                  value={value}
-                  onChange={(e) => setter(e.target.value)}
-                  required
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">{icon}</InputAdornment>
-                  }}
-                />
-              ))}
-              <Button className='bg-gradient-to-r from-green-500 to-teal-600' type="submit" fullWidth sx={{ mt: 2 }} variant="contained">
-                Add Calories
-              </Button>
-            </form>
-          </motion.div>
-        )}
-      </Box>
-
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={modalStyle}>
-          <Grid container spacing={2} justifyContent="center">
-            <Grid item xs={12}>
-              {resArray[0] === 'NO!' ? (
-                <Typography color="error">
-                  <CancelIcon fontSize="large" /> {modalResponse}
-                </Typography>
-              ) : (
-                <Typography>
-                  <CheckCircleIcon color="success" fontSize="large" /> {modalResponse}
-                </Typography>
-              )}
-            </Grid>
-            <Grid item>
-              <Button
-                onClick={resArray[0] === 'NO!' ? handleClose : addCalories}
-                variant="contained"
-              >
-                {resArray[0] === 'NO!' ? 'Okay' : 'Consume'}
-              </Button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Modal>
-
-      <Snackbar
-        open={openalert}
-        autoHideDuration={3000}
-        onClose={handleClosealert}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
-          Calories Consumed!
-        </Alert>
-      </Snackbar>
-    </Container>
+                <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
+                  Calories Consumed!
+                </Alert>
+              </Snackbar>
+            </Container>
+      )}
+      </>
   );
 };

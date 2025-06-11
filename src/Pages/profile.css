@@ -87,6 +87,10 @@
   margin: auto;
 }
 
+.section-block {
+  margin-top: 10rem;
+}
+
 @media screen and (max-width: 768px) {
   .food-table-container {
     width: 100% !important;

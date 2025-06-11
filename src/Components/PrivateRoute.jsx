@@ -1,7 +1,6 @@
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 export const PrivateRoute = ({children}) => {
-  const isAuth = useSelector((store) => store.AuthReducer.isAuth);
+  const isAuth = localStorage.getItem('isAuth');
 return (
     <>
       {
