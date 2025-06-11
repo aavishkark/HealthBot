@@ -75,12 +75,11 @@ export const Signup = () => {
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4">
+    <div className="flex items-center justify-center px-4 mt-20">
       <form
         onSubmit={handleSubmit}
-        className="bg-white bg-opacity-40 backdrop-blur-lg rounded-xl shadow-lg max-w-md w-full p-8 space-y-6"
+        className="bg-white bg-opacity-40 max-w-md w-full p-8 space-y-6"
       >
-        <h2 className="text-2xl font-bold text-gray-800 text-center">Sign Up</h2>
 
         {fields.map((f) => (
           <div key={f.name} className="relative">

@@ -1,12 +1,9 @@
 import { useState } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
-import { LOGIN_SUCCESS } from "../../Redux/Login/actionType";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 
 export const Login = () => {
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -22,7 +19,6 @@ export const Login = () => {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("isAuth", true);
           localStorage.setItem("email", email);
-          dispatch({ type: LOGIN_SUCCESS });
           alert("Login successful! Redirecting to dashboard.");
           navigate("/");
         } else {
@@ -35,12 +31,11 @@ export const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br p-6">
+    <div className="flex items-center justify-center bg-gradient-to-br p-6 mt-20">
       <form
         onSubmit={handleSubmit}
-        className="w-full max-w-md bg-white/40 backdrop-blur-lg rounded-xl shadow-xl p-8 space-y-6"
+        className="w-full max-w-md p-8 space-y-6"
       >
-        <h2 className="text-2xl font-bold text-center text-gray-800">Login</h2>
 
         <div className="relative">
           <span className="absolute left-3 top-3 text-blue-600">

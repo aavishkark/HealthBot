@@ -46,9 +46,8 @@ export const EditProfile = () => {
   ];
 
   return (
-    <div className=" min-h-screen flex items-center justify-center py-10 px-4">
+    <div className="flex items-center justify-center py-10 px-4">
       <form onSubmit={handleUpdate} className=" max-w-md w-full p-8 space-y-6">
-        <h2 className="text-2xl font-bold text-gray-800 text-center">Edit Your Profile</h2>
         {fields.map(f => (
           <div key={f.name} className="relative">
             <span className="absolute left-3 top-3 text-blue-600">{f.icon}</span>

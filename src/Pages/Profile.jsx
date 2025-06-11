@@ -2,9 +2,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import './profile.css';
 import CalCalendar from "../Components/CaloriesCalender/CalCalender";
-import { Button, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination } from "@mui/material";
+import {
+  Button, MenuItem, Select, Table, TableBody, TableCell,
+  TableContainer, TableHead, TableRow, TablePagination
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import EditIcon from '@mui/icons-material/Edit';
+import ClipLoader from "react-spinners/ClipLoader";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -40,18 +44,18 @@ export const Profile = () => {
       params: { email },
       headers: { 'Content-Type': 'application/json' }
     })
-    .then((response) => {
-      const userCalories = response.data.user.calories;
-      setUserProfile(response.data.user);
-      setCalories(userCalories);
-      const today = new Date().getDate();
-      const filtered = userCalories.filter(entry => new Date(entry.timestamp).getDate() === today);
-      setModeBasedEntries(filtered);
-      setLoading(false);
-    })
-    .catch((error) => {
-      console.error("Error fetching user data:", error);
-    });
+      .then((response) => {
+        const userCalories = response.data.user.calories;
+        setUserProfile(response.data.user);
+        setCalories(userCalories);
+        const today = new Date().getDate();
+        const filtered = userCalories.filter(entry => new Date(entry.timestamp).getDate() === today);
+        setModeBasedEntries(filtered);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
   }, [email]);
 
   useEffect(() => {
@@ -89,7 +93,6 @@ export const Profile = () => {
       const tdee = bmr * userProfile.activitylevel;
       setRequiredCalories(tdee.toFixed(0));
 
-      // Macronutrient distribution
       const proteinCalories = 0.2 * tdee;
       const fatCalories = 0.25 * tdee;
 
@@ -126,7 +129,11 @@ export const Profile = () => {
     setPage(newPage);
   };
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return (
+    <div className="flex justify-center items-center h-40">
+      <ClipLoader size={40} color="#36d7b7" />
+    </div>
+  );
 
   return (
     <>
@@ -163,7 +170,7 @@ export const Profile = () => {
         </div>
       </div>
 
-      <div className="calorie-history-container">
+      <div className="calorie-history-container section-block">
         <Select
           value={selectMode}
           onChange={(e) => setSelectMode(e.target.value)}
@@ -220,17 +227,18 @@ export const Profile = () => {
         )}
       </div>
 
-      <CalCalendar
-        selectedDayEntries={selectedDayEntries}
-        calories={calories}
-        requiredcalories={requiredCalories}
-        requiredProteins={requiredProteins}
-        requiredFats={requiredFats}
-        onDateClick={(date) => setSelectedDate(date)}
-      />
+      <div className="calendar-section section-block">
+        <CalCalendar
+          selectedDayEntries={selectedDayEntries}
+          calories={calories}
+          requiredcalories={requiredCalories}
+          requiredProteins={requiredProteins}
+          requiredFats={requiredFats}
+          onDateClick={(date) => setSelectedDate(date)}
+        />
+      </div>
 
-
-      <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+      <div className="legend" style={{ textAlign: 'center' }}>
         <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
           <span style={{ backgroundColor: '#4caf50', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Met</span>
           <span style={{ backgroundColor: '#ff9800', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Exceeded</span>
