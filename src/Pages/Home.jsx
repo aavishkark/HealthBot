@@ -21,7 +21,6 @@ import {
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import ClipLoader from "react-spinners/ClipLoader";
 
 const modalStyle = {
   position: 'absolute',
@@ -137,12 +136,6 @@ export const Home = () => {
   };
 
   return (
-    <>
-    {loading ? (
-        <div className="flex justify-center items-center h-40">
-          <ClipLoader size={40} color="#36d7b7" />
-        </div>
-      ) : (
             <Container maxWidth="sm" sx={{ mt: 5, px: 2 }}>
               <Box sx={{ border: '1px solid #ddd', borderRadius: 3, p: 4, boxShadow: 1 }}>
                 <Box textAlign="center" mb={3}>
@@ -177,7 +170,7 @@ export const Home = () => {
                         }}
                       />
                       <Button
-                        className='bg-gradient-to-r from-green-500 to-teal-600'
+                        className='bg-gradient-to-r from-green-500 to-teal-600 hover:from-blue-600 hover:to-indigo-700 transition'
                         type="submit"
                         fullWidth
                         sx={{ mt: 2, color:"white" }}
@@ -259,7 +252,5 @@ export const Home = () => {
                 </Alert>
               </Snackbar>
             </Container>
-      )}
-      </>
   );
 };

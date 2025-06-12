@@ -142,10 +142,9 @@ export const Profile = () => {
           <h2>Profile Info</h2>
           <Button
             variant="outlined"
-            color="primary"
             startIcon={<EditIcon />}
             onClick={() => navigate('/editprofile')}
-            className="editProfileBtn"
+            className="editProfileBtn rounded-lg bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition"
           >
             Edit
           </Button>

@@ -67,7 +67,7 @@ export const Login = () => {
 
         <button
           type="submit"
-          className="w-full py-3 rounded-lg bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition"
+          className="w-full py-3 rounded-lg bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition transition"
         >
           Login
         </button>
