@@ -12,3 +12,24 @@
 .calModal {
     font-size:large;
 }
+
+.resume-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.resume-button::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -75%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+  transform: skewX(-20deg);
+  transition: left 0.5s;
+}
+
+.resume-button:hover::after {
+  left: 125%;
+}
