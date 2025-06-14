@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Button,
   TextField,
@@ -10,13 +10,17 @@ import {
   Typography,
   Container,
   CircularProgress,
-  Divider
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
 } from '@mui/material';
 import {
   SwapHoriz as SwapHorizIcon,
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
-  Send as SendIcon
+  Send as SendIcon,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
 import axios from 'axios';
@@ -43,7 +47,6 @@ export const Home = () => {
   const [proteins, setProteins] = useState('');
   const [carbs, setCarbs] = useState('');
   const [fats, setFats] = useState('');
-  const [modalResponse, setmodalResponse] = useState('');
   const [foodItem, setFoodItem] = useState('');
   const [foodAmount, setFoodAmount] = useState('');
   const [mode, setMode] = useState('bot');
@@ -89,14 +92,6 @@ export const Home = () => {
     item += resArray[i] + ' ';
   }
 
-  useEffect(() => {
-    const modalRes =
-      resArray[0] === 'NO!'
-        ? `${response}`
-        : `${resArray[0]} calories, ${resArray[1]}g proteins, ${resArray[2]}g carbs & ${resArray[3]}g fats in ${resArray[4]}g ${item}`;
-    setmodalResponse(modalRes);
-  }, [response, item, resArray]);
-
   async function addCalories() {
     try {
       await axios.post(
@@ -108,10 +103,10 @@ export const Home = () => {
           fats: mode === 'bot' ? fat : fats,
           foodAmount: mode === 'manual' ? foodAmount : amount,
           foodItem: mode === 'bot' ? item : foodItem,
-          email: email
+          email: email,
         },
         {
-          headers: { 'Content-Type': 'application/json' }
+          headers: { 'Content-Type': 'application/json' },
         }
       );
       setInput('');
@@ -137,32 +132,104 @@ export const Home = () => {
   return (
     <Container maxWidth="sm" sx={{ mt: 5, px: 2 }}>
       <motion.div
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {},
+          visible: {
+            transition: {
+              staggerChildren: 0.15,
+            },
+          },
+        }}
       >
-        <Typography variant="h4" align="center" fontWeight="bold" mb={1}>
-          Welcome to Calorie Tracker
-        </Typography>
-        <Typography variant="subtitle1" align="center" mb={2} color="text.secondary">
-          Effortlessly track your calories, proteins, carbs, and fats
-        </Typography>
+        <motion.div
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {},
+            visible: {
+              transition: {
+                staggerChildren: 0.15,
+              },
+            },
+          }}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 120, damping: 10 }}
+          >
+            <Typography
+              variant="h3"
+              align="center"
+              fontWeight="bold"
+              sx={{
+                background: 'linear-gradient(90deg, #00C9FF, #92FE9D)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                mb: 2,
+                animation: 'pulse 2s infinite',
+                '@keyframes pulse': {
+                  '0%': { transform: 'scale(1)' },
+                  '50%': { transform: 'scale(1.05)' },
+                  '100%': { transform: 'scale(1)' },
+                },
+              }}
+            >
+              HealthBot 🤖
+            </Typography>
+          </motion.div>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.2 }}
+        >
+          <Typography
+            variant="subtitle1"
+            align="center"
+            color="text.secondary"
+            sx={{
+              fontStyle: 'italic',
+              fontSize: '1.1rem',
+              maxWidth: '500px',
+              mx: 'auto',
+              mb: 3,
+            }}
+          >
+            Effortlessly track your <strong>calories</strong>, <strong>proteins</strong>,
+            <strong> carbs</strong>, and <strong>fats</strong> in one place.
+          </Typography>
+        </motion.div>
       </motion.div>
-
-      <Box sx={{ border: '1px solid #ddd', borderRadius: 3, p: 4, boxShadow: 1, backgroundColor: '#fefefe' }}>
-        <Box textAlign="center" mb={3}>
+      <Box sx={{ border: '1px solid #ddd', borderRadius: 3, p: 4, boxShadow: 1 }}>
+        <Box
+          sx={{
+            border: '2px solid transparent',
+            borderRadius: '6px',
+            backgroundImage: 'linear-gradient(#fff, #fff), linear-gradient(90deg, #00C9FF, #92FE9D)',
+            backgroundOrigin: 'border-box',
+            backgroundClip: 'content-box, border-box',
+            display: 'inline-block',
+          }}
+        >
           <Button
             variant="outlined"
             startIcon={<SwapHorizIcon />}
             onClick={switchMode}
             size="small"
+            sx={{
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: 'text.primary',
+              fontWeight: 500,
+              px: 2,
+            }}
           >
             Switch to {mode === 'bot' ? 'Manual' : 'Bot'} Mode
           </Button>
         </Box>
-
-        <Divider sx={{ mb: 2 }} />
-
         {mode === 'bot' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <form onSubmit={handleSubmit}>
@@ -176,7 +243,7 @@ export const Home = () => {
                 required
               />
               <Button
-                className='bg-gradient-to-r from-green-500 to-teal-600 hover:from-blue-600 hover:to-indigo-700 transition'
+                className="bg-gradient-to-r from-green-500 to-teal-600 hover:from-blue-600 hover:to-indigo-700 transition"
                 type="submit"
                 fullWidth
                 sx={{ mt: 2, color: 'white' }}
@@ -193,12 +260,12 @@ export const Home = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             <form onSubmit={addCalories}>
               {[
+                ['Food Item', foodItem, setFoodItem],
+                ['Food Amount (g)', foodAmount, setFoodAmount],
                 ['Calories', calories, setCalories],
                 ['Proteins', proteins, setProteins],
                 ['Carbs', carbs, setCarbs],
                 ['Fats', fats, setFats],
-                ['Food Item', foodItem, setFoodItem],
-                ['Food Amount (g)', foodAmount, setFoodAmount]
               ].map(([label, value, setter], idx) => (
                 <TextField
                   key={idx}
@@ -211,7 +278,7 @@ export const Home = () => {
                 />
               ))}
               <Button
-                className='bg-gradient-to-r from-green-500 to-teal-600 hover:from-blue-600 hover:to-indigo-700 transition'
+                className="bg-gradient-to-r from-green-500 to-teal-600 hover:from-blue-600 hover:to-indigo-700 transition"
                 type="submit"
                 fullWidth
                 sx={{ mt: 2, color: 'white' }}
@@ -230,21 +297,56 @@ export const Home = () => {
             <Grid item xs={12}>
               {resArray[0] === 'NO!' ? (
                 <Typography color="error">
-                  <CancelIcon fontSize="large" /> {modalResponse}
+                  <CancelIcon fontSize="large" /> {response}
                 </Typography>
               ) : (
-                <Typography>
-                  <CheckCircleIcon color="success" fontSize="large" /> {modalResponse}
-                </Typography>
+                <>
+                  <Typography mb={2} fontWeight="bold" color="green">
+                    <CheckCircleIcon color="success" fontSize="large" /> Nutritional Breakdown
+                  </Typography>
+                  <TableContainer component={Box}>
+                    <Table size="small">
+                      <TableBody>
+                        <TableRow>
+                          <TableCell><strong>Food Item</strong></TableCell>
+                          <TableCell>{item.trim()}</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell><strong>Amount</strong></TableCell>
+                          <TableCell>{amount} g</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell><strong>Calories</strong></TableCell>
+                          <TableCell>{cal} kcal</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell><strong>Proteins</strong></TableCell>
+                          <TableCell>{pro} g</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell><strong>Carbs</strong></TableCell>
+                          <TableCell>{carb} g</TableCell>
+                        </TableRow>
+                        <TableRow>
+                          <TableCell><strong>Fats</strong></TableCell>
+                          <TableCell>{fat} g</TableCell>
+                        </TableRow>
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </>
               )}
             </Grid>
-            <Grid item>
-              <Button
-                onClick={resArray[0] === 'NO!' ? handleClose : addCalories}
-                variant="contained"
-              >
-                {resArray[0] === 'NO!' ? 'Okay' : 'Consume'}
-              </Button>
+            <Grid container spacing={2} justifyContent="center" alignItems="center">
+              <Grid item>
+                <Button
+                  className="bg-gradient-to-r from-green-500 to-teal-600 hover:from-blue-600 hover:to-indigo-700 transition"
+                  onClick={resArray[0] === 'NO!' ? handleClose : addCalories}
+                  variant="contained"
+                >
+                  {resArray[0] === 'NO!' ? 'Okay' : 'Consume'}
+                </Button>
+              </Grid>
             </Grid>
           </Grid>
         </Box>

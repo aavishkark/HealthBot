@@ -78,7 +78,7 @@ export const Signup = () => {
     <div className="flex items-center justify-center px-4 mt-20">
       <form
         onSubmit={handleSubmit}
-        className="bg-white bg-opacity-40 max-w-md w-full p-8 space-y-6"
+        className="max-w-md w-full p-8 space-y-6"
       >
 
         {fields.map((f) => (
@@ -90,7 +90,7 @@ export const Signup = () => {
                 value={form[f.name]}
                 onChange={handleChange}
                 required
-                className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-300"
+                className="w-full pl-12 pr-4 bg-transparent text-gray-800 placeholder-gray-400 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-300"
               >
                 <option value="">{f.placeholder}</option>
                 {f.options.map((opt, i) => (
@@ -107,7 +107,7 @@ export const Signup = () => {
                 required
                 placeholder={f.placeholder}
                 onChange={handleChange}
-                className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-300"
+                className="w-full pl-12 pr-4 bg-transparent text-gray-800 placeholder-gray-400 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-300"
               />
             )}
           </div>

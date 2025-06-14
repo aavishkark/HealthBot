@@ -47,7 +47,7 @@ export const Login = () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400"
+            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 bg-transparent text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-blue-400"
           />
         </div>
 
@@ -61,7 +61,7 @@ export const Login = () => {
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-400"
+            className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 bg-transparent text-gray-800 placeholder-gray-400 focus:ring-2 focus:ring-blue-400"
           />
         </div>
 
