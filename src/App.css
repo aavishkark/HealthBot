@@ -3,7 +3,9 @@
 }
 
 body {
-  background-color: rgb(255, 255, 255);
+  background-image: url('../public/bg.jpg') !important;
+  background-repeat: repeat ;
+  background-size: 3000px !important;
 }
 
 a{
