@@ -56,19 +56,20 @@
   overflow-x: scroll;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background-color: transparent !important;
 }
 
 .food-table-container table tbody tr:nth-child(odd) {
-  background-color: #f9f9f9;
+  background-color: transparent;
 }
 
 .food-table-container table tbody tr:hover {
-  background-color: #e0f7fa;
+  background-color: #a3f4ff50;
   transition: background-color 0.2s ease;
 }
 
 .food-table-container table thead th {
-  background-color: #1976d2;
+  background-color: #60aefd;
   color: white;
   position: sticky;
   top: 0;
@@ -103,7 +104,7 @@
 }
 
 .section-block {
-  margin-top: 10rem;
+  margin-top: 5rem;
 }
 
 .chakra-button {
