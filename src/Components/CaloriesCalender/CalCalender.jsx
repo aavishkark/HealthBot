@@ -107,6 +107,14 @@ function CalorieCalendar({
             <option value="fats">Fats</option>
           </Select>
 
+          <div className="legend" style={{ textAlign: 'center', alignSelf: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem' }}>
+              <span style={{ backgroundColor: '#4caf50', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Met</span>
+              <span style={{ backgroundColor: '#ff9800', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Exceeded</span>
+              <span style={{ backgroundColor: '#f44336', padding: '4px 8px', borderRadius: '4px', color: '#fff' }}>Low</span>
+            </div>
+          </div>
+
           <Calendar
             onChange={handleDateChange}
             value={value}

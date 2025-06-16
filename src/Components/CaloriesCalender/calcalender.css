@@ -1,13 +1,58 @@
 .react-calendar {
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-  padding: 10px;
-  background-color: white;
-  font-family: monospace;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(6px);
+  font-family: 'Inter', sans-serif;
+  border: none;
+  transition: all 0.3s ease-in-out;
 }
-.react-calendar__tile--active{
-  background-color: rgb(255, 255, 255);
-  color: black;
+
+.react-calendar__tile {
+  border-radius: 10px;
+  padding: 10px 0;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  font-weight: 500;
+}
+
+.react-calendar__tile div {
+  margin-right: 2px;
+}
+
+.react-calendar__tile:hover {
+  background-color: rgba(33, 150, 243, 0.1);
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+.react-calendar__tile--now {
+  background-color: rgba(33, 150, 243, 0.2);
+  color: #1565c0;
+  font-weight: bold;
+}
+
+.react-calendar__tile--active {
+  background-color: rgba(33, 150, 243, 0.3);
+  color: white;
+  font-weight: bold;
+}
+
+.react-calendar__navigation {
+  margin-bottom: 10px;
+}
+
+.react-calendar__navigation button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #1565c0;
+  transition: color 0.3s ease;
+}
+
+.react-calendar__navigation button:hover {
+  color: #0d47a1;
 }
 
 .calContainer {
@@ -16,7 +61,9 @@
   justify-content: center;
   width: 80%;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease-in-out;
 }
 
 abbr[title] {
@@ -25,6 +72,15 @@ abbr[title] {
 
 @media screen and (max-width: 768px) {
   .calContainer {
-    width: 90%;
+    width: 95%;
+    padding: 15px;
+  }
+
+  .react-calendar {
+    padding: 12px;
+  }
+
+  .react-calendar__tile {
+    padding: 8px 0;
   }
 }
