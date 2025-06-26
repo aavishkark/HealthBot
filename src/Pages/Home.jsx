@@ -95,7 +95,7 @@ export const Home = () => {
   async function addCalories() {
     try {
       await axios.post(
-        'https://healthbotbackend-production.up.railway.app/addcalories',
+        'https://healthbotbackend.vercel.app/addcalories',
         {
           calories: mode === 'bot' ? cal : calories,
           proteins: mode === 'bot' ? pro : proteins,

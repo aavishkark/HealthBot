@@ -41,7 +41,7 @@ export const Profile = () => {
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
   useEffect(() => {
-    axios.get(`https://healthbotbackend-production.up.railway.app/getProfile`, {
+    axios.get(`https://healthbotbackend.vercel.app/getProfile`, {
       params: { email },
       headers: { 'Content-Type': 'application/json' }
     })

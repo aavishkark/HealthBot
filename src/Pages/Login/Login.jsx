@@ -13,7 +13,7 @@ export const Login = () => {
     e.preventDefault();
     const user = { email, password };
     axios
-      .post("https://healthbotbackend-production.up.railway.app/login", user)
+      .post("https://healthbotbackend.vercel.app/login", user)
       .then((response) => {
         if (response.data.msg === "Login Successfull") {
           localStorage.setItem("token", response.data.token);

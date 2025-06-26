@@ -8,7 +8,7 @@ export const EditProfile = () => {
   const email = localStorage.getItem("email");
 
   useEffect(() => {
-    axios.get("https://healthbotbackend-production.up.railway.app/getProfile", { params:{ email }})
+    axios.get("https://healthbotbackend.vercel.app/getProfile", { params:{ email }})
       .then(res => {
         setUserProfile(res.data.user);
         setForm({
@@ -27,7 +27,7 @@ export const EditProfile = () => {
 
   const handleUpdate = e => {
     e.preventDefault();
-    axios.patch(`https://healthbotbackend-production.up.railway.app/updateProfile/${userProfile._id}`,
+    axios.patch(`https://healthbotbackend.vercel.app/updateProfile/${userProfile._id}`,
       { ...userProfile, ...form }
     ).then(console.log).catch(console.error);
   };
