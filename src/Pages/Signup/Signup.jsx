@@ -32,7 +32,7 @@ export const Signup = () => {
     e.preventDefault();
     axios
       .post(
-        "https://healthbotbackend.vercel.app/signup",
+        "https://healthbotbackend.onrender.com/signup",
         form
       )
       .then(() => {
