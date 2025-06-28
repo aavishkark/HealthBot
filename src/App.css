@@ -2,6 +2,21 @@
   text-align: center;
 }
 
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('../public/bg.jpg');
+  background-repeat: repeat;
+  background-size: 5000px;
+  filter: grayscale(100%);
+  z-index: -1;
+  pointer-events: none;
+}
+
 body {
   background-image: url('../public/bg.jpg') !important;
   background-repeat: repeat ;
