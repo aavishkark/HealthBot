@@ -1,7 +1,6 @@
 .infoContainerWithHeader {
   border-radius: 12px;
   padding: 2rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
   width: 80%;
   margin: 3rem auto;
 }
