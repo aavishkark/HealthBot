@@ -1,7 +1,7 @@
 import { useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
+import API from "../../Components/api";
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -12,8 +12,8 @@ export const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     const user = { email, password };
-    axios
-      .post("https://healthbotbackend.onrender.com/login", user)
+    API
+      .post("/login", user)
       .then((response) => {
         if (response.data.msg === "Login Successfull") {
           localStorage.setItem("token", response.data.token);

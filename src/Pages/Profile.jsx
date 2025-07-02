@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import './profile.css';
 import CalCalendar from "../Components/CaloriesCalender/CalCalender";
 import {
@@ -20,6 +19,8 @@ import {
   ArcElement
 } from 'chart.js';
 import ChartSection from "../Components/ChartSection";
+import API from "../Components/api";
+import signin from '../assets/signin.gif'
 
 export const Profile = () => {
   const [calories, setCalories] = useState([]);
@@ -32,6 +33,7 @@ export const Profile = () => {
   const [requiredCalories, setRequiredCalories] = useState('');
   const [requiredProteins, setRequiredProteins] = useState('');
   const [requiredFats, setRequiredFats] = useState('');
+  const [authorized, setauthorized] = useState(true);
   const [page, setPage] = useState(0);
 
   const email = localStorage.getItem("email");
@@ -41,7 +43,7 @@ export const Profile = () => {
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
   useEffect(() => {
-    axios.get(`https://healthbotbackend.onrender.com/getProfile`, {
+    API.get(`/getProfile`, {
       params: { email },
       headers: { 'Content-Type': 'application/json' }
     })
@@ -55,7 +57,11 @@ export const Profile = () => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching user data:", error);
+        if(error.response.data.msg){
+          setauthorized(false)
+          setLoading(false);
+        }
+        console.error("Error fetching user data:", error.response.data.msg);
       });
   }, [email]);
 
@@ -138,6 +144,8 @@ export const Profile = () => {
 
   return (
     <>
+    {authorized ? 
+      <>
       <div className="infoContainerWithHeader">
         <div className="infoHeader">
           <h2>Profile Info</h2>
@@ -239,6 +247,27 @@ export const Profile = () => {
       </div>
 
       <ChartSection calories={calories}/>
+      </>
+    : <div className="flex flex-col items-center justify-center text-center p-8 sm:p-10 max-w-xl mx-auto mt-24 animate-fade-in">
+          <h2 className="text-3xl font-bold text-gray-800 mb-3">Please Log In</h2>
+          <p className="text-gray-600 text-base sm:text-lg mb-6">
+            You must be Logged in to access your profile, track your calories, and view insights.
+          </p>
+          
+          <img
+            src={signin}
+            alt="Sign in illustration"
+            className="w-60 sm:w-72 h-auto rounded-xl shadow-lg mb-6 transition-transform duration-300 hover:scale-105"
+          />
+          
+          <button
+            onClick={() => navigate('/login')}
+            className="px-6 py-2.5 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-full shadow-lg font-semibold hover:from-blue-600 hover:to-indigo-700 hover:scale-105 transition-all duration-300"
+          >
+            Log In to Continue
+          </button>
+      </div>
+ }
     </>
   );
 };

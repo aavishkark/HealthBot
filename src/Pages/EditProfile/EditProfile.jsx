@@ -1,6 +1,6 @@
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { FaUser, FaBirthdayCake, FaRulerVertical, FaWeightHanging, FaVenusMars, FaEnvelope, FaDumbbell } from "react-icons/fa";
+import API from "../../Components/api";
 
 export const EditProfile = () => {
   const [userProfile, setUserProfile] = useState({});
@@ -8,7 +8,7 @@ export const EditProfile = () => {
   const email = localStorage.getItem("email");
 
   useEffect(() => {
-    axios.get("https://healthbotbackend.onrender.com/getProfile", { params:{ email }})
+    API.get("/getProfile", { params:{ email }})
       .then(res => {
         setUserProfile(res.data.user);
         setForm({
@@ -27,7 +27,7 @@ export const EditProfile = () => {
 
   const handleUpdate = e => {
     e.preventDefault();
-    axios.patch(`https://healthbotbackend.onrender.com/updateProfile/${userProfile._id}`,
+    API.patch(`/updateProfile/${userProfile._id}`,
       { ...userProfile, ...form }
     ).then(console.log).catch(console.error);
   };

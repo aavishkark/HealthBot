@@ -9,10 +9,10 @@ import { EditProfile } from "../Pages/EditProfile/EditProfile";
 export const MainRoutes = () => {
   return (
     <Routes>
-        <Route path="/" element={<PrivateRoute><Home/></PrivateRoute>} />
+        <Route path="/" element={<Home/>} />
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/profile" element={<PrivateRoute> <Profile /> </PrivateRoute>} />
+        <Route path="/register" element={<Signup />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/editprofile" element={<PrivateRoute> <EditProfile /> </PrivateRoute>} />
     </Routes>
   );

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   Button,
   TextField,
@@ -23,7 +23,7 @@ import {
   Send as SendIcon,
 } from '@mui/icons-material';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import API from '../Components/api';
 
 const modalStyle = {
   position: 'absolute',
@@ -52,6 +52,7 @@ export const Home = () => {
   const [mode, setMode] = useState('bot');
   const [open, setOpen] = useState(false);
   const [openalert, setOpenalert] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -60,14 +61,24 @@ export const Home = () => {
 
   const email = localStorage.getItem('email');
 
+  useEffect(()=>{
+    API.get('/verify')
+      .then(res => {
+        setLoggedIn(res.data.loggedIn);
+      })
+      .catch(err => {
+        setLoggedIn(false);
+      });
+  },[])
+
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     setResponse('');
 
     try {
-      const res = await axios.post(
-        'https://healthbotbackend.onrender.com/query',
+      const res = await API.post(
+        '/query',
         { query: input },
         { headers: { 'Content-Type': 'application/json' } }
       );
@@ -94,8 +105,8 @@ export const Home = () => {
 
   async function addCalories() {
     try {
-      await axios.post(
-        'https://healthbotbackend.onrender.com/addcalories',
+      await API.post(
+        '/addcalories',
         {
           calories: mode === 'bot' ? cal : calories,
           proteins: mode === 'bot' ? pro : proteins,
@@ -108,7 +119,8 @@ export const Home = () => {
         {
           headers: { 'Content-Type': 'application/json' },
         }
-      );
+      ).then((res)=>{
+      });
       setInput('');
       setResponse('');
       setCalories('');
@@ -120,8 +132,12 @@ export const Home = () => {
       handleOpenalert();
       handleClose();
     } catch (err) {
-      console.error(err);
-      alert('Error adding calories.');
+      if(err.response.data.msg === "Not Logged in"){
+        alert('Please Login to your account to add calories.');
+      }
+      else{
+        alert('Error adding calories.');
+      }
     }
   }
 
@@ -214,7 +230,7 @@ export const Home = () => {
             display: 'inline-block',
           }}
         >
-          <Button
+          {loggedIn ? <Button
             variant="outlined"
             startIcon={<SwapHorizIcon />}
             onClick={switchMode}
@@ -228,7 +244,11 @@ export const Home = () => {
             }}
           >
             Switch to {mode === 'bot' ? 'Manual' : 'Bot'} Mode
-          </Button>
+          </Button> : <Button
+            href='/login'
+          >
+            Login To Check Manual Mode
+          </Button> }
         </Box>
         {mode === 'bot' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

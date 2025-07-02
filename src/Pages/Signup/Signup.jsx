@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -11,6 +10,8 @@ import {
   FaLock,
   FaDumbbell,
 } from "react-icons/fa";
+
+import API from "../../Components/api";
 
 export const Signup = () => {
   const navigate = useNavigate();
@@ -30,14 +31,18 @@ export const Signup = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios
+    API
       .post(
-        "https://healthbotbackend.onrender.com/signup",
+        "/signup",
         form
       )
-      .then(() => {
-        alert("Signup successful! Please login to continue.");
-        navigate("/login");
+      .then((res) => {
+        if(res.data.msg === "User already registered"){
+          alert("Email already registered , Please try again using different email.");
+        }
+        else{
+          alert("Signup successful! Please login to continue.");
+        }
       })
       .catch(() => {
         alert("Signup failed! Please try again.");
