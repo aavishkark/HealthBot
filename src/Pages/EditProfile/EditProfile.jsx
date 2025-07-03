@@ -5,11 +5,18 @@ import API from "../../Components/api";
 export const EditProfile = () => {
   const [userProfile, setUserProfile] = useState({});
   const [form, setForm] = useState({ name:"", age:"", height:"", weight:"", gender:"", email:"", activity:"" });
-  const email = localStorage.getItem("email");
 
   useEffect(() => {
-    API.get("/getProfile", { params:{ email }})
+    API.get('/verify')
       .then(res => {
+          const userEmail = res.data.user.email;
+        setForm(prev=>({
+          ...prev,
+          email:userEmail
+      }))
+        return  API.get("/getProfile", { params:{email: userEmail }})
+
+      }).then(res => {
         setUserProfile(res.data.user);
         setForm({
           name: res.data.user.name,
@@ -21,7 +28,7 @@ export const EditProfile = () => {
           activity: res.data.user.activitylevel
         });
       });
-  }, [email]);
+  }, []);
 
   const handleChange = e => setForm({...form, [e.target.name]: e.target.value});
 

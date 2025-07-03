@@ -13,7 +13,7 @@ export const MainRoutes = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Signup />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/editprofile" element={<PrivateRoute> <EditProfile /> </PrivateRoute>} />
+        <Route path="/editprofile" element={<PrivateRoute><EditProfile /></PrivateRoute>} />
     </Routes>
   );
 }

@@ -1,10 +1,11 @@
 import { Navigate } from 'react-router-dom';
+import { useAuth } from './authContext';
 export const PrivateRoute = ({children}) => {
-  const isAuth = localStorage.getItem('isAuth');
+  const {loggedIn} = useAuth()
 return (
     <>
       {
-        isAuth === "true" ? children : <Navigate to={"/login"} />
+        loggedIn === "true" ? children : <Navigate to={"/login"} />
       }
     </>
   )
