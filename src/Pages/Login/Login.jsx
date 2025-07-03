@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { useAuth } from "../../Components/authContext";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import API from "../../Components/api";
 
 export const Login = () => {
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,10 +18,8 @@ export const Login = () => {
       .post("/login", user)
       .then((response) => {
         if (response.data.msg === "Login Successfull") {
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("isAuth", true);
-          localStorage.setItem("email", email);
           alert("Login successful! Redirecting to dashboard.");
+          login();
           navigate("/");
         } else {
           alert("Login failed! Please check your credentials.");

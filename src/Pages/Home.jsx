@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { useAuth } from '../Components/authContext';
 import {
   Button,
   TextField,
@@ -52,24 +53,13 @@ export const Home = () => {
   const [mode, setMode] = useState('bot');
   const [open, setOpen] = useState(false);
   const [openalert, setOpenalert] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleClosealert = () => setOpenalert(false);
   const handleOpenalert = () => setOpenalert(true);
-
-  const email = localStorage.getItem('email');
-
-  useEffect(()=>{
-    API.get('/verify')
-      .then(res => {
-        setLoggedIn(res.data.loggedIn);
-      })
-      .catch(err => {
-        setLoggedIn(false);
-      });
-  },[])
+  const { loggedIn, email } = useAuth();
 
   async function handleSubmit(e) {
     e.preventDefault();

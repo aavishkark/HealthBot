@@ -30,23 +30,28 @@ export const Profile = () => {
   const [modeBasedEntries, setModeBasedEntries] = useState([]);
   const [userProfile, setUserProfile] = useState();
   const [userBmi, setUserBmi] = useState();
+  const [email, setemail] = useState('');
   const [requiredCalories, setRequiredCalories] = useState('');
   const [requiredProteins, setRequiredProteins] = useState('');
   const [requiredFats, setRequiredFats] = useState('');
   const [authorized, setauthorized] = useState(true);
   const [page, setPage] = useState(0);
 
-  const email = localStorage.getItem("email");
   const navigate = useNavigate();
   const rowsPerPage = 4;
 
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
   useEffect(() => {
-    API.get(`/getProfile`, {
-      params: { email },
-      headers: { 'Content-Type': 'application/json' }
-    })
+    API.get('/verify')
+      .then(res => {
+        let email=res.data.user.email
+
+        return  API.get(`/getProfile`, {
+        params: { email },
+        headers: { 'Content-Type': 'application/json' }
+        })
+      })
       .then((response) => {
         const userCalories = response.data.user.calories;
         setUserProfile(response.data.user);
@@ -57,11 +62,10 @@ export const Profile = () => {
         setLoading(false);
       })
       .catch((error) => {
-        if(error.response.data.msg){
+        if(error){
           setauthorized(false)
           setLoading(false);
         }
-        console.error("Error fetching user data:", error.response.data.msg);
       });
   }, [email]);
 
