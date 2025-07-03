@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'https://healthbotbackend-1.onrender.com',
+  baseURL: 'https://healthbotbackend.onrender.com',
   withCredentials: true,
 });
 
