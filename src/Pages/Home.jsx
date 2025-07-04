@@ -93,7 +93,8 @@ export const Home = () => {
     item += resArray[i] + ' ';
   }
 
-  async function addCalories() {
+  async function addCalories(e) {
+    e.preventDefault();
     try {
       await API.post(
         '/addcalories',
@@ -110,17 +111,18 @@ export const Home = () => {
           headers: { 'Content-Type': 'application/json' },
         }
       ).then((res)=>{
+        console.log(res);
+        setInput('');
+        setResponse('');
+        setCalories('');
+        setProteins('');
+        setFats('');
+        setCarbs('');
+        setFoodAmount('');
+        setFoodItem('');
+        handleOpenalert();
+        handleClose();
       });
-      setInput('');
-      setResponse('');
-      setCalories('');
-      setProteins('');
-      setFats('');
-      setCarbs('');
-      setFoodAmount('');
-      setFoodItem('');
-      handleOpenalert();
-      handleClose();
     } catch (err) {
       if(err.response.data.msg === "Not Logged in"){
         alert('Please Login to your account to add calories.');
@@ -209,7 +211,7 @@ export const Home = () => {
           </Typography>
         </motion.div>
       </motion.div>
-      <Box sx={{ border: '1px solid #ddd', borderRadius: 3, p: 4, boxShadow: 1 }}>
+      <Box>
         <Box
           sx={{
             border: '2px solid transparent',
@@ -268,7 +270,7 @@ export const Home = () => {
 
         {mode === 'manual' && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            <form onSubmit={addCalories}>
+            <form onSubmit={(e)=>{addCalories(e)}}>
               {[
                 ['Food Item', foodItem, setFoodItem],
                 ['Food Amount (g)', foodAmount, setFoodAmount],
@@ -366,9 +368,9 @@ export const Home = () => {
         open={openalert}
         autoHideDuration={3000}
         onClose={handleClosealert}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
+        <Alert onClose={handleClosealert} severity="success" sx={{ width: '200%' }}>
           Calories Consumed!
         </Alert>
       </Snackbar>

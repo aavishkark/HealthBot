@@ -3,6 +3,10 @@ import { useAuth } from "../../Components/authContext";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import API from "../../Components/api";
+import { Button,CircularProgress, Alert,Snackbar } from "@mui/material";
+import {
+  Send as SendIcon,
+} from '@mui/icons-material';
 
 export const Login = () => {
   const navigate = useNavigate();
@@ -10,6 +14,11 @@ export const Login = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setloading] = useState(false);
+  const [openalert, setOpenalert] = useState(false);
+
+  const handleClosealert = () => setOpenalert(false);
+  const handleOpenalert = () => setOpenalert(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,8 +26,10 @@ export const Login = () => {
     API
       .post("/login", user)
       .then((response) => {
+        setloading(true)
         if (response.data.msg === "Login Successfull") {
-          alert("Login successful! Redirecting to dashboard.");
+          setloading(false);
+          handleOpenalert()
           login();
           navigate("/");
         } else {
@@ -26,8 +37,12 @@ export const Login = () => {
         }
       })
       .catch(() => {
+        setloading(false);
         alert("Login failed! Please try again.");
-      });
+      })
+      .finally(()=>{
+        setloading(false);
+      })
   };
 
   return (
@@ -65,12 +80,16 @@ export const Login = () => {
           />
         </div>
 
-        <button
+        <Button
+          className="bg-gradient-to-r from-green-500 to-teal-600 hover:from-blue-600 hover:to-indigo-700 transition"
           type="submit"
-          className="w-full py-3 rounded-lg bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition transition"
+          fullWidth
+          sx={{ mt: 2, color: 'white' }}
+          disabled={loading}
+          endIcon={loading ? <CircularProgress size={20} color="inherit" /> : <SendIcon />}
         >
-          Login
-        </button>
+          {loading ? 'Please wait our server might be just waking up...' : 'Login'}
+        </Button>
 
         <p className="text-center text-sm text-gray-600">
           Don't have an account?
@@ -83,6 +102,16 @@ export const Login = () => {
           </button>
         </p>
       </form>
+      <Snackbar
+        open={openalert}
+        autoHideDuration={3000}
+        onClose={handleClosealert}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
+          Logged In Successfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };
