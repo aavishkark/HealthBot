@@ -1,10 +1,16 @@
 import { useEffect, useState } from "react";
 import { FaUser, FaBirthdayCake, FaRulerVertical, FaWeightHanging, FaVenusMars, FaEnvelope, FaDumbbell } from "react-icons/fa";
 import API from "../../Components/api";
+import { Snackbar } from "@mui/material";
+import { Alert } from "@mui/material";
 
 export const EditProfile = () => {
   const [userProfile, setUserProfile] = useState({});
   const [form, setForm] = useState({ name:"", age:"", height:"", weight:"", gender:"", email:"", activity:"" });
+  const [openalert, setOpenalert] = useState(false);
+
+  const handleClosealert = () => setOpenalert(false);
+  const handleOpenalert = () => setOpenalert(true);
 
   useEffect(() => {
     API.get('/verify')
@@ -36,7 +42,7 @@ export const EditProfile = () => {
     e.preventDefault();
     API.patch(`/updateProfile/${userProfile._id}`,
       { ...userProfile, ...form }
-    ).then(console.log).catch(console.error);
+    ).then(handleOpenalert()).catch(console.error);
   };
 
   const fields = [
@@ -91,6 +97,16 @@ export const EditProfile = () => {
           Save Changes
         </button>
       </form>
+      <Snackbar
+        open={openalert}
+        autoHideDuration={3000}
+        onClose={handleClosealert}
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      >
+        <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
+          Profile Updated Successfully!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

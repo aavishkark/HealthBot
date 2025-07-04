@@ -1,16 +1,21 @@
 import { useAuth } from './authContext';
+import { useState } from 'react';
 import API from './api';
 import './navbar.css';
 import { useNavigate } from 'react-router-dom';
+import { Snackbar, Alert } from '@mui/material';
 
 export const Navbar = () => {
+    const [openalert, setOpenalert] = useState(false);
+    const handleClosealert = () => setOpenalert(false);
+    const handleOpenalert = () => setOpenalert(true);
     const { loggedIn, logout, loading } = useAuth();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         API.post('/logout', {}, { withCredentials: true })
             .then((res) => {
-                alert("Logged Out Successfully!");
+                handleOpenalert()
                 logout();
                 navigate('/login')
             });
@@ -29,6 +34,16 @@ export const Navbar = () => {
                     <li><a href="/login">Login</a></li>
                 )}
             </ul>
+            <Snackbar
+                open={openalert}
+                autoHideDuration={3000}
+                onClose={handleClosealert}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
+                    Logged Out Successfully!
+                </Alert>
+            </Snackbar> 
         </div>
     );
 };
