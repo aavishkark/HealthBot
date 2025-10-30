@@ -66,6 +66,8 @@ export const Home = () => {
     setLoading(true);
     setResponse('');
 
+    console.log(input)
+
     try {
       const res = await API.post(
         '/query',
@@ -111,7 +113,6 @@ export const Home = () => {
           headers: { 'Content-Type': 'application/json' },
         }
       ).then((res)=>{
-        console.log(res);
         setInput('');
         setResponse('');
         setCalories('');
