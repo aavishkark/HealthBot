@@ -2,12 +2,11 @@ import { useEffect, useState } from "react";
 import './profile.css';
 import CalCalendar from "../Components/CaloriesCalender/CalCalender";
 import {
-  Button, MenuItem, Select, Table, TableBody, TableCell,
+  MenuItem, Select, Table, TableBody, TableCell,
   TableContainer, TableHead, TableRow, TablePagination
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import EditIcon from '@mui/icons-material/Edit';
-import ClipLoader from "react-spinners/ClipLoader";
+import { Edit, TrendingUp, Activity, Award } from 'lucide-react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -20,7 +19,9 @@ import {
 } from 'chart.js';
 import ChartSection from "../Components/ChartSection";
 import API from "../Components/api";
-import signin from '../assets/signin.gif'
+import Card from "../Components/ui/Card";
+import ProgressRing from "../Components/ui/ProgressRing";
+import LoadingSpinner from "../Components/ui/LoadingSpinner";
 
 export const Profile = () => {
   const [calories, setCalories] = useState([]);
@@ -38,18 +39,18 @@ export const Profile = () => {
   const [page, setPage] = useState(0);
 
   const navigate = useNavigate();
-  const rowsPerPage = 4;
+  const rowsPerPage = 5;
 
   ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
   useEffect(() => {
     API.get('/verify')
       .then(res => {
-        let email=res.data.user.email
+        let email = res.data.user.email
 
-        return  API.get(`/getProfile`, {
-        params: { email },
-        headers: { 'Content-Type': 'application/json' }
+        return API.get(`/getProfile`, {
+          params: { email },
+          headers: { 'Content-Type': 'application/json' }
         })
       })
       .then((response) => {
@@ -62,7 +63,7 @@ export const Profile = () => {
         setLoading(false);
       })
       .catch((error) => {
-        if(error){
+        if (error) {
           setauthorized(false)
           setLoading(false);
         }
@@ -115,6 +116,13 @@ export const Profile = () => {
     }
   }, [userProfile]);
 
+  // Calculate today's totals
+  const todayTotals = modeBasedEntries.reduce((acc, entry) => ({
+    calories: acc.calories + parseFloat(entry.calories || 0),
+    proteins: acc.proteins + parseFloat(entry.proteins || 0),
+    fats: acc.fats + parseFloat(entry.fats || 0),
+  }), { calories: 0, proteins: 0, fats: 0 });
+
   const selectedDayEntries = selectedDate
     ? calories.filter(entry =>
       new Date(entry.timestamp).toDateString() === new Date(selectedDate).toDateString()
@@ -140,138 +148,214 @@ export const Profile = () => {
     setPage(newPage);
   };
 
+  const getBMICategory = (bmi) => {
+    if (bmi < 18.5) return { text: 'Underweight', color: '#f59e0b' };
+    if (bmi < 25) return { text: 'Normal', color: '#10b981' };
+    if (bmi < 30) return { text: 'Overweight', color: '#f59e0b' };
+    return { text: 'Obese', color: '#ef4444' };
+  };
+
   if (loading) return (
-    <div className="flex justify-center items-center h-40">
-      <ClipLoader size={40} color="#36d7b7" />
+    <div className="profile-loading">
+      <LoadingSpinner size="large" />
+      <p>Loading your dashboard...</p>
     </div>
   );
 
   return (
     <>
-    {authorized ? 
-      <>
-      <div className="infoContainerWithHeader">
-        <div className="infoHeader">
-          <h2>Profile Info</h2>
-          <Button
-            variant="outlined"
-            startIcon={<EditIcon />}
-            onClick={() => navigate('/editprofile')}
-            className="editProfileBtn rounded-lg bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition"
-          >
-            Edit
-          </Button>
-        </div>
-
-        <div className="infoGrid">
-          {[
-            { label: "Name", value: userProfile.name },
-            { label: "Height", value: `${userProfile.height} cm` },
-            { label: "Weight", value: `${userProfile.weight} kg` },
-            { label: "Age", value: userProfile.age },
-            { label: "BMI", value: userBmi },
-            { label: "Required Calories", value: `${requiredCalories} kcal` },
-            { label: "Required Proteins", value: `${requiredProteins} g` },
-            { label: "Required Fats", value: `${requiredFats} g` }
-          ].map((item, idx) => (
-            <div className="infoCard" key={idx}>
-              <label>{item.label}</label>
-              <div>{item.value}</div>
+      {authorized ? (
+        <div className="profile-container">
+          {/* Header */}
+          <div className="profile-header">
+            <div className="profile-header-content">
+              <div className="profile-avatar">
+                <span className="avatar-text">{userProfile.name.charAt(0).toUpperCase()}</span>
+              </div>
+              <div>
+                <h1 className="profile-name">Hello, {userProfile.name}! 👋</h1>
+                <p className="profile-subtitle">Here's your health summary</p>
+              </div>
             </div>
-          ))}
-        </div>
-      </div>
+            <button onClick={() => navigate('/editprofile')} className="btn-edit">
+              <Edit size={18} />
+              <span>Edit Profile</span>
+            </button>
+          </div>
 
-      <div className="calorie-history-container section-block">
-        <Select
-          value={selectMode}
-          onChange={(e) => setSelectMode(e.target.value)}
-          variant="outlined"
-          size="small"
-          style={{ marginBottom: '1rem' }}
-        >
-          <MenuItem value={0}>Today</MenuItem>
-          <MenuItem value={1}>This Week</MenuItem>
-          <MenuItem value={2}>This Month</MenuItem>
-          <MenuItem value={3}>Total</MenuItem>
-        </Select>
+          {/* Stats Grid */}
+          <div className="stats-grid">
+            <Card variant="glass" className="stat-card">
+              <div className="stat-icon stat-icon-primary">
+                <TrendingUp size={24} />
+              </div>
+              <div className="stat-content">
+                <div className="stat-label">BMI</div>
+                <div className="stat-value">{userBmi}</div>
+                <div className="stat-badge" style={{ backgroundColor: getBMICategory(parseFloat(userBmi)).color }}>
+                  {getBMICategory(parseFloat(userBmi)).text}
+                </div>
+              </div>
+            </Card>
 
-        {modeBasedEntries.length === 0 ? (
-          <p>No records found.</p>
-        ) : (
-          <TableContainer className="food-table-container">
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Food Item</TableCell>
-                  <TableCell align="right">Amount(g)</TableCell>
-                  <TableCell align="right">Calories(kcal)</TableCell>
-                  <TableCell align="right">Proteins(g)</TableCell>
-                  <TableCell align="right">Carbs(g)</TableCell>
-                  <TableCell align="right">Fats(g)</TableCell>
-                  <TableCell align="right">Date</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {idedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
-                  <TableRow key={item.id}>
-                    <TableCell>{item.foodItem}</TableCell>
-                    <TableCell align="right">{item.foodAmount}</TableCell>
-                    <TableCell align="right">{item.calories}</TableCell>
-                    <TableCell align="right">{item.proteins}</TableCell>
-                    <TableCell align="right">{item.carbs}</TableCell>
-                    <TableCell align="right">{item.fats}</TableCell>
-                    <TableCell align="right">{item.timestamp}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-            <TablePagination
-              component="div"
-              count={idedRows.length}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              rowsPerPageOptions={[]}
-              className="pagination"
+            <Card variant="glass" className="stat-card">
+              <div className="stat-icon stat-icon-secondary">
+                <Activity size={24} />
+              </div>
+              <div className="stat-content">
+                <div className="stat-label">Daily Goal</div>
+                <div className="stat-value">{requiredCalories}</div>
+                <div className="stat-unit">kcal</div>
+              </div>
+            </Card>
+
+            <Card variant="glass" className="stat-card">
+              <div className="stat-icon stat-icon-accent">
+                <Award size={24} />
+              </div>
+              <div className="stat-content">
+                <div className="stat-label">Meals Logged</div>
+                <div className="stat-value">{modeBasedEntries.length}</div>
+                <div className="stat-unit">today</div>
+              </div>
+            </Card>
+          </div>
+
+          {/* Progress Rings */}
+          <Card variant="glass" className="progress-card">
+            <h3 className="section-title">Today's Progress</h3>
+            <div className="progress-rings">
+              <ProgressRing
+                progress={Math.min((todayTotals.calories / requiredCalories) * 100, 100)}
+                size={140}
+                strokeWidth={10}
+                label="Calories"
+                color="var(--color-primary)"
+                animated
+              />
+              <ProgressRing
+                progress={Math.min((todayTotals.proteins / requiredProteins) * 100, 100)}
+                size={140}
+                strokeWidth={10}
+                label="Proteins"
+                color="var(--color-secondary)"
+                animated
+              />
+              <ProgressRing
+                progress={Math.min((todayTotals.fats / requiredFats) * 100, 100)}
+                size={140}
+                strokeWidth={10}
+                label="Fats"
+                color="var(--color-accent)"
+                animated
+              />
+            </div>
+            <div className="macro-details">
+              <div className="macro-item">
+                <span className="macro-label">Calories</span>
+                <span className="macro-value">{todayTotals.calories.toFixed(0)} / {requiredCalories} kcal</span>
+              </div>
+              <div className="macro-item">
+                <span className="macro-label">Proteins</span>
+                <span className="macro-value">{todayTotals.proteins.toFixed(1)} / {requiredProteins} g</span>
+              </div>
+              <div className="macro-item">
+                <span className="macro-label">Fats</span>
+                <span className="macro-value">{todayTotals.fats.toFixed(1)} / {requiredFats} g</span>
+              </div>
+            </div>
+          </Card>
+
+          {/* Charts */}
+          <ChartSection calories={calories} />
+
+          {/* Meal History */}
+          <Card variant="glass" className="history-card">
+            <div className="history-header">
+              <h3 className="section-title">Meal History</h3>
+              <Select
+                value={selectMode}
+                onChange={(e) => setSelectMode(e.target.value)}
+                size="small"
+                className="history-select"
+              >
+                <MenuItem value={0}>Today</MenuItem>
+                <MenuItem value={1}>This Week</MenuItem>
+                <MenuItem value={2}>This Month</MenuItem>
+                <MenuItem value={3}>All Time</MenuItem>
+              </Select>
+            </div>
+
+            {modeBasedEntries.length === 0 ? (
+              <div className="empty-state">
+                <p>No meals logged for this period</p>
+              </div>
+            ) : (
+              <>
+                <TableContainer className="meal-table">
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Food Item</TableCell>
+                        <TableCell align="right">Amount</TableCell>
+                        <TableCell align="right">Calories</TableCell>
+                        <TableCell align="right">Proteins</TableCell>
+                        <TableCell align="right">Carbs</TableCell>
+                        <TableCell align="right">Fats</TableCell>
+                        <TableCell align="right">Date</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {idedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
+                        <TableRow key={item.id} className="meal-row">
+                          <TableCell>{item.foodItem}</TableCell>
+                          <TableCell align="right">{item.foodAmount}g</TableCell>
+                          <TableCell align="right" className="cal-cell">{item.calories}</TableCell>
+                          <TableCell align="right">{item.proteins}g</TableCell>
+                          <TableCell align="right">{item.carbs}g</TableCell>
+                          <TableCell align="right">{item.fats}g</TableCell>
+                          <TableCell align="right" className="date-cell">{item.timestamp}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+                <TablePagination
+                  component="div"
+                  count={idedRows.length}
+                  page={page}
+                  onPageChange={handleChangePage}
+                  rowsPerPage={rowsPerPage}
+                  rowsPerPageOptions={[]}
+                  className="table-pagination"
+                />
+              </>
+            )}
+          </Card>
+
+          {/* Calendar */}
+          <Card variant="glass" className="calendar-card">
+            <h3 className="section-title">Calendar View</h3>
+            <CalCalendar
+              selectedDayEntries={selectedDayEntries}
+              calories={calories}
+              requiredcalories={requiredCalories}
+              requiredProteins={requiredProteins}
+              requiredFats={requiredFats}
+              onDateClick={(date) => setSelectedDate(date)}
             />
-          </TableContainer>
-        )}
-      </div>
-
-      <div className="calendar-section section-block">
-        <CalCalendar
-          selectedDayEntries={selectedDayEntries}
-          calories={calories}
-          requiredcalories={requiredCalories}
-          requiredProteins={requiredProteins}
-          requiredFats={requiredFats}
-          onDateClick={(date) => setSelectedDate(date)}
-        />
-      </div>
-
-      <ChartSection calories={calories}/>
-      </>
-    : <div className="flex flex-col items-center justify-center text-center p-8 sm:p-10 max-w-xl mx-auto mt-24 animate-fade-in">
-          <h2 className="text-3xl font-bold text-gray-800 mb-3">Please Log In</h2>
-          <p className="text-gray-600 text-base sm:text-lg mb-6">
-            You must be Logged in to access your profile, track your calories, and view insights.
-          </p>
-          
-          <img
-            src={signin}
-            alt="Sign in illustration"
-            className="w-60 sm:w-72 h-auto rounded-xl shadow-lg mb-6 transition-transform duration-300 hover:scale-105"
-          />
-          
-          <button
-            onClick={() => navigate('/login')}
-            className="px-6 py-2.5 bg-gradient-to-r from-green-500 to-teal-600 text-white rounded-full shadow-lg font-semibold hover:from-blue-600 hover:to-indigo-700 hover:scale-105 transition-all duration-300"
-          >
+          </Card>
+        </div>
+      ) : (
+        <div className="not-authorized">
+          <div className="not-auth-icon">🔒</div>
+          <h2>Please Log In</h2>
+          <p>You must be logged in to access your profile and track your calories.</p>
+          <button onClick={() => navigate('/login')} className="btn-login gradient-primary">
             Log In to Continue
           </button>
-      </div>
- }
+        </div>
+      )}
     </>
   );
 };
