@@ -1,5 +1,3 @@
-/* Modern Navbar with Glass Morphism */
-
 .navbar-modern {
     position: sticky;
     top: 0;
@@ -24,7 +22,7 @@
     gap: var(--space-8);
 }
 
-/* Logo */
+
 .navbar-logo {
     display: flex;
     align-items: center;
@@ -49,7 +47,7 @@
     letter-spacing: -0.5px;
 }
 
-/* Navigation Links */
+
 .navbar-links {
     display: flex;
     align-items: center;
@@ -120,14 +118,14 @@
     color: white;
 }
 
-/* Actions Section */
+
 .navbar-actions {
     display: flex;
     align-items: center;
     gap: var(--space-3);
 }
 
-/* Theme Toggle */
+
 .theme-toggle {
     position: relative;
     width: 40px;
@@ -163,7 +161,7 @@
     color: var(--color-primary);
 }
 
-/* Mobile Menu Button */
+
 .mobile-menu-button {
     display: none;
     width: 40px;
@@ -186,7 +184,7 @@
     transform: scale(0.9);
 }
 
-/* Mobile Menu */
+
 .mobile-menu {
     display: none;
     overflow: hidden;
@@ -251,7 +249,7 @@
     color: white;
 }
 
-/* Responsive Design */
+
 @media (max-width: 768px) {
     .navbar-links {
         display: none;
@@ -281,7 +279,7 @@
     }
 }
 
-/* Scroll Effect */
+
 .navbar-modern.scrolled {
     padding: var(--space-2) 0;
     box-shadow: var(--shadow-xl);

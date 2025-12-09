@@ -1,4 +1,3 @@
-/* Modern Auth Pages Styles */
 
 .auth-container {
     min-height: 100vh;
@@ -48,7 +47,6 @@
     z-index: 1;
 }
 
-/* Form Section */
 .auth-form-section {
     padding: var(--space-12) var(--space-8);
     display: flex;
@@ -97,7 +95,6 @@
     margin: 0;
 }
 
-/* Form */
 .auth-form {
     display: flex;
     flex-direction: column;
@@ -175,7 +172,6 @@
     box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
-/* Button */
 .btn-auth {
     display: flex;
     align-items: center;
@@ -207,7 +203,6 @@
     cursor: not-allowed;
 }
 
-/* Footer */
 .auth-footer {
     margin-top: var(--space-8);
     text-align: center;
@@ -233,7 +228,6 @@
     color: var(--color-primary-hover);
 }
 
-/* Loading Message */
 .loading-message {
     display: flex;
     align-items: center;
@@ -251,7 +245,6 @@
     animation: glow 2s ease-in-out infinite;
 }
 
-/* Illustration Section */
 .auth-illustration-section {
     background: var(--gradient-mesh);
     padding: var(--space-12);
@@ -342,7 +335,6 @@
     color: var(--color-text-secondary);
 }
 
-/* Signup specific styles */
 .signup-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -353,7 +345,6 @@
     grid-column: span 2;
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
     .auth-content {
         grid-template-columns: 1fr;

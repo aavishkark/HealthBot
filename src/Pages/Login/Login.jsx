@@ -5,7 +5,6 @@ import { FaEnvelope, FaLock } from "react-icons/fa";
 import API from "../../Components/api";
 import { Snackbar, Alert } from "@mui/material";
 import { ArrowRight, Sparkles } from "lucide-react";
-import Card from "../../Components/ui/Card";
 import LoadingSpinner from "../../Components/ui/LoadingSpinner";
 import loginImg from "../../assets/illustrations/login.png";
 import "./login.css";
@@ -48,10 +47,8 @@ export const Login = () => {
   return (
     <div className="auth-container">
       <div className="auth-content">
-        {/* Left Side - Form */}
         <div className="auth-form-section">
           <div className="auth-form-wrapper">
-            {/* Header */}
             <div className="auth-header">
               <div className="auth-logo">
                 <span className="logo-emoji">🥗</span>
@@ -63,7 +60,6 @@ export const Login = () => {
               </p>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="auth-form">
               <div className="form-group">
                 <label htmlFor="email" className="form-label">
@@ -120,7 +116,6 @@ export const Login = () => {
               </button>
             </form>
 
-            {/* Footer */}
             <div className="auth-footer">
               <p className="auth-footer-text">
                 Don't have an account?{" "}
@@ -134,7 +129,6 @@ export const Login = () => {
               </p>
             </div>
 
-            {/* Loading Wait Message */}
             {loading && (
               <div className="loading-message animate-fade-in">
                 <Sparkles size={16} className="sparkle-icon" />
@@ -144,7 +138,6 @@ export const Login = () => {
           </div>
         </div>
 
-        {/* Right Side - Illustration */}
         <div className="auth-illustration-section">
           <div className="illustration-wrapper">
             <div className="illustration-badge">

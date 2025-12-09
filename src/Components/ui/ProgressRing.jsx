@@ -36,7 +36,6 @@ const ProgressRing = ({
                     width={size}
                     height={size}
                 >
-                    {/* Background circle */}
                     <circle
                         cx={size / 2}
                         cy={size / 2}
@@ -45,7 +44,6 @@ const ProgressRing = ({
                         strokeWidth={strokeWidth}
                         fill="transparent"
                     />
-                    {/* Progress circle */}
                     <circle
                         cx={size / 2}
                         cy={size / 2}
@@ -59,7 +57,6 @@ const ProgressRing = ({
                         className={animated ? 'transition-all duration-1000 ease-out' : ''}
                     />
                 </svg>
-                {/* Center text */}
                 <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
                         {showPercentage && (

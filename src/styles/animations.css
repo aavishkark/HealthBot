@@ -1,6 +1,3 @@
-/* HealthBot Animations */
-
-/* ========== Fade Animations ========== */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -45,7 +42,6 @@
     }
 }
 
-/* ========== Slide Animations ========== */
 @keyframes slideInRight {
     from {
         transform: translateX(100%);
@@ -80,7 +76,6 @@
     }
 }
 
-/* ========== Scale Animations ========== */
 @keyframes scaleIn {
     from {
         transform: scale(0.9);
@@ -119,7 +114,6 @@
     }
 }
 
-/* ========== Rotation Animations ========== */
 @keyframes spin {
     from {
         transform: rotate(0deg);
@@ -146,7 +140,6 @@
     }
 }
 
-/* ========== Shake Animation ========== */
 @keyframes shake {
 
     0%,
@@ -170,7 +163,6 @@
     }
 }
 
-/* ========== Bounce Animations ========== */
 @keyframes bounce {
 
     0%,
@@ -203,7 +195,6 @@
     }
 }
 
-/* ========== Gradient Animation ========== */
 @keyframes gradientShift {
     0% {
         background-position: 0% 50%;
@@ -218,7 +209,6 @@
     }
 }
 
-/* ========== Shimmer Effect ========== */
 @keyframes shimmer {
     0% {
         background-position: -1000px 0;
@@ -229,7 +219,6 @@
     }
 }
 
-/* ========== Glow Animation ========== */
 @keyframes glow {
 
     0%,
@@ -246,7 +235,6 @@
     }
 }
 
-/* ========== Float Animation ========== */
 @keyframes float {
 
     0%,
@@ -259,7 +247,6 @@
     }
 }
 
-/* ========== Typing Animation ========== */
 @keyframes typing {
     from {
         width: 0;
@@ -276,7 +263,6 @@
     }
 }
 
-/* ========== Progress Animation ========== */
 @keyframes progress {
     0% {
         width: 0%;
@@ -287,7 +273,6 @@
     }
 }
 
-/* ========== Ripple Effect ========== */
 @keyframes ripple {
     0% {
         transform: scale(0);
@@ -300,7 +285,6 @@
     }
 }
 
-/* ========== Confetti ========== */
 @keyframes confetti-fall {
     0% {
         transform: translateY(-100vh) rotate(0deg);
@@ -311,7 +295,6 @@
     }
 }
 
-/* ========== Utility Animation Classes ========== */
 .animate-fade-in {
     animation: fadeIn 0.3s ease-in;
 }
@@ -369,7 +352,6 @@
     animation: gradientShift 3s ease infinite;
 }
 
-/* ========== Stagger Animation Delay ========== */
 .stagger-1 {
     animation-delay: 0.1s;
 }
@@ -390,7 +372,6 @@
     animation-delay: 0.5s;
 }
 
-/* ========== Hover Utilities ========== */
 .hover-lift {
     transition: transform var(--transition-base), box-shadow var(--transition-base);
 }
@@ -413,7 +394,6 @@
     transition: box-shadow var(--transition-base);
 }
 
-/* ========== Button Press Effect ========== */
 .btn-press:active {
     transform: scale(0.95);
 }

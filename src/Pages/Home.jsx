@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../Components/authContext';
 import {
-  Button,
   TextField,
   Modal,
   Box,
@@ -25,13 +24,12 @@ import {
   Send as SendIcon,
 } from '@mui/icons-material';
 import { Sparkles } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import API from '../Components/api';
 import Card from '../Components/ui/Card';
 import LoadingSpinner from '../Components/ui/LoadingSpinner';
 import heroImg from '../assets/illustrations/hero_illustration_1765284652849.png';
 import chatbotImg from '../assets/illustrations/ai_chatbot_illustration_1765284957931.png';
-import emptyMealsImg from '../assets/illustrations/empty_meals_illustration_1765284757107.png';
 import './home.css';
 
 const modalStyle = {
@@ -181,7 +179,6 @@ export const Home = () => {
 
   return (
     <div className="home-container">
-      {/* Hero Section */}
       <section className="hero-section">
         <Container maxWidth="lg">
           <div className="hero-content">
@@ -237,10 +234,10 @@ export const Home = () => {
         </Container>
       </section>
 
-      {/* Main Content */}
+
       <Container maxWidth="md" className="main-content">
         <Card variant="glass" className="chat-card">
-          {/* Mode Switcher */}
+
           <div className="mode-switcher-container">
             {loggedIn ? (
               <button onClick={switchMode} className="mode-switcher">
@@ -254,7 +251,7 @@ export const Home = () => {
             )}
           </div>
 
-          {/* Bot Mode */}
+
           {mode === 'bot' && (
             <motion.div
               key="bot-mode"
@@ -304,7 +301,7 @@ export const Home = () => {
                 </div>
               </form>
 
-              {/* Quick Suggestions */}
+
               <div className="quick-suggestions">
                 <p className="suggestions-label">Quick suggestions:</p>
                 <div className="suggestions-chips">
@@ -322,7 +319,7 @@ export const Home = () => {
             </motion.div>
           )}
 
-          {/* Manual Mode */}
+
           {mode === 'manual' && (
             <motion.div
               key="manual-mode"
@@ -401,7 +398,7 @@ export const Home = () => {
         </Card>
       </Container>
 
-      {/* Result Modal */}
+
       <Modal open={open} onClose={handleClose}>
         <Box sx={modalStyle}>
           <Grid container spacing={2} justifyContent="center">

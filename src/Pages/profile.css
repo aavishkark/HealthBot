@@ -1,4 +1,3 @@
-/* Modern Profile Page Styles */
 
 .profile-container {
   max-width: 1400px;
@@ -13,7 +12,6 @@
   background-image: none !important;
 }
 
-/* Background - Matching Home Page */
 .profile-container::before {
   content: '';
   position: absolute;
@@ -42,13 +40,11 @@
   z-index: 0;
 }
 
-/* Ensure content is above background */
 .profile-container>* {
   position: relative;
   z-index: 1;
 }
 
-/* Loading State */
 .profile-loading {
   display: flex;
   flex-direction: column;
@@ -59,7 +55,6 @@
   color: var(--color-text-secondary);
 }
 
-/* Header */
 .profile-header {
   display: flex;
   align-items: center;
@@ -124,7 +119,6 @@
   box-shadow: var(--shadow-md);
 }
 
-/* Stats Grid */
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -223,7 +217,6 @@
   margin-top: var(--space-2);
 }
 
-/* Progress Card */
 .progress-card {
   padding: var(--space-8);
   position: relative;
@@ -309,7 +302,6 @@
   font-family: var(--font-family-mono);
 }
 
-/* History Card */
 .history-card {
   padding: var(--space-8);
 }
@@ -371,12 +363,11 @@
   border-top: 1px solid var(--color-border);
 }
 
-/* Calendar Card */
+
 .calendar-card {
   padding: var(--space-8);
 }
 
-/* Not Authorized */
 .not-authorized {
   display: flex;
   flex-direction: column;
@@ -450,7 +441,6 @@
   box-shadow: var(--shadow-2xl);
 }
 
-/* Responsive Design */
 @media (max-width: 1024px) {
   .macro-details {
     grid-template-columns: 1fr;
@@ -517,7 +507,6 @@
     font-size: var(--font-size-xl);
   }
 
-  /* Hide less important columns on small screens */
   .meal-table .MuiTableCell-root:nth-child(4),
   .meal-table .MuiTableCell-root:nth-child(5) {
     display: none;

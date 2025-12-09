@@ -1,11 +1,10 @@
 import { useAuth } from './authContext';
-import { useTheme } from './ThemeContext';
 import { useState } from 'react';
 import API from './api';
 import './navbar.css';
 import { useNavigate } from 'react-router-dom';
 import { Snackbar, Alert } from '@mui/material';
-import { Moon, Sun, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export const Navbar = () => {
     const [openalert, setOpenalert] = useState(false);
@@ -13,7 +12,6 @@ export const Navbar = () => {
     const handleClosealert = () => setOpenalert(false);
     const handleOpenalert = () => setOpenalert(true);
     const { loggedIn, logout, loading } = useAuth();
-    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -38,13 +36,11 @@ export const Navbar = () => {
         <>
             <nav className="navbar-modern">
                 <div className="navbar-container">
-                    {/* Logo */}
                     <div className="navbar-logo">
                         <span className="logo-icon">🥗</span>
                         <span className="logo-text gradient-text">HealthBot</span>
                     </div>
 
-                    {/* Desktop Navigation */}
                     <ul className="navbar-links">
                         <li>
                             <a href="/" className="nav-link">Home</a>
@@ -65,20 +61,7 @@ export const Navbar = () => {
                         )}
                     </ul>
 
-                    {/* Theme Toggle & Mobile Menu Button */}
                     <div className="navbar-actions">
-                        <button
-                            onClick={toggleTheme}
-                            className="theme-toggle"
-                            aria-label="Toggle theme"
-                        >
-                            {theme === 'dark' ? (
-                                <Sun size={20} className="theme-icon" />
-                            ) : (
-                                <Moon size={20} className="theme-icon" />
-                            )}
-                        </button>
-
                         <button
                             onClick={toggleMobileMenu}
                             className="mobile-menu-button"
@@ -93,7 +76,6 @@ export const Navbar = () => {
                     </div>
                 </div>
 
-                {/* Mobile Menu */}
                 <div className={`mobile-menu ${mobileMenuOpen ? 'mobile-menu-open' : ''}`}>
                     <ul className="mobile-menu-links">
                         <li>

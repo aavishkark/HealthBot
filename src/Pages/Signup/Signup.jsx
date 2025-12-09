@@ -86,10 +86,8 @@ export const Signup = () => {
   return (
     <div className="auth-container">
       <div className="auth-content">
-        {/* Left Side - Form */}
         <div className="auth-form-section">
           <div className="auth-form-wrapper">
-            {/* Header */}
             <div className="auth-header">
               <div className="auth-logo">
                 <span className="logo-emoji">🥗</span>
@@ -101,7 +99,6 @@ export const Signup = () => {
               </p>
             </div>
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="auth-form">
               <div className="signup-grid">
                 {fields.map((f) => (
@@ -168,7 +165,6 @@ export const Signup = () => {
               </button>
             </form>
 
-            {/* Footer */}
             <div className="auth-footer">
               <p className="auth-footer-text">
                 Already have an account?{" "}
@@ -184,7 +180,6 @@ export const Signup = () => {
           </div>
         </div>
 
-        {/* Right Side - Illustration */}
         <div className="auth-illustration-section">
           <div className="illustration-wrapper">
             <div className="illustration-badge">

@@ -91,16 +91,13 @@ function CalorieCalendar({
 
   return (
     <div className='calContainer'>
-      <ChakraProvider>
+      <ChakraProvider resetCSS={false}>
         <VStack spacing={4} align="start" mb={4}>
           <Select
             value={viewMode}
             onChange={(e) => setViewMode(e.target.value)}
             width="200px"
             borderRadius="md"
-            size="md"
-            variant="outline"
-            alignSelf="Center"
           >
             <option value="calories">Calories</option>
             <option value="proteins">Proteins</option>
@@ -132,7 +129,7 @@ function CalorieCalendar({
                 {selectedDayEntries.length === 0 ? (
                   <p>No records found.</p>
                 ) : (
-                  <TableDisplay selectedDayEntries={selectedDayEntries}/>
+                  <TableDisplay selectedDayEntries={selectedDayEntries} />
                 )}
               </Box>
             </ModalBody>

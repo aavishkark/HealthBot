@@ -116,7 +116,6 @@ export const Profile = () => {
     }
   }, [userProfile]);
 
-  // Calculate today's totals
   const todayTotals = modeBasedEntries.reduce((acc, entry) => ({
     calories: acc.calories + parseFloat(entry.calories || 0),
     proteins: acc.proteins + parseFloat(entry.proteins || 0),
@@ -166,7 +165,6 @@ export const Profile = () => {
     <>
       {authorized ? (
         <div className="profile-container">
-          {/* Header */}
           <div className="profile-header">
             <div className="profile-header-content">
               <div className="profile-avatar">
@@ -183,7 +181,6 @@ export const Profile = () => {
             </button>
           </div>
 
-          {/* Stats Grid */}
           <div className="stats-grid">
             <Card variant="glass" className="stat-card">
               <div className="stat-icon stat-icon-primary">
@@ -221,7 +218,6 @@ export const Profile = () => {
             </Card>
           </div>
 
-          {/* Progress Rings */}
           <Card variant="glass" className="progress-card">
             <h3 className="section-title">Today's Progress</h3>
             <div className="progress-rings">
@@ -265,11 +261,8 @@ export const Profile = () => {
               </div>
             </div>
           </Card>
-
-          {/* Charts */}
           <ChartSection calories={calories} />
 
-          {/* Meal History */}
           <Card variant="glass" className="history-card">
             <div className="history-header">
               <h3 className="section-title">Meal History</h3>
@@ -333,7 +326,6 @@ export const Profile = () => {
             )}
           </Card>
 
-          {/* Calendar */}
           <Card variant="glass" className="calendar-card">
             <h3 className="section-title">Calendar View</h3>
             <CalCalendar

@@ -1,75 +1,33 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
-const ThemeContext = createContext();
+const ThemeContext = createContext(undefined);
 
-export const useTheme = () => {
+export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error('useTheme must be used within ThemeProvider');
   }
   return context;
-};
+}
 
-export const ThemeProvider = ({ children }) => {
-  const [theme, setTheme] = useState('light');
-  const [mounted, setMounted] = useState(false);
+export function ThemeProvider({ children }) {
+  const [theme, setTheme] = useState(() => {
+    const saved = localStorage.getItem('healthbot-theme');
+    return saved || 'light';
+  });
 
-  // Load theme from localStorage on mount
   useEffect(() => {
-    const savedTheme = localStorage.getItem('healthbot-theme');
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-    const initialTheme = savedTheme || systemTheme;
-    
-    setTheme(initialTheme);
-    document.documentElement.setAttribute('data-theme', initialTheme);
-    setMounted(true);
-  }, []);
-
-  // Listen for system theme changes
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e) => {
-      if (!localStorage.getItem('healthbot-theme')) {
-        const newTheme = e.matches ? 'dark' : 'light';
-        setTheme(newTheme);
-        document.documentElement.setAttribute('data-theme', newTheme);
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('healthbot-theme', theme);
+  }, [theme]);
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('healthbot-theme', newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
-
-  const setSpecificTheme = (newTheme) => {
-    if (newTheme === 'light' || newTheme === 'dark') {
-      setTheme(newTheme);
-      localStorage.setItem('healthbot-theme', newTheme);
-      document.documentElement.setAttribute('data-theme', newTheme);
-    }
-  };
-
-  const value = {
-    theme,
-    toggleTheme,
-    setTheme: setSpecificTheme,
-    isDark: theme === 'dark',
-  };
-
-  // Prevent flash of wrong theme
-  if (!mounted) {
-    return null;
-  }
 
   return (
-    <ThemeContext.Provider value={value}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, isDark: theme === 'dark' }}>
       {children}
     </ThemeContext.Provider>
   );
-};
+}
