@@ -1,15 +1,19 @@
 import { useAuth } from './authContext';
+import { useTheme } from './ThemeContext';
 import { useState } from 'react';
 import API from './api';
 import './navbar.css';
 import { useNavigate } from 'react-router-dom';
 import { Snackbar, Alert } from '@mui/material';
+import { Moon, Sun, Menu, X } from 'lucide-react';
 
 export const Navbar = () => {
     const [openalert, setOpenalert] = useState(false);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const handleClosealert = () => setOpenalert(false);
     const handleOpenalert = () => setOpenalert(true);
     const { loggedIn, logout, loading } = useAuth();
+    const { theme, toggleTheme } = useTheme();
     const navigate = useNavigate();
 
     const handleLogout = () => {
@@ -21,19 +25,106 @@ export const Navbar = () => {
             });
     };
 
+    const toggleMobileMenu = () => {
+        setMobileMenuOpen(!mobileMenuOpen);
+    };
+
+    const navigationHandler = (path) => {
+        navigate(path);
+        setMobileMenuOpen(false);
+    };
+
     return (
-        <div className='navbar'>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/profile">Profile</a></li>
-                 {loading ? (
-                    <li>Logout</li>
-                ) : loggedIn ? (
-                    <li onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</li>
-                ) : (
-                    <li><a href="/login">Login</a></li>
-                )}
-            </ul>
+        <>
+            <nav className="navbar-modern">
+                <div className="navbar-container">
+                    {/* Logo */}
+                    <div className="navbar-logo">
+                        <span className="logo-icon">🥗</span>
+                        <span className="logo-text gradient-text">HealthBot</span>
+                    </div>
+
+                    {/* Desktop Navigation */}
+                    <ul className="navbar-links">
+                        <li>
+                            <a href="/" className="nav-link">Home</a>
+                        </li>
+                        <li>
+                            <a href="/profile" className="nav-link">Profile</a>
+                        </li>
+                        {loading ? (
+                            <li className="nav-link">Loading...</li>
+                        ) : loggedIn ? (
+                            <li onClick={handleLogout} className="nav-link nav-link-action">
+                                Logout
+                            </li>
+                        ) : (
+                            <li>
+                                <a href="/login" className="nav-link nav-link-primary">Login</a>
+                            </li>
+                        )}
+                    </ul>
+
+                    {/* Theme Toggle & Mobile Menu Button */}
+                    <div className="navbar-actions">
+                        <button
+                            onClick={toggleTheme}
+                            className="theme-toggle"
+                            aria-label="Toggle theme"
+                        >
+                            {theme === 'dark' ? (
+                                <Sun size={20} className="theme-icon" />
+                            ) : (
+                                <Moon size={20} className="theme-icon" />
+                            )}
+                        </button>
+
+                        <button
+                            onClick={toggleMobileMenu}
+                            className="mobile-menu-button"
+                            aria-label="Toggle menu"
+                        >
+                            {mobileMenuOpen ? (
+                                <X size={24} />
+                            ) : (
+                                <Menu size={24} />
+                            )}
+                        </button>
+                    </div>
+                </div>
+
+                {/* Mobile Menu */}
+                <div className={`mobile-menu ${mobileMenuOpen ? 'mobile-menu-open' : ''}`}>
+                    <ul className="mobile-menu-links">
+                        <li>
+                            <button onClick={() => navigationHandler('/')} className="mobile-nav-link">
+                                Home
+                            </button>
+                        </li>
+                        <li>
+                            <button onClick={() => navigationHandler('/profile')} className="mobile-nav-link">
+                                Profile
+                            </button>
+                        </li>
+                        {loading ? (
+                            <li className="mobile-nav-link">Loading...</li>
+                        ) : loggedIn ? (
+                            <li>
+                                <button onClick={handleLogout} className="mobile-nav-link mobile-nav-link-action">
+                                    Logout
+                                </button>
+                            </li>
+                        ) : (
+                            <li>
+                                <button onClick={() => navigationHandler('/login')} className="mobile-nav-link mobile-nav-link-primary">
+                                    Login
+                                </button>
+                            </li>
+                        )}
+                    </ul>
+                </div>
+            </nav>
+
             <Snackbar
                 open={openalert}
                 autoHideDuration={3000}
@@ -43,7 +134,7 @@ export const Navbar = () => {
                 <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
                     Logged Out Successfully!
                 </Alert>
-            </Snackbar> 
-        </div>
+            </Snackbar>
+        </>
     );
 };
