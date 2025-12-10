@@ -1,4 +1,4 @@
-# 🥗 Health Bot
+# Health Bot
 Health Bot is a web application that helps users track their daily food intake and get instant nutritional information about the food they eat. Powered by Groq AI, the chatbot provides real-time responses, making it easy to log and manage meals efficiently.
 
 
@@ -31,18 +31,47 @@ Health Bot is a web application that helps users track their daily food intake a
     <img src="https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white" alt="mongodb" />
 </p>
 
+**Voice AI:**
+<p>
+    <img src="https://img.shields.io/badge/VAPI-6366F1?style=for-the-badge&logo=voice&logoColor=white" alt="vapi" />
+    <img src="https://img.shields.io/badge/OpenAI-412991?style=for-the-badge&logo=openai&logoColor=white" alt="openai" />
+    <img src="https://img.shields.io/badge/ElevenLabs-000000?style=for-the-badge&logo=audio&logoColor=white" alt="elevenlabs" />
+    <img src="https://img.shields.io/badge/Deepgram-000000?style=for-the-badge&logo=voice&logoColor=white" alt="deepgram" />
+</p>
 
-## 🚀 Features
 
-💬 AI-Powered Chatbot – Ask about any food item and get quick nutritional insights using Groq AI.
+## Features
 
-🧾 Meal Logging – Save meals to your profile and track your daily intake.
+### Core Nutrition Tracking
+**AI-Powered Chatbot** – Ask about any food item and get quick nutritional insights using Groq AI.
 
-✍️ Manual Entry Support – Add foods manually if needed, for full control.
+**Meal Logging** – Save meals to your profile and track your daily intake.
 
-🔐 User Authentication – Secure login and personalized dashboard.
+**Manual Entry Support** – Add foods manually if needed, for full control.
 
-📊 Nutrition Overview – View logged items and nutrition breakdowns.
+**Nutrition Overview** – View logged items with detailed nutrition breakdowns and charts.
+
+**Calendar View** – Track your nutrition history with an interactive calendar showing daily intake.
+
+### Voice AI Companion
+**Voice-Only AI Health Companion** – Natural voice conversations with an AI health advisor powered by VAPI.
+
+**Real-Time Voice Interaction** – Speak naturally and get instant voice responses about nutrition and health.
+
+**Context-Aware Conversations** – AI remembers your profile, recent meals, and past conversations for personalized guidance.
+
+**Session History** – All voice sessions are saved and transcribed for future reference.
+
+**Modern UI/UX** – Sleek dark theme interface with smooth animations and intuitive design.
+
+### User Experience
+**User Authentication** – Secure login with personalized dashboard.
+
+**Weekly Analytics** – Visualize your nutrition trends with interactive charts.
+
+**Daily Goals** – Track calories, proteins, and fats against your personalized targets.
+
+**Responsive Design** – Fully optimized for desktop, tablet, and mobile devices.
 
 
  
@@ -50,20 +79,16 @@ Health Bot is a web application that helps users track their daily food intake a
 
 ## Project Screenshots
 
-- Home Page
-<img src="./public/home.png" alt="home">
+![](https://i.ibb.co/jvqbHvmz/1.png)
 
-- Profile Page
-<img src="./public/profile.png" alt="profile">
 
-- Edit Profile Page
-<img src="./public/editprofile.png" alt="edit profile">
+![](https://i.ibb.co/svVgxYjB/2.png)
 
-- SignUp Page
-<img src="./public/signup.png" alt="signup">
 
-- Login Page
-<img src="./public/login.png" alt="login">
+![](https://i.ibb.co/FkYfwtrq/3.png)
+
+
+![](https://i.ibb.co/kVSwyVM5/4.png)
 
 
 
