@@ -9,7 +9,6 @@ import {
   Snackbar,
   Typography,
   Container,
-  CircularProgress,
   Table,
   TableBody,
   TableCell,
@@ -396,6 +395,58 @@ export const Home = () => {
             </motion.div>
           )}
         </Card>
+      </Container>
+
+      <Container maxWidth="md" className="voice-ai-section">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
+          <Card variant="glass" className="voice-ai-card">
+            <div className="voice-ai-content">
+              <div className="voice-ai-icon">
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 14C13.66 14 15 12.66 15 11V5C15 3.34 13.66 2 12 2C10.34 2 9 3.34 9 5V11C9 12.66 10.34 14 12 14Z" fill="url(#gradient1)" />
+                  <path d="M17 11C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5C5 14.53 7.61 17.43 11 17.92V21H13V17.92C16.39 17.43 19 14.53 19 11H17Z" fill="url(#gradient1)" />
+                  <defs>
+                    <linearGradient id="gradient1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                      <stop stopColor="#6366f1" />
+                      <stop offset="1" stopColor="#8b5cf6" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+              </div>
+
+              <div className="voice-ai-text">
+                <h2 className="voice-ai-title">AI Diet Companion</h2>
+                <p className="voice-ai-description">
+                  Have natural voice conversations about your health and nutrition goals.
+                  Get personalized advice, meal planning, and support - all through voice.
+                </p>
+
+                <div className="voice-ai-features">
+                  <div className="feature-item">
+                    <span className="feature-text">Personalized Advice</span>
+                  </div>
+                  <div className="feature-item">
+                    <span className="feature-text">Remembers Context</span>
+                  </div>
+                  <div className="feature-item">
+                    <span className="feature-text">Natural Conversations</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <a href="/voice-companion" className="voice-ai-cta">
+              <span>Start Conversation</span>
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </a>
+          </Card>
+        </motion.div>
       </Container>
 
 
