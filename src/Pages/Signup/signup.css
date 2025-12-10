@@ -1,0 +1,213 @@
+.signup-container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--color-bg-primary);
+    padding: var(--space-xl);
+    position: relative;
+    overflow: hidden;
+}
+
+.signup-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.signup-container::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.signup-card {
+    width: 100%;
+    max-width: 600px;
+    padding: var(--space-2xl);
+    background: var(--color-surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-xl);
+    position: relative;
+    z-index: 1;
+}
+
+.signup-header {
+    text-align: center;
+    margin-bottom: var(--space-2xl);
+}
+
+.signup-logo {
+    font-size: 3rem;
+    margin-bottom: var(--space-md);
+}
+
+.signup-title {
+    font-size: 1.875rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: var(--space-sm);
+}
+
+.signup-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-lg);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-lg);
+}
+
+.form-row-2 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+}
+
+.form-group .MuiInputBase-root {
+    background: var(--color-surface-elevated);
+    color: var(--color-text-primary);
+    border-radius: var(--radius-md);
+}
+
+.form-group .MuiOutlinedInput-notchedOutline {
+    border-color: var(--color-border);
+}
+
+.form-group .MuiInputBase-root:hover .MuiOutlinedInput-notchedOutline {
+    border-color: var(--color-border-light);
+}
+
+.form-group .Mui-focused .MuiOutlinedInput-notchedOutline {
+    border-color: var(--color-accent-primary) !important;
+    border-width: 2px;
+}
+
+.form-group .MuiInputLabel-root {
+    color: var(--color-text-secondary);
+}
+
+.form-group .Mui-focused {
+    color: var(--color-accent-primary) !important;
+}
+
+.form-group .MuiSelect-select {
+    color: var(--color-text-primary);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: var(--space-md);
+    border: none;
+    border-radius: var(--radius-full);
+    background: linear-gradient(135deg, var(--color-accent-primary) 0%, var(--color-accent-primary-hover) 100%);
+    color: white;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: var(--shadow-md);
+    margin-top: var(--space-md);
+}
+
+.btn-submit:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+}
+
+.btn-submit:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: var(--space-xl);
+    padding-top: var(--space-xl);
+    border-top: 1px solid var(--color-border);
+}
+
+.form-footer p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-sm);
+}
+
+.form-footer a {
+    color: var(--color-accent-primary);
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+}
+
+.form-footer a:hover {
+    color: var(--color-accent-primary-hover);
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    .form-row-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .signup-container {
+        padding: var(--space-md);
+    }
+
+    .signup-card {
+        padding: var(--space-xl);
+    }
+
+    .signup-title {
+        font-size: 1.5rem;
+    }
+}

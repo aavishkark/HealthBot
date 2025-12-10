@@ -1,3 +1,46 @@
+
+:root {
+    --color-bg-primary: #0f1419;
+    --color-bg-secondary: #1a1f29;
+    --color-bg-tertiary: #232936;
+    --color-surface: #1e2530;
+    --color-surface-elevated: #252d3a;
+
+    --color-text-primary: #e6e8eb;
+    --color-text-secondary: #9ca3af;
+    --color-text-tertiary: #6b7280;
+
+    --color-accent-primary: #6366f1;
+    --color-accent-primary-hover: #7c3aed;
+    --color-accent-danger: #ef4444;
+    --color-accent-success: #10b981;
+
+
+    --color-border: #2d3748;
+    --color-border-light: #374151;
+
+
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+
+
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2rem;
+    --space-2xl: 3rem;
+
+
+    --radius-sm: 0.375rem;
+    --radius-md: 0.5rem;
+    --radius-lg: 0.75rem;
+    --radius-xl: 1rem;
+    --radius-full: 9999px;
+}
+
 .App {
   text-align: center;
 }
@@ -9,7 +52,6 @@ body::before {
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('../public/bg.jpg');
   background-repeat: repeat;
   background-size: 5000px;
   filter: grayscale(100%);
@@ -18,12 +60,11 @@ body::before {
 }
 
 body {
-  background-image: url('../public/bg.jpg') !important;
-  background-repeat: repeat ;
+  background-repeat: repeat;
   background-size: 5000px !important;
 }
 
-a{
+a {
   text-decoration: none;
   color: inherit;
 }
