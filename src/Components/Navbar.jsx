@@ -37,7 +37,6 @@ export const Navbar = () => {
             <nav className="navbar-modern">
                 <div className="navbar-container">
                     <div className="navbar-logo">
-                        <span className="logo-icon">🥗</span>
                         <span className="logo-text gradient-text">HealthBot</span>
                     </div>
 
@@ -49,14 +48,27 @@ export const Navbar = () => {
                             <a href="/profile" className="nav-link">Profile</a>
                         </li>
                         {loading ? (
-                            <li className="nav-link">Loading...</li>
+                            <li className="nav-link-loading">
+                                <div className="loading-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </li>
                         ) : loggedIn ? (
-                            <li onClick={handleLogout} className="nav-link nav-link-action">
-                                Logout
+                            <li>
+                                <button onClick={handleLogout} className="btn-logout">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                    <span>Logout</span>
+                                </button>
                             </li>
                         ) : (
                             <li>
-                                <a href="/login" className="nav-link nav-link-primary">Login</a>
+                                <a href="/login" className="btn-login">Login</a>
                             </li>
                         )}
                     </ul>
@@ -89,16 +101,27 @@ export const Navbar = () => {
                             </button>
                         </li>
                         {loading ? (
-                            <li className="mobile-nav-link">Loading...</li>
+                            <li className="mobile-nav-link-loading">
+                                <div className="loading-dots">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </li>
                         ) : loggedIn ? (
                             <li>
-                                <button onClick={handleLogout} className="mobile-nav-link mobile-nav-link-action">
-                                    Logout
+                                <button onClick={handleLogout} className="mobile-btn-logout">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                        <polyline points="16 17 21 12 16 7"></polyline>
+                                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                                    </svg>
+                                    <span>Logout</span>
                                 </button>
                             </li>
                         ) : (
                             <li>
-                                <button onClick={() => navigationHandler('/login')} className="mobile-nav-link mobile-nav-link-primary">
+                                <button onClick={() => navigationHandler('/login')} className="mobile-btn-login">
                                     Login
                                 </button>
                             </li>

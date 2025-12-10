@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
 import { FaUser, FaBirthdayCake, FaRulerVertical, FaWeightHanging, FaVenusMars, FaEnvelope, FaDumbbell } from "react-icons/fa";
+import { ArrowRight } from "lucide-react";
 import API from "../../Components/api";
-import { Snackbar } from "@mui/material";
-import { Alert } from "@mui/material";
+import { Snackbar, Alert } from "@mui/material";
+import LoadingSpinner from "../../Components/ui/LoadingSpinner";
+import "./editprofile.css";
 
 export const EditProfile = () => {
   const [userProfile, setUserProfile] = useState({});
-  const [form, setForm] = useState({ name:"", age:"", height:"", weight:"", gender:"", email:"", activity:"" });
+  const [form, setForm] = useState({ name: "", age: "", height: "", weight: "", gender: "", email: "", activity: "" });
   const [openalert, setOpenalert] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleClosealert = () => setOpenalert(false);
   const handleOpenalert = () => setOpenalert(true);
@@ -15,12 +18,12 @@ export const EditProfile = () => {
   useEffect(() => {
     API.get('/verify')
       .then(res => {
-          const userEmail = res.data.user.email;
-        setForm(prev=>({
+        const userEmail = res.data.user.email;
+        setForm(prev => ({
           ...prev,
-          email:userEmail
-      }))
-        return  API.get("/getProfile", { params:{email: userEmail }})
+          email: userEmail
+        }))
+        return API.get("/getProfile", { params: { email: userEmail } })
 
       }).then(res => {
         setUserProfile(res.data.user);
@@ -36,67 +39,101 @@ export const EditProfile = () => {
       });
   }, []);
 
-  const handleChange = e => setForm({...form, [e.target.name]: e.target.value});
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleUpdate = e => {
     e.preventDefault();
+    setLoading(true);
     API.patch(`/updateProfile/${userProfile._id}`,
       { ...userProfile, ...form }
-    ).then(handleOpenalert()).catch(console.error);
+    ).then(() => {
+      setLoading(false);
+      handleOpenalert();
+    }).catch(err => {
+      console.error(err);
+      setLoading(false);
+    });
   };
 
   const fields = [
-    { name:"name", label:"Name", icon: <FaUser /> , type:"text" },
-    { name:"age", label:"Age", icon: <FaBirthdayCake /> , type:"number" },
-    { name:"height", label:"Height (cm)", icon: <FaRulerVertical />, type:"number" },
-    { name:"weight", label:"Weight (kg)", icon: <FaWeightHanging />, type:"number" },
-    { name:"gender", label:"Gender", icon: <FaVenusMars />, type:"select", options:["Male","Female"] },
-    { name:"email", label:"Email", icon: <FaEnvelope />, type:"email" },
-    { name:"activity", label:"Activity Level",icon:<FaDumbbell />, type:"select", 
-      options:["1.2","1.375","1.55","1.725","1.9"], 
-      optionLabels:["Sedentary","Lightly active","Moderately active","Very active","Super active"]
+    { name: "name", label: "Name", icon: <FaUser />, type: "text" },
+    { name: "age", label: "Age", icon: <FaBirthdayCake />, type: "number" },
+    { name: "height", label: "Height (cm)", icon: <FaRulerVertical />, type: "number" },
+    { name: "weight", label: "Weight (kg)", icon: <FaWeightHanging />, type: "number" },
+    { name: "gender", label: "Gender", icon: <FaVenusMars />, type: "select", options: ["Male", "Female"] },
+    { name: "email", label: "Email", icon: <FaEnvelope />, type: "email" },
+    {
+      name: "activity", label: "Activity Level", icon: <FaDumbbell />, type: "select",
+      options: ["1.2", "1.375", "1.55", "1.725", "1.9"],
+      optionLabels: ["Sedentary (Little or no exercise)", "Lightly active (1-3 days/week)", "Moderately active (3-5 days/week)", "Very active (6-7 days/week)", "Super active (Athlete level)"]
     }
   ];
 
   return (
-    <div className="flex items-center justify-center py-10 px-4">
-      <form onSubmit={handleUpdate} className=" max-w-md w-full p-8 space-y-6">
-        {fields.map(f => (
-          <div key={f.name} className="relative">
-            <span className="absolute left-3 top-3 text-blue-600">{f.icon}</span>
-            {f.type === "select" ? (
-              <select
-                name={f.name}
-                value={form[f.name]}
-                required
-                onChange={handleChange}
-                className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-300"
-              >
-                <option value="" disabled>Select {f.label}</option>
-                {f.options.map((opt, i) => (
-                  <option key={opt} value={opt}>{f.optionLabels? f.optionLabels[i] : opt}</option>
-                ))}
-              </select>
-            ) : (
-              <input
-                name={f.name}
-                type={f.type}
-                placeholder={f.label}
-                value={form[f.name]}
-                required
-                onChange={handleChange}
-                className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-300"
-              />
-            )}
+    <div className="editprofile-container">
+      <div className="editprofile-card">
+        <div className="editprofile-header">
+          <h1 className="editprofile-title">Edit Profile</h1>
+          <p className="editprofile-subtitle">Update your health information</p>
+        </div>
+
+        <form onSubmit={handleUpdate} className="editprofile-form">
+          <div className="editprofile-grid">
+            {fields.map(f => (
+              <div key={f.name} className={`form-group ${f.name === 'email' || f.name === 'activity' ? 'editprofile-grid-full' : ''}`}>
+                <label htmlFor={f.name} className="form-label">{f.label}</label>
+                {f.type === "select" ? (
+                  <select
+                    id={f.name}
+                    name={f.name}
+                    value={form[f.name]}
+                    required
+                    onChange={handleChange}
+                    className="form-select"
+                  >
+                    {f.options.map((opt, i) => (
+                      <option key={opt} value={opt}>{f.optionLabels ? f.optionLabels[i] : opt}</option>
+                    ))}
+                  </select>
+                ) : (
+                  <div className="input-with-icon">
+                    {f.icon && <span className="input-icon">{f.icon}</span>}
+                    <input
+                      id={f.name}
+                      name={f.name}
+                      type={f.type}
+                      value={form[f.name]}
+                      required
+                      onChange={handleChange}
+                      className="form-input"
+                      disabled={f.name === 'email'}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-        <button
-          type="submit"
-          className="w-full py-3 rounded-lg bg-gradient-to-r from-green-500 to-teal-600 text-white font-semibold hover:from-blue-600 hover:to-indigo-700 transition transition"
-        >
-          Save Changes
-        </button>
-      </form>
+
+          <button
+            type="submit"
+            className="btn-submit gradient-primary"
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <LoadingSpinner size="small" color="white" />
+                <span>Saving...</span>
+              </>
+            ) : (
+              <>
+                <span>Save Changes</span>
+                <ArrowRight size={20} />
+              </>
+            )}
+          </button>
+        </form>
+      </div>
+
       <Snackbar
         open={openalert}
         autoHideDuration={3000}
@@ -104,7 +141,7 @@ export const EditProfile = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
-          Profile Updated Successfully!
+           Profile Updated Successfully!
         </Alert>
       </Snackbar>
     </div>

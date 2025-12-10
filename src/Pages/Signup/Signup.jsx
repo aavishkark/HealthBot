@@ -89,10 +89,6 @@ export const Signup = () => {
         <div className="auth-form-section">
           <div className="auth-form-wrapper">
             <div className="auth-header">
-              <div className="auth-logo">
-                <span className="logo-emoji">🥗</span>
-                <span className="logo-text gradient-text">HealthBot</span>
-              </div>
               <h1 className="auth-title">Create Account</h1>
               <p className="auth-subtitle">
                 Start your health tracking journey today

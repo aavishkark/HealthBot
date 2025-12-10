@@ -13,7 +13,6 @@
 @import './variables.css';
 @import './animations.css';
 
-/* ========== CSS Reset & Base Styles ========== */
 *,
 *::before,
 *::after {
@@ -40,7 +39,6 @@ body {
     overflow-x: hidden;
 }
 
-/* ========== Typography ========== */
 h1,
 h2,
 h3,
@@ -100,9 +98,6 @@ code {
     border-radius: var(--radius-sm);
 }
 
-/* ========== Utility Classes ========== */
-
-/* Glass Morphism */
 .glass {
     background: var(--glass-bg);
     backdrop-filter: blur(10px);
@@ -119,7 +114,6 @@ code {
     box-shadow: var(--glass-shadow);
 }
 
-/* Gradients */
 .gradient-primary {
     background: var(--gradient-primary);
 }
@@ -143,7 +137,6 @@ code {
     background-clip: text;
 }
 
-/* Cards */
 .card {
     background: var(--color-surface);
     border-radius: var(--radius-lg);
@@ -167,7 +160,6 @@ code {
     box-shadow: var(--glass-shadow);
 }
 
-/* Container */
 .container {
     width: 100%;
     max-width: 1200px;
@@ -191,7 +183,6 @@ code {
     max-width: 1280px;
 }
 
-/* Flexbox Utilities */
 .flex {
     display: flex;
 }
@@ -213,7 +204,6 @@ code {
     flex-direction: column;
 }
 
-/* Grid Utilities */
 .grid {
     display: grid;
 }
@@ -236,7 +226,6 @@ code {
     gap: var(--space-4);
 }
 
-/* Responsive Grid */
 @media (max-width: 768px) {
 
     .grid-2,
@@ -254,7 +243,6 @@ code {
     }
 }
 
-/* Spacing Utilities */
 .mt-auto {
     margin-top: auto;
 }
@@ -271,7 +259,6 @@ code {
     margin-right: auto;
 }
 
-/* Text Alignment */
 .text-left {
     text-align: left;
 }
@@ -284,7 +271,6 @@ code {
     text-align: right;
 }
 
-/* Text Colors */
 .text-primary {
     color: var(--color-text-primary);
 }
@@ -297,7 +283,6 @@ code {
     color: var(--color-text-tertiary);
 }
 
-/* Visibility */
 .hide-mobile {
     display: block;
 }
@@ -318,7 +303,6 @@ code {
     }
 }
 
-/* ========== Custom Scrollbar ========== */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
@@ -337,13 +321,11 @@ code {
     background: var(--color-border-hover);
 }
 
-/* Firefox */
 * {
     scrollbar-width: thin;
     scrollbar-color: var(--color-border) var(--color-surface);
 }
 
-/* ========== Focus Styles ========== */
 :focus-visible {
     outline: 2px solid var(--color-primary);
     outline-offset: 2px;
@@ -356,13 +338,11 @@ a:focus-visible {
     outline-offset: 2px;
 }
 
-/* ========== Selection ========== */
 ::selection {
     background-color: var(--color-primary-light);
     color: var(--color-text-primary);
 }
 
-/* ========== Loading State ========== */
 .skeleton {
     background: linear-gradient(90deg,
             var(--color-surface-hover) 0%,
@@ -383,7 +363,6 @@ a:focus-visible {
     }
 }
 
-/* ========== Print Styles ========== */
 @media print {
     .no-print {
         display: none !important;

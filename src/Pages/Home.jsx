@@ -389,7 +389,7 @@ export const Home = () => {
                   />
                 </div>
                 <button type="submit" className="btn-submit gradient-primary">
-                  Add to Diary
+                  Add
                 </button>
               </form>
             </motion.div>

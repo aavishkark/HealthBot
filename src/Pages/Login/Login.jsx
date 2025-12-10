@@ -50,10 +50,6 @@ export const Login = () => {
         <div className="auth-form-section">
           <div className="auth-form-wrapper">
             <div className="auth-header">
-              <div className="auth-logo">
-                <span className="logo-emoji">🥗</span>
-                <span className="logo-text gradient-text">HealthBot</span>
-              </div>
               <h1 className="auth-title">Welcome Back!</h1>
               <p className="auth-subtitle">
                 Sign in to continue tracking your health journey
