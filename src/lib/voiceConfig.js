@@ -15,14 +15,10 @@ export const configureHealthAssistant = (userContext = '') => {
             language: "en",
         },
 
-        // Text-to-Speech configuration (ElevenLabs)
+        // Text-to-Speech configuration (Deepgram Aura - Built-in VAPI support)
         voice: {
-            provider: "11labs",
-            voiceId: "21m00Tcm4TlvDq8ikWAM", // Rachel - professional female voice
-            stability: 0.5,
-            similarityBoost: 0.8,
-            speed: 1.0,
-            optimizeStreamingLatency: 2,
+            provider: "deepgram",
+            voiceId: "athena", // Natural, warm female voice
         },
 
         // LLM configuration (OpenAI)
