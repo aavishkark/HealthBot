@@ -6,7 +6,7 @@ import {
   TableContainer, TableHead, TableRow, TablePagination
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Edit, TrendingUp, Activity, Award } from 'lucide-react';
+import { Edit, TrendingUp, Activity, Award, Lock, ChevronRight, Sparkles, BarChart3, CalendarDays, Brain } from 'lucide-react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -340,12 +340,63 @@ export const Profile = () => {
         </div>
       ) : (
         <div className="not-authorized">
-          <div className="not-auth-icon">🔒</div>
-          <h2>Please Log In</h2>
-          <p>You must be logged in to access your profile and track your calories.</p>
-          <button onClick={() => navigate('/login')} className="btn-login gradient-primary">
-            Log In to Continue
-          </button>
+          <div className="not-auth-content">
+            <div className="lock-animation">
+              <Lock className="lock-icon" size={64} />
+              <div className="lock-glow"></div>
+            </div>
+
+            <div className="not-auth-header">
+              <h1 className="not-auth-title">Access Your Health Dashboard</h1>
+              <p className="not-auth-subtitle">
+                Sign in to unlock your personalized nutrition tracking and AI-powered health insights
+              </p>
+            </div>
+
+            <div className="features-grid">
+              <div className="feature-card">
+                <div className="feature-icon feature-icon-primary">
+                  <BarChart3 size={24} />
+                </div>
+                <h3 className="feature-title">Track Progress</h3>
+                <p className="feature-desc">Monitor calories, macros, and achieve your health goals</p>
+              </div>
+
+              <div className="feature-card">
+                <div className="feature-icon feature-icon-secondary">
+                  <Brain size={24} />
+                </div>
+                <h3 className="feature-title">AI Companion</h3>
+                <p className="feature-desc">Get personalized advice from your voice AI health assistant</p>
+              </div>
+
+              <div className="feature-card">
+                <div className="feature-icon feature-icon-accent">
+                  <CalendarDays size={24} />
+                </div>
+                <h3 className="feature-title">Daily Insights</h3>
+                <p className="feature-desc">Visualize your nutrition journey with interactive charts</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => navigate('/login')}
+              className="btn-login gradient-primary">
+              <Sparkles size={20} />
+              <span>Sign In to Get Started</span>
+              <ChevronRight size={20} />
+            </button>
+
+            <p className="signup-prompt">
+              Don't have an account?{' '}
+              <button
+                onClick={() => navigate('/signup')}
+                className="signup-link"
+              >
+                Create one for free
+              </button>
+            </p>
+          </div>
         </div>
       )}
     </>

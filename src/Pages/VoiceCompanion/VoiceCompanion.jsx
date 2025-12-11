@@ -113,7 +113,9 @@ export const VoiceCompanion = () => {
 
         const onError = (error) => {
             console.error('VAPI Error:', error);
-            showNotification(`Error: ${error.message || 'Something went wrong'}`, 'error');
+            console.error('Error details:', JSON.stringify(error, null, 2));
+            const errorMsg = error?.error?.message || error?.message || 'Something went wrong';
+            showNotification(`Error: ${errorMsg}`, 'error');
             setCallStatus(CallStatus.INACTIVE);
         };
 
@@ -163,7 +165,7 @@ export const VoiceCompanion = () => {
     };
 
     const handleStartCall = async () => {
-        if (!process.env.VAPI_TOKEN) {
+        if (!process.env.REACT_APP_VAPI_TOKEN) {
             showNotification('VAPI token not configured. Please check your .env file.', 'error');
             return;
         }
