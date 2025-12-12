@@ -165,10 +165,6 @@ export const VoiceCompanion = () => {
     };
 
     const handleStartCall = async () => {
-        if (!process.env.REACT_APP_VAPI_TOKEN) {
-            showNotification('VAPI token not configured. Please check your .env file.', 'error');
-            return;
-        }
 
         try {
             setCallStatus(CallStatus.LOADING);
