@@ -147,15 +147,15 @@ export const Login = () => {
             />
             <div className="illustration-stats">
               <div className="stat-bubble stat-bubble-1">
-                <div className="stat-value">1000+</div>
-                <div className="stat-label">Active Users</div>
+                <div className="stat-value">Track</div>
+                <div className="stat-label">Your Health</div>
               </div>
               <div className="stat-bubble stat-bubble-2">
                 <div className="stat-value">AI-Powered</div>
                 <div className="stat-label">Insights</div>
               </div>
               <div className="stat-bubble stat-bubble-3">
-                <div className="stat-value">100% Free</div>
+                <div className="stat-value">Free</div>
                 <div className="stat-label">Forever</div>
               </div>
             </div>

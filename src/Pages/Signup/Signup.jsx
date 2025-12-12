@@ -180,7 +180,7 @@ export const Signup = () => {
           <div className="illustration-wrapper">
             <div className="illustration-badge">
               <CheckCircle size={16} />
-              <span>Join 1000+ healthy users</span>
+              <span>Join Now</span>
             </div>
             <img
               src={loginImg}
@@ -190,11 +190,6 @@ export const Signup = () => {
             <div className="illustration-stats">
               <div className="stat-bubble stat-bubble-1">
                 <div className="stat-value">Free</div>
-                <div className="stat-label">No Credit Card</div>
-              </div>
-              <div className="stat-bubble stat-bubble-2">
-                <div className="stat-value">Secure</div>
-                <div className="stat-label">Your Data</div>
               </div>
               <div className="stat-bubble stat-bubble-3">
                 <div className="stat-value">30 sec</div>

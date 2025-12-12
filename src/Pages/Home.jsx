@@ -21,6 +21,7 @@ import {
   CheckCircle as CheckCircleIcon,
   Cancel as CancelIcon,
   Send as SendIcon,
+  Lock as LockIcon,
 } from '@mui/icons-material';
 import { Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -234,221 +235,235 @@ export const Home = () => {
       </section>
 
 
-      <Container maxWidth="md" className="main-content">
-        <Card variant="glass" className="chat-card">
+      <div className="two-column-layout">
+        <Container maxWidth="md" className="main-content">
+          <Card variant="glass" className="chat-card">
 
-          <div className="mode-switcher-container">
-            {loggedIn ? (
-              <button onClick={switchMode} className="mode-switcher">
-                <SwapHorizIcon className="switch-icon" />
-                <span>Switch to {mode === 'bot' ? 'Manual' : 'AI Bot'} Mode</span>
-              </button>
-            ) : (
-              <a href='/login' className="login-prompt-link">
-                <span>🔒 Login to unlock Manual Mode</span>
-              </a>
-            )}
-          </div>
-
-
-          {mode === 'bot' && (
-            <motion.div
-              key="bot-mode"
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 20 }}
-              transition={{ duration: 0.3 }}
-              className="chat-interface"
-            >
-              <div className="chat-header">
-                <img src={chatbotImg} alt="AI Assistant" className="chatbot-avatar" />
-                <div>
-                  <h3 className="chat-title">AI Nutrition Assistant</h3>
-                  <p className="chat-subtitle">Ask me about any food item!</p>
-                </div>
-              </div>
-
-              <form onSubmit={handleSubmit} className="chat-form">
-                <div className="input-group">
-                  <TextField
-                    type="text"
-                    value={input}
-                    fullWidth
-                    placeholder="e.g., 200g Muesli, 1 Banana, 100g Chicken..."
-                    onChange={(e) => setInput(e.target.value)}
-                    required
-                    variant="outlined"
-                    className="chat-input"
-                    sx={{
-                      '& .MuiOutlinedInput-root': {
-                        borderRadius: 'var(--radius-xl)',
-                        backgroundColor: 'var(--color-surface)',
-                      }
-                    }}
-                  />
-                  <button
-                    type="submit"
-                    className="btn-send"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <LoadingSpinner size="small" color="white" />
-                    ) : (
-                      <SendIcon />
-                    )}
-                  </button>
-                </div>
-              </form>
-
-
-              <div className="quick-suggestions">
-                <p className="suggestions-label">Quick suggestions:</p>
-                <div className="suggestions-chips">
-                  {popularFoods.map((food, idx) => (
-                    <Chip
-                      key={idx}
-                      label={food}
-                      onClick={() => handleQuickFood(food)}
-                      className="suggestion-chip"
-                      size="small"
-                    />
-                  ))}
-                </div>
-              </div>
-            </motion.div>
-          )}
-
-
-          {mode === 'manual' && (
-            <motion.div
-              key="manual-mode"
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -20 }}
-              transition={{ duration: 0.3 }}
-              className="manual-form"
-            >
-              <div className="manual-header">
-                <h3 className="manual-title">Manual Entry</h3>
-                <p className="manual-subtitle">Enter nutritional information directly</p>
-              </div>
-
-              <form onSubmit={(e) => { addCalories(e) }} className="manual-fields">
-                <div className="form-row">
-                  <TextField
-                    fullWidth
-                    label="Food Item"
-                    value={foodItem}
-                    onChange={(e) => setFoodItem(e.target.value)}
-                    required
-                    variant="outlined"
-                  />
-                </div>
-                <div className="form-row-2">
-                  <TextField
-                    label="Amount (g)"
-                    type="number"
-                    value={foodAmount}
-                    onChange={(e) => setFoodAmount(e.target.value)}
-                    required
-                    variant="outlined"
-                  />
-                  <TextField
-                    label="Calories"
-                    type="number"
-                    value={calories}
-                    onChange={(e) => setCalories(e.target.value)}
-                    required
-                    variant="outlined"
-                  />
-                </div>
-                <div className="form-row-3">
-                  <TextField
-                    label="Proteins (g)"
-                    type="number"
-                    value={proteins}
-                    onChange={(e) => setProteins(e.target.value)}
-                    required
-                    variant="outlined"
-                  />
-                  <TextField
-                    label="Carbs (g)"
-                    type="number"
-                    value={carbs}
-                    onChange={(e) => setCarbs(e.target.value)}
-                    required
-                    variant="outlined"
-                  />
-                  <TextField
-                    label="Fats (g)"
-                    type="number"
-                    value={fats}
-                    onChange={(e) => setFats(e.target.value)}
-                    required
-                    variant="outlined"
-                  />
-                </div>
-                <button type="submit" className="btn-submit gradient-primary">
-                  Add
+            <div className="mode-switcher-container">
+              {loggedIn ? (
+                <button onClick={switchMode} className="mode-switcher">
+                  <SwapHorizIcon className="switch-icon" />
+                  <span>Switch to {mode === 'bot' ? 'Manual' : 'AI Bot'} Mode</span>
                 </button>
-              </form>
-            </motion.div>
-          )}
-        </Card>
-      </Container>
-
-      <Container maxWidth="md" className="voice-ai-section">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-        >
-          <Card variant="glass" className="voice-ai-card">
-            <div className="voice-ai-content">
-              <div className="voice-ai-icon">
-                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 14C13.66 14 15 12.66 15 11V5C15 3.34 13.66 2 12 2C10.34 2 9 3.34 9 5V11C9 12.66 10.34 14 12 14Z" fill="url(#gradient1)" />
-                  <path d="M17 11C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5C5 14.53 7.61 17.43 11 17.92V21H13V17.92C16.39 17.43 19 14.53 19 11H17Z" fill="url(#gradient1)" />
-                  <defs>
-                    <linearGradient id="gradient1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
-                      <stop stopColor="#6366f1" />
-                      <stop offset="1" stopColor="#8b5cf6" />
-                    </linearGradient>
-                  </defs>
-                </svg>
-              </div>
-
-              <div className="voice-ai-text">
-                <h2 className="voice-ai-title">AI Diet Companion</h2>
-                <p className="voice-ai-description">
-                  Have natural voice conversations about your health and nutrition goals.
-                  Get personalized advice, meal planning, and support - all through voice.
-                </p>
-
-                <div className="voice-ai-features">
-                  <div className="feature-item">
-                    <span className="feature-text">Personalized Advice</span>
+              ) : (
+                <div className="login-prompt-container">
+                  <div className="login-prompt-content">
+                    <LockIcon className="lock-icon" />
+                    <div className="login-prompt-text">
+                      <span className="login-prompt-title">Manual Mode</span>
+                      <span className="login-prompt-subtitle">Login to unlock manual entry</span>
+                    </div>
                   </div>
-                  <div className="feature-item">
-                    <span className="feature-text">Remembers Context</span>
-                  </div>
-                  <div className="feature-item">
-                    <span className="feature-text">Natural Conversations</span>
-                  </div>
+                  <a href='/login' className="login-prompt-link">
+                    <span>Login Now</span>
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <path fillRule="evenodd" d="M8.293 2.293a1 1 0 011.414 0l5 5a1 1 0 010 1.414l-5 5a1 1 0 01-1.414-1.414L11.586 9H3a1 1 0 110-2h8.586L8.293 3.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                    </svg>
+                  </a>
                 </div>
-              </div>
+              )}
             </div>
 
-            <a href="/voice-companion" className="voice-ai-cta">
-              <span>Start Conversation</span>
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </a>
-          </Card>
-        </motion.div>
-      </Container>
 
+            {mode === 'bot' && (
+              <motion.div
+                key="bot-mode"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: 20 }}
+                transition={{ duration: 0.3 }}
+                className="chat-interface"
+              >
+                <div className="chat-header">
+                  <img src={chatbotImg} alt="AI Assistant" className="chatbot-avatar" />
+                  <div>
+                    <h3 className="chat-title">AI Nutrition Assistant</h3>
+                    <p className="chat-subtitle">Ask me about any food item!</p>
+                  </div>
+                </div>
+
+                <form onSubmit={handleSubmit} className="chat-form">
+                  <div className="input-group">
+                    <TextField
+                      type="text"
+                      value={input}
+                      fullWidth
+                      placeholder="e.g., 200g Muesli, 1 Banana, 100g Chicken..."
+                      onChange={(e) => setInput(e.target.value)}
+                      required
+                      variant="outlined"
+                      className="chat-input"
+                      sx={{
+                        '& .MuiOutlinedInput-root': {
+                          borderRadius: 'var(--radius-xl)',
+                          backgroundColor: 'var(--color-surface)',
+                        }
+                      }}
+                    />
+                    <button
+                      type="submit"
+                      className="btn-send"
+                      disabled={loading}
+                    >
+                      {loading ? (
+                        <LoadingSpinner size="small" color="white" />
+                      ) : (
+                        <SendIcon />
+                      )}
+                    </button>
+                  </div>
+                </form>
+
+
+                <div className="quick-suggestions">
+                  <p className="suggestions-label">Quick suggestions:</p>
+                  <div className="suggestions-chips">
+                    {popularFoods.map((food, idx) => (
+                      <Chip
+                        key={idx}
+                        label={food}
+                        onClick={() => handleQuickFood(food)}
+                        className="suggestion-chip"
+                        size="small"
+                      />
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+
+            {mode === 'manual' && (
+              <motion.div
+                key="manual-mode"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.3 }}
+                className="manual-form"
+              >
+                <div className="manual-header">
+                  <h3 className="manual-title">Manual Entry</h3>
+                  <p className="manual-subtitle">Enter nutritional information directly</p>
+                </div>
+
+                <form onSubmit={(e) => { addCalories(e) }} className="manual-fields">
+                  <div className="form-row">
+                    <TextField
+                      fullWidth
+                      label="Food Item"
+                      value={foodItem}
+                      onChange={(e) => setFoodItem(e.target.value)}
+                      required
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="form-row-2">
+                    <TextField
+                      label="Amount (g)"
+                      type="number"
+                      value={foodAmount}
+                      onChange={(e) => setFoodAmount(e.target.value)}
+                      required
+                      variant="outlined"
+                    />
+                    <TextField
+                      label="Calories"
+                      type="number"
+                      value={calories}
+                      onChange={(e) => setCalories(e.target.value)}
+                      required
+                      variant="outlined"
+                    />
+                  </div>
+                  <div className="form-row-3">
+                    <TextField
+                      label="Proteins (g)"
+                      type="number"
+                      value={proteins}
+                      onChange={(e) => setProteins(e.target.value)}
+                      required
+                      variant="outlined"
+                    />
+                    <TextField
+                      label="Carbs (g)"
+                      type="number"
+                      value={carbs}
+                      onChange={(e) => setCarbs(e.target.value)}
+                      required
+                      variant="outlined"
+                    />
+                    <TextField
+                      label="Fats (g)"
+                      type="number"
+                      value={fats}
+                      onChange={(e) => setFats(e.target.value)}
+                      required
+                      variant="outlined"
+                    />
+                  </div>
+                  <button type="submit" className="btn-submit gradient-primary">
+                    Add
+                  </button>
+                </form>
+              </motion.div>
+            )}
+          </Card>
+        </Container>
+
+        <Container maxWidth="md" className="voice-ai-section">
+          <motion.div
+            className="voice-ai-wrapper"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <Card variant="glass" className="voice-ai-card">
+              <div className="voice-ai-content">
+                <div className="voice-ai-icon">
+                  <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 14C13.66 14 15 12.66 15 11V5C15 3.34 13.66 2 12 2C10.34 2 9 3.34 9 5V11C9 12.66 10.34 14 12 14Z" fill="url(#gradient1)" />
+                    <path d="M17 11C17 13.76 14.76 16 12 16C9.24 16 7 13.76 7 11H5C5 14.53 7.61 17.43 11 17.92V21H13V17.92C16.39 17.43 19 14.53 19 11H17Z" fill="url(#gradient1)" />
+                    <defs>
+                      <linearGradient id="gradient1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stopColor="#6366f1" />
+                        <stop offset="1" stopColor="#8b5cf6" />
+                      </linearGradient>
+                    </defs>
+                  </svg>
+                </div>
+
+                <div className="voice-ai-text">
+                  <h2 className="voice-ai-title">AI Diet Companion</h2>
+                  <p className="voice-ai-description">
+                    Have natural voice conversations about your health and nutrition goals.
+                    Get personalized advice, meal planning, and support - all through voice.
+                  </p>
+
+                  <div className="voice-ai-features">
+                    <div className="feature-item">
+                      <span className="feature-text">Personalized Advice</span>
+                    </div>
+                    <div className="feature-item">
+                      <span className="feature-text">Remembers Context</span>
+                    </div>
+                    <div className="feature-item">
+                      <span className="feature-text">Natural Conversations</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <a href="/voice-companion" className="voice-ai-cta">
+                <span>Start Conversation</span>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </a>
+            </Card>
+          </motion.div>
+        </Container>
+      </div>
 
       <Modal open={open} onClose={handleClose}>
         <Box sx={modalStyle}>
