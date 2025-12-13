@@ -2,7 +2,7 @@ import { useAuth } from './authContext';
 import { useState } from 'react';
 import API from './api';
 import './navbar.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Snackbar, Alert } from '@mui/material';
 import { Menu, X } from 'lucide-react';
 
@@ -37,7 +37,13 @@ export const Navbar = () => {
             <nav className="navbar-modern">
                 <div className="navbar-container">
                     <div className="navbar-logo">
-                        <span className="logo-text gradient-text">HealthBot</span>
+                        <Link to='/' style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
+                            <img
+                                src='/logo.png'
+                                alt='HealthBot Logo'
+                                style={{ width: '186px', height: 'auto' }}
+                            />
+                        </Link>
                     </div>
 
                     <ul className="navbar-links">

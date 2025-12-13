@@ -6,7 +6,7 @@ export const Footer = () => {
             <div className="footer-container">
                 <div className="footer-content">
                     <div className="footer-brand">
-                        <span className="footer-logo gradient-text">HealthBot</span>
+                        <span className="footer-logo gradient-text">DietLog</span>
                     </div>
 
                     <nav className="footer-nav">
