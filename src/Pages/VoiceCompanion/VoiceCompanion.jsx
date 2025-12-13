@@ -138,15 +138,33 @@ export const VoiceCompanion = () => {
 
     const loadUserContext = async () => {
         try {
+            console.log('🔍 Loading voice context for email:', email);
+            console.log('🔍 API baseURL:', API.defaults.baseURL);
+
             const res = await API.get('/getVoiceContext', {
                 params: { email },
             });
-            console.log('User context loaded:', res.data);
+
+            console.log('✅ Response received:', {
+                status: res.status,
+                data: res.data,
+                context: res.data.context,
+                pastSessions: res.data.pastSessions,
+                sessionsLength: res.data.pastSessions?.length
+            });
+
             setUserContext(res.data.context || '');
             setPastSessions(res.data.pastSessions || []);
-            console.log('User context loaded:', res.data);
         } catch (error) {
-            console.error('Error loading context:', error);
+            console.error('❌ Error loading context:', error);
+            console.error('❌ Error details:', {
+                name: error.name,
+                message: error.message,
+                status: error.response?.status,
+                statusText: error.response?.statusText,
+                data: error.response?.data,
+                url: error.config?.url
+            });
         }
     };
 
