@@ -1,5 +1,5 @@
-# Health Bot
-Health Bot is a web application that helps users track their daily food intake and get instant nutritional information about the food they eat. Powered by Groq AI, the chatbot provides real-time responses, making it easy to log and manage meals efficiently.
+# DietLog
+DietLog is a web application that helps users track their daily food intake and get instant nutritional information about the food they eat. Powered by Groq AI, the chatbot provides real-time responses, making it easy to log and manage meals efficiently.
 
 
 ## Deployment
