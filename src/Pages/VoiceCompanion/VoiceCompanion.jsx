@@ -141,7 +141,7 @@ export const VoiceCompanion = () => {
             const res = await API.get('/getVoiceContext', {
                 params: { email },
             });
-
+            console.log('User context loaded:', res.data);
             setUserContext(res.data.context || '');
             setPastSessions(res.data.pastSessions || []);
             console.log('User context loaded:', res.data);
@@ -302,7 +302,6 @@ export const VoiceCompanion = () => {
                                 )}
                             </div>
 
-                            {/* Call Controls */}
                             <div className="call-controls">
                                 {callStatus === CallStatus.INACTIVE || callStatus === CallStatus.FINISHED ? (
                                     <button
