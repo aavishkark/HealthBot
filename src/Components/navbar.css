@@ -144,46 +144,80 @@
 .btn-logout {
     display: inline-flex;
     align-items: center;
-    gap: 0.625rem;
-    padding: 0.625rem 1.25rem;
-    background: transparent;
-    color: #e6e8eb;
-    border: 1px solid rgba(148, 163, 184, 0.2);
-    border-radius: 0.5rem;
-    font-weight: 500;
+    gap: 0.5rem;
+    padding: 0.625rem 1.5rem;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+    color: #fca5a5;
+    border: 1.5px solid rgba(239, 68, 68, 0.3);
+    border-radius: 0.75rem;
+    font-weight: 600;
     font-size: 0.9375rem;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
+    letter-spacing: 0.01em;
 }
 
 .btn-logout::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.3s ease;
+}
+
+.btn-logout::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.4s ease, height 0.4s ease;
 }
 
 .btn-logout:hover {
-    border-color: rgba(239, 68, 68, 0.4);
-    color: #fca5a5;
+    border-color: rgba(239, 68, 68, 0.6);
+    color: #fee2e2;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(220, 38, 38, 0.2) 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
 }
 
 .btn-logout:hover::before {
     opacity: 1;
 }
 
+.btn-logout:hover::after {
+    width: 300px;
+    height: 300px;
+}
+
+.btn-logout:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+}
+
 .btn-logout svg {
-    width: 16px;
-    height: 16px;
-    transition: transform 0.2s;
+    width: 18px;
+    height: 18px;
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
 }
 
 .btn-logout:hover svg {
-    transform: translateX(2px);
+    transform: translateX(3px);
+}
+
+.btn-logout span {
+    position: relative;
+    z-index: 1;
 }
 
 .btn-login {
