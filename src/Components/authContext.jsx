@@ -6,14 +6,14 @@ const AuthContext = createContext();
 export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
-    const [loggedIn, setLoggedIn] = useState(true);
+    const [loggedIn, setLoggedIn] = useState(false);
     const [email, setemail] = useState('');
     const [loading, setloading] = useState(true);
-    
+
 
     useEffect(() => {
         API.get('/verify')
-            .then(res => { setLoggedIn(res.data.loggedIn); if(res.data.loggedIn)setemail(res.data.user.email);setloading(false)})
+            .then(res => { setLoggedIn(res.data.loggedIn); if (res.data.loggedIn) setemail(res.data.user.email); setloading(false) })
             .catch(() => { setLoggedIn(false); setloading(false) });
     }, []);
 

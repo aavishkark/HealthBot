@@ -3,8 +3,6 @@ import { useAuth } from '../../Components/authContext';
 import { vapi } from '../../lib/vapi.sdk';
 import { configureHealthAssistant } from '../../lib/voiceConfig';
 import API from '../../Components/api';
-import Lottie from 'lottie-react';
-import soundwaveAnimation from '../../assets/soundwaves.json';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
     Container,
@@ -19,7 +17,6 @@ import {
     Phone as PhoneIcon,
     PhoneDisabled as PhoneDisabledIcon,
     History as HistoryIcon,
-    Info as InfoIcon,
 } from '@mui/icons-material';
 import Card from '../../Components/ui/Card';
 import './voiceCompanion.css';
@@ -138,33 +135,12 @@ export const VoiceCompanion = () => {
 
     const loadUserContext = async () => {
         try {
-            console.log('🔍 Loading voice context for email:', email);
-            console.log('🔍 API baseURL:', API.defaults.baseURL);
-
             const res = await API.get('/getVoiceContext', {
                 params: { email },
             });
-
-            console.log('✅ Response received:', {
-                status: res.status,
-                data: res.data,
-                context: res.data.context,
-                pastSessions: res.data.pastSessions,
-                sessionsLength: res.data.pastSessions?.length
-            });
-
             setUserContext(res.data.context || '');
             setPastSessions(res.data.pastSessions || []);
         } catch (error) {
-            console.error('❌ Error loading context:', error);
-            console.error('❌ Error details:', {
-                name: error.name,
-                message: error.message,
-                status: error.response?.status,
-                statusText: error.response?.statusText,
-                data: error.response?.data,
-                url: error.config?.url
-            });
         }
     };
 
@@ -262,62 +238,95 @@ export const VoiceCompanion = () => {
                     <div className="call-section">
                         <Card variant="glass" className="call-card">
                             <div className="voice-visualizer">
-                                <AnimatePresence>
+                                <AnimatePresence mode="wait">
+                                    {callStatus === CallStatus.INACTIVE && (
+                                        <motion.div
+                                            key="idle"
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="avatar-container"
+                                        >
+                                            <img
+                                                src="/avatar-idle.png"
+                                                alt="Dr. Sarah - Ready"
+                                                className="avatar-image breathing"
+                                            />
+                                            <p className="avatar-status">Ready to start conversation</p>
+                                        </motion.div>
+                                    )}
+
+                                    {(callStatus === CallStatus.LOADING || callStatus === CallStatus.CONNECTING) && (
+                                        <motion.div
+                                            key="loading"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            exit={{ opacity: 0 }}
+                                            className="avatar-container"
+                                        >
+                                            <div className="loading-overlay">
+                                                <CircularProgress size={60} />
+                                                <p className="avatar-status">
+                                                    {callStatus === CallStatus.LOADING ? 'Initializing' : 'Connecting...'}
+                                                </p>
+                                            </div>
+                                        </motion.div>
+                                    )}
+
+                                    {callStatus === CallStatus.ACTIVE && !isAISpeaking && (
+                                        <motion.div
+                                            key="listening"
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="avatar-container"
+                                        >
+                                            <img
+                                                src="/avatar-listening.png"
+                                                alt="Dr. Sarah - Listening"
+                                                className="avatar-image listening"
+                                            />
+                                            <p className="avatar-status listening">Listening...</p>
+                                        </motion.div>
+                                    )}
+
                                     {callStatus === CallStatus.ACTIVE && isAISpeaking && (
                                         <motion.div
-                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            key="speaking"
+                                            initial={{ opacity: 0, scale: 0.9 }}
                                             animate={{ opacity: 1, scale: 1 }}
-                                            exit={{ opacity: 0, scale: 0.8 }}
-                                            className="soundwave-container"
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            transition={{ duration: 0.3 }}
+                                            className="avatar-container"
                                         >
-                                            <Lottie
-                                                animationData={soundwaveAnimation}
-                                                loop={true}
-                                                className="soundwave-animation"
+                                            <img
+                                                src="/avatar-speaking.png"
+                                                alt="Dr. Sarah - Speaking"
+                                                className="avatar-image speaking"
                                             />
+                                            <p className="avatar-status speaking">Dr. Sarah is speaking...</p>
+                                        </motion.div>
+                                    )}
+
+                                    {callStatus === CallStatus.FINISHED && (
+                                        <motion.div
+                                            key="finished"
+                                            initial={{ opacity: 0, scale: 0.9 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.9 }}
+                                            className="avatar-container"
+                                        >
+                                            <img
+                                                src="/avatar-idle.png"
+                                                alt="Dr. Sarah - Finished"
+                                                className="avatar-image breathing"
+                                            />
+                                            <p className="avatar-status">Call ended</p>
                                         </motion.div>
                                     )}
                                 </AnimatePresence>
-
-                                {callStatus === CallStatus.INACTIVE && (
-                                    <div className="call-status-display">
-                                        <MicIcon className="status-icon inactive" />
-                                        <p className="status-text">Ready to start conversation</p>
-                                    </div>
-                                )}
-
-                                {callStatus === CallStatus.LOADING && (
-                                    <div className="call-status-display">
-                                        <CircularProgress size={60} />
-                                        <p className="status-text">Initializing AI...</p>
-                                    </div>
-                                )}
-
-                                {callStatus === CallStatus.CONNECTING && (
-                                    <div className="call-status-display">
-                                        <CircularProgress size={60} />
-                                        <p className="status-text">Connecting...</p>
-                                    </div>
-                                )}
-
-                                {callStatus === CallStatus.ACTIVE && !isAISpeaking && (
-                                    <div className="call-status-display">
-                                        <motion.div
-                                            animate={{ scale: [1, 1.1, 1] }}
-                                            transition={{ repeat: Infinity, duration: 1.5 }}
-                                        >
-                                            <MicIcon className="status-icon active" />
-                                        </motion.div>
-                                        <p className="status-text">Listening...</p>
-                                    </div>
-                                )}
-
-                                {callStatus === CallStatus.FINISHED && (
-                                    <div className="call-status-display">
-                                        <PhoneDisabledIcon className="status-icon finished" />
-                                        <p className="status-text">Call ended</p>
-                                    </div>
-                                )}
                             </div>
 
                             <div className="call-controls">

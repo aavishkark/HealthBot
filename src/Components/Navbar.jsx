@@ -17,9 +17,9 @@ export const Navbar = () => {
     const handleLogout = () => {
         API.post('/logout', {}, { withCredentials: true })
             .then((res) => {
-                handleOpenalert()
+                handleOpenalert();
                 logout();
-                navigate('/login')
+                navigate('/login');
             });
     };
 
@@ -41,7 +41,7 @@ export const Navbar = () => {
                             <img
                                 src='/logo.png'
                                 alt='HealthBot Logo'
-                                style={{ width: '186px', height: 'auto' }}
+                                style={{ width: '106px', height: 'auto' }}
                             />
                         </Link>
                     </div>
