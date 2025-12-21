@@ -34,6 +34,7 @@ export const Profile = () => {
   const [email, setemail] = useState('');
   const [requiredCalories, setRequiredCalories] = useState('');
   const [requiredProteins, setRequiredProteins] = useState('');
+  const [requiredCarbs, setRequiredCarbs] = useState('');
   const [requiredFats, setRequiredFats] = useState('');
   const [authorized, setauthorized] = useState(true);
   const [page, setPage] = useState(0);
@@ -57,8 +58,13 @@ export const Profile = () => {
         const userCalories = response.data.user.calories;
         setUserProfile(response.data.user);
         setCalories(userCalories);
-        const today = new Date().getDate();
-        const filtered = userCalories.filter(entry => new Date(entry.timestamp).getDate() === today);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const filtered = userCalories.filter(entry => {
+          const entryDate = new Date(entry.timestamp);
+          entryDate.setHours(0, 0, 0, 0);
+          return entryDate.getTime() === today.getTime();
+        });
         setModeBasedEntries(filtered);
         setLoading(false);
       })
@@ -81,15 +87,25 @@ export const Profile = () => {
     endOfWeek.setDate(startOfWeek.getDate() + 6);
     endOfWeek.setHours(23, 59, 59, 999);
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     if (selectMode === 0) {
-      setModeBasedEntries(calories.filter((entry) => new Date(entry.timestamp).getDate() === new Date().getDate()));
+      setModeBasedEntries(calories.filter((entry) => {
+        const entryDate = new Date(entry.timestamp);
+        entryDate.setHours(0, 0, 0, 0);
+        return entryDate.getTime() === today.getTime();
+      }));
     } else if (selectMode === 1) {
       setModeBasedEntries(calories.filter((entry) => {
         const entryDate = new Date(entry.timestamp);
         return entryDate >= startOfWeek && entryDate <= endOfWeek;
       }));
     } else if (selectMode === 2) {
-      setModeBasedEntries(calories.filter((entry) => new Date(entry.timestamp).getMonth() === new Date().getMonth()));
+      setModeBasedEntries(calories.filter((entry) => {
+        const entryDate = new Date(entry.timestamp);
+        return entryDate.getMonth() === now.getMonth() && entryDate.getFullYear() === now.getFullYear();
+      }));
     } else if (selectMode === 3) {
       setModeBasedEntries(calories);
     }
@@ -107,11 +123,14 @@ export const Profile = () => {
 
       const proteinCalories = 0.2 * tdee;
       const fatCalories = 0.25 * tdee;
+      const carbCalories = 0.55 * tdee;
 
       const proteinGrams = proteinCalories / 4;
-      const fatGrams = fatCalories / 9;
+      const fatGrams = fatCalories / 9;  
+      const carbGrams = carbCalories / 4;
 
       setRequiredProteins(proteinGrams.toFixed(0));
+      setRequiredCarbs(carbGrams.toFixed(0));
       setRequiredFats(fatGrams.toFixed(0));
     }
   }, [userProfile]);
@@ -119,8 +138,9 @@ export const Profile = () => {
   const todayTotals = modeBasedEntries.reduce((acc, entry) => ({
     calories: acc.calories + parseFloat(entry.calories || 0),
     proteins: acc.proteins + parseFloat(entry.proteins || 0),
+    carbs: acc.carbs + parseFloat(entry.carbs || 0),
     fats: acc.fats + parseFloat(entry.fats || 0),
-  }), { calories: 0, proteins: 0, fats: 0 });
+  }), { calories: 0, proteins: 0, carbs: 0, fats: 0 });
 
   const selectedDayEntries = selectedDate
     ? calories.filter(entry =>
@@ -137,11 +157,13 @@ export const Profile = () => {
     hour12: true
   };
 
-  const idedRows = modeBasedEntries.map(row => ({
-    ...row,
-    id: row._id,
-    timestamp: new Date(row.timestamp).toLocaleString('en-US', optionsDate)
-  }));
+  const idedRows = modeBasedEntries
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    .map(row => ({
+      ...row,
+      id: row._id,
+      timestamp: new Date(row.timestamp).toLocaleString('en-US', optionsDate)
+    }));
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -222,27 +244,27 @@ export const Profile = () => {
             <h3 className="section-title">Today's Progress</h3>
             <div className="progress-rings">
               <ProgressRing
-                progress={Math.min((todayTotals.calories / requiredCalories) * 100, 100)}
+                progress={Math.min(((todayTotals.calories / (parseFloat(requiredCalories) || 1)) * 100) || 0, 100)}
                 size={140}
                 strokeWidth={10}
                 label="Calories"
-                color="var(--color-primary)"
+                color="#60D5FA"
                 animated
               />
               <ProgressRing
-                progress={Math.min((todayTotals.proteins / requiredProteins) * 100, 100)}
+                progress={Math.min(((todayTotals.proteins / (parseFloat(requiredProteins) || 1)) * 100) || 0, 100)}
                 size={140}
                 strokeWidth={10}
                 label="Proteins"
-                color="var(--color-secondary)"
+                color="#FF8A80"
                 animated
               />
               <ProgressRing
-                progress={Math.min((todayTotals.fats / requiredFats) * 100, 100)}
+                progress={Math.min(((todayTotals.fats / (parseFloat(requiredFats) || 1)) * 100) || 0, 100)}
                 size={140}
                 strokeWidth={10}
                 label="Fats"
-                color="var(--color-accent)"
+                color="#FFD54F"
                 animated
               />
             </div>
@@ -333,6 +355,7 @@ export const Profile = () => {
               calories={calories}
               requiredcalories={requiredCalories}
               requiredProteins={requiredProteins}
+              requiredCarbs={requiredCarbs}
               requiredFats={requiredFats}
               onDateClick={(date) => setSelectedDate(date)}
             />

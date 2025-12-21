@@ -23,6 +23,7 @@ function CalorieCalendar({
   onDateClick,
   requiredcalories,
   requiredProteins,
+  requiredCarbs,
   requiredFats,
   selectedDayEntries,
 }) {
@@ -34,11 +35,12 @@ function CalorieCalendar({
     const date = new Date(entry.timestamp).toDateString();
 
     if (!acc[date]) {
-      acc[date] = { calories: 0, proteins: 0, fats: 0 };
+      acc[date] = { calories: 0, proteins: 0, carbs: 0, fats: 0 };
     }
 
     acc[date].calories += parseInt(entry.calories) || 0;
     acc[date].proteins += parseFloat(entry.proteins) || 0;
+    acc[date].carbs += parseFloat(entry.carbs) || 0;
     acc[date].fats += parseFloat(entry.fats) || 0;
 
     return acc;
@@ -47,6 +49,7 @@ function CalorieCalendar({
   const getRequirement = () => {
     if (viewMode === 'calories') return requiredcalories;
     if (viewMode === 'proteins') return requiredProteins;
+    if (viewMode === 'carbs') return requiredCarbs;
     return requiredFats;
   };
 
@@ -101,6 +104,7 @@ function CalorieCalendar({
           >
             <option value="calories">Calories</option>
             <option value="proteins">Proteins</option>
+            <option value="carbs">Carbs</option>
             <option value="fats">Fats</option>
           </Select>
 

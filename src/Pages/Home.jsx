@@ -28,6 +28,8 @@ import { motion } from 'framer-motion';
 import API from '../Components/api';
 import Card from '../Components/ui/Card';
 import LoadingSpinner from '../Components/ui/LoadingSpinner';
+import MealImageUpload from '../Components/MealImageUpload';
+import AIAnalysisModal from '../Components/AIAnalysisModal';
 import heroImg from '../assets/illustrations/hero_illustration_1765284652849.png';
 import chatbotImg from '../assets/illustrations/ai_chatbot_illustration_1765284957931.png';
 import './home.css';
@@ -68,6 +70,8 @@ export const Home = () => {
   const [mode, setMode] = useState('bot');
   const [open, setOpen] = useState(false);
   const [openalert, setOpenalert] = useState(false);
+  const [aiAnalysisData, setAiAnalysisData] = useState(null);
+  const [aiModalOpen, setAiModalOpen] = useState(false);
 
 
   const handleOpen = () => setOpen(true);
@@ -94,25 +98,22 @@ export const Home = () => {
       setResponse(res.data.reply || 'No response.');
       handleOpen();
     } catch (error) {
-      console.error('Error details:', error);
-      console.error('Error response:', error.response?.data);
-      console.error('Error status:', error.response?.status);
+      console.error('Query error:', error);
+
+      const errorMessage = error.response?.data?.message || error.message;
 
       if (error.response?.status === 404) {
-        setResponse('ERROR: API endpoint not found. Please check the backend server.');
-        alert('Error: The nutrition API endpoint is not available. Please check if the backend server is running.');
+        setResponse('ERROR: API endpoint not found.');
+        alert('The nutrition API is unavailable. Please check if the backend server is running.');
       } else if (error.response?.status === 500) {
-        const errorMsg = error.response?.data?.message || error.response?.data?.error || '';
-        console.error('Server error details:', errorMsg);
-
-        setResponse('ERROR: AI service error. The Groq API is not responding correctly.');
-        alert('⚠️ AI Service Error\n\nThe nutrition AI service (Groq API) is currently having issues. This could be due to:\n\n1. Invalid or expired API key\n2. API rate limit reached\n3. Groq service downtime\n\nPlease contact the administrator or try again later.');
+        setResponse('ERROR: AI service error.');
+        alert('AI service is currently unavailable. Please try again later.');
       } else if (error.code === 'ERR_NETWORK' || !error.response) {
-        setResponse('ERROR: Cannot connect to server. Please check your internet connection.');
-        alert('Network error: Cannot connect to the backend server. Please check if the server is running at https://healthbotbackend.onrender.com');
+        setResponse('ERROR: Cannot connect to server.');
+        alert('Network error. Unable to reach the backend server.');
       } else {
-        setResponse('Error fetching data: ' + (error.response?.data?.message || error.message));
-        alert('Error: ' + (error.response?.data?.message || 'Failed to get nutrition information. Please try again.'));
+        setResponse(`Error: ${errorMessage}`);
+        alert(`Error: ${errorMessage || 'Failed to get nutrition information.'}`);
       }
     } finally {
       setLoading(false);
@@ -170,7 +171,46 @@ export const Home = () => {
   }
 
   const switchMode = () => {
-    setMode((prev) => (prev === 'bot' ? 'manual' : 'bot'));
+    setMode((prev) => {
+      if (prev === 'bot') return 'manual';
+      if (prev === 'manual') return 'ai-scan';
+      return 'bot';
+    });
+  };
+
+  const handleAIAnalysisComplete = (data) => {
+    setAiAnalysisData(data);
+    setAiModalOpen(true);
+  };
+
+  const handleQuickLog = async (data) => {
+    try {
+      await API.post(
+        '/addcalories',
+        {
+          calories: data.totalNutrition.calories,
+          proteins: data.totalNutrition.proteins,
+          carbs: data.totalNutrition.carbs,
+          fats: data.totalNutrition.fats,
+          foodAmount: data.foodItems.map(item => item.amount).join(', '),
+          foodItem: data.foodItems.map(item => item.name).join(', '),
+          email: email,
+        },
+        {
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
+      setAiModalOpen(false);
+      setAiAnalysisData(null);
+      handleOpenalert();
+    } catch (err) {
+      console.error('Error logging AI meal:', err);
+      if (err.response?.data?.msg === "Not Logged in") {
+        alert('Please Login to your account to add calories.');
+      } else {
+        alert('Error adding calories.');
+      }
+    }
   };
 
   const handleQuickFood = (food) => {
@@ -243,7 +283,9 @@ export const Home = () => {
               {loggedIn ? (
                 <button onClick={switchMode} className="mode-switcher">
                   <SwapHorizIcon className="switch-icon" />
-                  <span>Switch to {mode === 'bot' ? 'Manual' : 'AI Bot'} Mode</span>
+                  <span>
+                    Switch to {mode === 'bot' ? 'Manual' : mode === 'manual' ? 'AI Scan' : 'Bot'} Mode
+                  </span>
                 </button>
               ) : (
                 <div className="login-prompt-container">
@@ -408,6 +450,24 @@ export const Home = () => {
                 </form>
               </motion.div>
             )}
+
+            {mode === 'ai-scan' && (
+              <motion.div
+                key="ai-scan-mode"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.3 }}
+                className="ai-scan-interface"
+              >
+                <div className="manual-header">
+                  <h3 className="manual-title">AI Meal Scanner</h3>
+                  <p className="manual-subtitle">Upload a photo and let AI analyze the nutrition</p>
+                </div>
+
+                <MealImageUpload onAnalysisComplete={handleAIAnalysisComplete} />
+              </motion.div>
+            )}
           </Card>
         </Container>
 
@@ -522,7 +582,7 @@ export const Home = () => {
                 onClick={resArray[0] === 'NO!' ? handleClose : addCalories}
                 className="btn-modal gradient-primary"
               >
-                {resArray[0] === 'NO!' ? 'Okay' : 'Add to Diary'}
+                {resArray[0] === 'NO!' ? 'Okay' : 'Add Meal to Log'}
               </button>
             </Grid>
           </Grid>
@@ -539,6 +599,13 @@ export const Home = () => {
           ✨ Meal logged successfully!
         </Alert>
       </Snackbar>
+
+      <AIAnalysisModal
+        open={aiModalOpen}
+        onClose={() => setAiModalOpen(false)}
+        analysisData={aiAnalysisData}
+        onQuickLog={handleQuickLog}
+      />
     </div>
   );
 };

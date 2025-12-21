@@ -24,45 +24,67 @@ const ProgressRing = ({
         }
     }, [progress, animated]);
 
-    const radius = (size - strokeWidth) / 2;
-    const circumference = radius * 2 * Math.PI;
-    const offset = circumference - (displayProgress / 100) * circumference;
+    const radius = size / 2;
+    const centerX = size / 2;
+    const centerY = size / 2;
+
+    const angle = (displayProgress / 100) * 360;
+    const radians = ((angle - 90) * Math.PI) / 180;
+    const endX = centerX + radius * Math.cos(radians);
+    const endY = centerY + radius * Math.sin(radians);
+
+    const largeArcFlag = angle > 180 ? 1 : 0;
+
+    const createPiePath = () => {
+        if (displayProgress === 0) return '';
+        if (displayProgress >= 100) {
+            return `M ${centerX},${centerY} m 0,-${radius} a ${radius},${radius} 0 1,1 0,${radius * 2} a ${radius},${radius} 0 1,1 0,-${radius * 2}`;
+        }
+        return `M ${centerX},${centerY} L ${centerX},${centerY - radius} A ${radius},${radius} 0 ${largeArcFlag},1 ${endX},${endY} Z`;
+    };
 
     return (
-        <div className="flex flex-col items-center">
-            <div className="relative" style={{ width: size, height: size }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '12px' }}>
+            <div style={{ position: 'relative', width: size, height: size }}>
                 <svg
-                    className="transform -rotate-90"
                     width={size}
                     height={size}
+                    style={{ filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.15))' }}
                 >
                     <circle
-                        cx={size / 2}
-                        cy={size / 2}
+                        cx={centerX}
+                        cy={centerY}
                         r={radius}
-                        stroke={bgColor}
-                        strokeWidth={strokeWidth}
-                        fill="transparent"
+                        fill={bgColor}
+                        opacity="0.2"
                     />
-                    <circle
-                        cx={size / 2}
-                        cy={size / 2}
-                        r={radius}
-                        stroke={color}
-                        strokeWidth={strokeWidth}
-                        fill="transparent"
-                        strokeDasharray={circumference}
-                        strokeDashoffset={offset}
-                        strokeLinecap="round"
-                        className={animated ? 'transition-all duration-1000 ease-out' : ''}
+
+                    <path
+                        d={createPiePath()}
+                        fill={color}
+                        style={{
+                            transition: animated ? 'all 1s ease-out' : 'none'
+                        }}
                     />
                 </svg>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-center">
+
+                <div style={{
+                    position: 'absolute',
+                    inset: 0,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <div style={{ textAlign: 'center' }}>
                         {showPercentage && (
                             <div
-                                className="font-bold font-mono"
-                                style={{ fontSize: size * 0.18 }}
+                                style={{
+                                    fontSize: size * 0.18,
+                                    fontWeight: '700',
+                                    fontFamily: 'var(--font-family-mono)',
+                                    color: 'var(--color-text-primary)',
+                                    textShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                }}
                             >
                                 {Math.round(displayProgress)}%
                             </div>
@@ -71,7 +93,12 @@ const ProgressRing = ({
                 </div>
             </div>
             {label && (
-                <div className="mt-2 text-sm text-[var(--color-text-secondary)] font-medium">
+                <div style={{
+                    fontSize: '0.875rem',
+                    color: 'var(--color-text-secondary)',
+                    fontWeight: '600',
+                    letterSpacing: '0.025em'
+                }}>
                     {label}
                 </div>
             )}

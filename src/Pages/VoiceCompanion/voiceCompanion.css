@@ -404,12 +404,10 @@
     margin-bottom: 0;
 }
 
-/* User messages - right aligned like WhatsApp */
 .message.user {
     justify-content: flex-end;
 }
 
-/* Assistant messages - left aligned like WhatsApp */
 .message.assistant {
     justify-content: flex-start;
 }
@@ -424,7 +422,6 @@
     position: relative;
 }
 
-/* User message bubble - right side, blue/purple gradient */
 .message.user .message-content {
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     color: white;
@@ -432,7 +429,6 @@
     box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
 }
 
-/* Assistant message bubble - left side, dark surface */
 .message.assistant .message-content {
     background: rgba(255, 255, 255, 0.05);
     color: var(--color-text-primary);
@@ -723,7 +719,6 @@
         margin-bottom: var(--space-xl);
     }
 
-    /* Avatar responsive styles */
     .avatar-image {
         width: 200px;
         height: 200px;
