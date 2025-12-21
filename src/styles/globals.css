@@ -1,4 +1,4 @@
-/* HealthBot Global Styles */
+/* DietLog Global Styles */
 
 /* Import Fonts */
 @import '@fontsource/inter/400.css';
@@ -9,8 +9,6 @@
 @import '@fontsource/jetbrains-mono/400.css';
 @import '@fontsource/jetbrains-mono/600.css';
 
-/* Import Variables */
-@import './variables.css';
 @import './animations.css';
 
 *,
