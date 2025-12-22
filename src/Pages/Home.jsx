@@ -30,6 +30,7 @@ import Card from '../Components/ui/Card';
 import LoadingSpinner from '../Components/ui/LoadingSpinner';
 import MealImageUpload from '../Components/MealImageUpload';
 import AIAnalysisModal from '../Components/AIAnalysisModal';
+import VoiceInput from '../Components/VoiceInput';
 import heroImg from '../assets/illustrations/hero_illustration_1765284652849.png';
 import chatbotImg from '../assets/illustrations/ai_chatbot_illustration_1765284957931.png';
 import './home.css';
@@ -80,17 +81,18 @@ export const Home = () => {
   const handleOpenalert = () => setOpenalert(true);
   const { loggedIn, email } = useAuth();
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e, voiceQuery = null) {
     e.preventDefault();
     setLoading(true);
     setResponse('');
 
     try {
-      console.log('Sending request to /query with:', { query: input });
+      const queryText = voiceQuery || input;
+      console.log('Sending request to /query with:', { query: queryText });
 
       const res = await API.post(
         '/query',
-        { query: input },
+        { query: queryText },
         { headers: { 'Content-Type': 'application/json' } }
       );
 
@@ -212,6 +214,13 @@ export const Home = () => {
       }
     }
   };
+
+  const handleVoiceTranscript = (transcript) => {
+    setInput(transcript);
+    const syntheticEvent = { preventDefault: () => { } };
+    handleSubmit(syntheticEvent, transcript);
+  };
+
 
   const handleQuickFood = (food) => {
     setInput(food);
@@ -356,6 +365,23 @@ export const Home = () => {
                   </div>
                 </form>
 
+                <div style={{ marginTop: '24px', marginBottom: '24px' }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    margin: '16px 0'
+                  }}>
+                    <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }}></div>
+                    <span style={{ color: 'var(--color-text-tertiary)', fontSize: '0.875rem' }}>or</span>
+                    <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }}></div>
+                  </div>
+
+                  <VoiceInput
+                    onTranscript={handleVoiceTranscript}
+                    disabled={loading}
+                  />
+                </div>
 
                 <div className="quick-suggestions">
                   <p className="suggestions-label">Quick suggestions:</p>
