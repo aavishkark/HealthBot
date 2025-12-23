@@ -31,7 +31,7 @@ export const Login = () => {
         if (response.data.msg === "Login Successfull") {
           setloading(false);
           handleOpenalert();
-          login();
+          login(email);
           navigate("/");
         } else {
           setloading(false);

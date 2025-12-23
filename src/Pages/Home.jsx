@@ -31,9 +31,11 @@ import LoadingSpinner from '../Components/ui/LoadingSpinner';
 import MealImageUpload from '../Components/MealImageUpload';
 import AIAnalysisModal from '../Components/AIAnalysisModal';
 import VoiceInput from '../Components/VoiceInput';
+import MealRecommendations from '../Components/MealRecommendations';
 import heroImg from '../assets/illustrations/hero_illustration_1765284652849.png';
 import chatbotImg from '../assets/illustrations/ai_chatbot_illustration_1765284957931.png';
 import './home.css';
+
 
 const modalStyle = {
   position: 'absolute',
@@ -550,6 +552,13 @@ export const Home = () => {
           </motion.div>
         </Container>
       </div>
+
+      <div className="meal-recommendations-section">
+        <Container maxWidth={false}>
+          <MealRecommendations />
+        </Container>
+      </div>
+
 
       <Modal open={open} onClose={handleClose}>
         <Box sx={modalStyle}>

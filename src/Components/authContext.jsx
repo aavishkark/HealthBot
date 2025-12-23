@@ -17,8 +17,16 @@ export const AuthProvider = ({ children }) => {
             .catch(() => { setLoggedIn(false); setloading(false) });
     }, []);
 
-    const login = () => setLoggedIn(true);
-    const logout = () => setLoggedIn(false);
+    const login = (userEmail) => {
+        setLoggedIn(true);
+        if (userEmail) {
+            setemail(userEmail);
+        }
+    };
+    const logout = () => {
+        setLoggedIn(false);
+        setemail('');
+    };
 
     return (
         <AuthContext.Provider value={{ loggedIn, login, logout, email, loading }}>
