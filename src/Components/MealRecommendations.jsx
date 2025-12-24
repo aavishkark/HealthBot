@@ -145,18 +145,6 @@ export const MealRecommendations = () => {
         <>
             <Card variant="glass" className="meal-recommendations-card">
                 <div className="meal-rec-header">
-                    <div className="header-title">
-                        <Sparkles className="header-icon gradient-primary" />
-                        <div>
-                            <h3>AI Meal Suggestions</h3>
-                            {mealType && (
-                                <p className="meal-type-label">
-                                    {getMealTypeIcon(mealType)}
-                                    <span>Perfect for {mealType}</span>
-                                </p>
-                            )}
-                        </div>
-                    </div>
                     <div className="meal-recommendations-heading">
                         <h2>Personalized Meal Suggestions</h2>
                         <p>AI-powered recommendations based on your nutrition goals</p>

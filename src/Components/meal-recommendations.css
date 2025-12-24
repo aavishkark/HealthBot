@@ -1,12 +1,12 @@
-
 .meal-recommendations-card {
-    margin-bottom: var(--space-6, 24px);
+    margin: var(--space-6, 24px);
     width: 100%;
     margin-left: auto;
     margin-right: auto;
     background: linear-gradient(135deg, rgba(99, 102, 241, 0.03), rgba(139, 92, 246, 0.03));
     border: 1px solid rgba(99, 102, 241, 0.2);
     overflow: visible;
+    padding: var(--space-6, 24px);
 }
 
 .meal-recommendations-section {
@@ -41,28 +41,20 @@
 }
 
 .meal-rec-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    gap: var(--space-5, 20px);
+    align-items: center;
     margin-bottom: var(--space-6, 24px);
     padding-bottom: var(--space-5, 20px);
     border-bottom: 2px solid transparent;
-    background: linear-gradient(90deg, rgba(99, 102, 241, 0.2), rgba(139, 92, 246, 0.2)) border-box;
-    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
-    mask-composite: exclude;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, transparent) bottom / 100% 2px no-repeat;
     position: relative;
 }
 
-.meal-rec-header::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, #6366f1, #8b5cf6, transparent);
+@media (max-width: 768px) {
+    .meal-rec-header {
+        grid-template-columns: 1fr auto;
+        gap: var(--space-3, 12px);
+    }
 }
 
 .header-content {
@@ -70,21 +62,32 @@
 }
 
 .meal-recommendations-heading {
-    margin-bottom: var(--space-4, 16px);
+    text-align: center;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .meal-recommendations-heading {
+        grid-column: 1 / -1;
+        text-align: left;
+        order: -1;
+        margin-bottom: var(--space-3, 12px);
+    }
 }
 
 .meal-recommendations-heading h2 {
-    font-size: var(--font-size-3xl, 32px);
+    font-size: clamp(var(--font-size-xl, 20px), 4vw, var(--font-size-3xl, 32px));
     font-weight: var(--font-weight-bold, 700);
     background: linear-gradient(135deg, #fff, #8b5cf6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin: 0 0 var(--space-2, 8px) 0;
+    margin: 0 0 var(--space-1, 4px) 0;
+    line-height: 1.2;
 }
 
 .meal-recommendations-heading p {
-    font-size: var(--font-size-base, 16px);
+    font-size: var(--font-size-sm, 14px);
     color: rgba(255, 255, 255, 0.6);
     margin: 0;
 }
