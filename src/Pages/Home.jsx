@@ -368,37 +368,12 @@ export const Home = () => {
                 </form>
 
                 <div style={{ marginTop: '24px', marginBottom: '24px' }}>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '12px',
-                    margin: '16px 0'
-                  }}>
-                    <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }}></div>
-                    <span style={{ color: 'var(--color-text-tertiary)', fontSize: '0.875rem' }}>or</span>
-                    <div style={{ flex: 1, height: '1px', background: 'var(--color-border)' }}></div>
-                  </div>
-
                   <VoiceInput
                     onTranscript={handleVoiceTranscript}
                     disabled={loading}
                   />
                 </div>
 
-                <div className="quick-suggestions">
-                  <p className="suggestions-label">Quick suggestions:</p>
-                  <div className="suggestions-chips">
-                    {popularFoods.map((food, idx) => (
-                      <Chip
-                        key={idx}
-                        label={food}
-                        onClick={() => handleQuickFood(food)}
-                        className="suggestion-chip"
-                        size="small"
-                      />
-                    ))}
-                  </div>
-                </div>
               </motion.div>
             )}
 
