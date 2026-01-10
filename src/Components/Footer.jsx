@@ -16,7 +16,7 @@ export const Footer = () => {
                     </nav>
 
                     <div className="footer-copyright">
-                        <span>© {new Date().getFullYear()} HealthBot. Made with <span className="heart">♥</span></span>
+                        <span>© {new Date().getFullYear()} DietLog. Eat Healthy, Stay Fit <span className="heart">♥</span></span>
                     </div>
                 </div>
             </div>

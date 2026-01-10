@@ -15,7 +15,8 @@
     flex-direction: column;
     align-items: center;
     padding: 0 var(--space-4, 16px);
-    margin-bottom: var(--space-8, 32px);
+    margin: 0 auto var(--space-8, 32px) auto;
+    max-width: 1400px;
 }
 
 .meal-recommendations-heading {
