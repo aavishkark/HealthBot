@@ -86,7 +86,7 @@
 
 .form-input {
     width: 100%;
-    padding: 1rem 1rem 1rem 3rem;
+    padding: 1rem;
     background: rgba(30, 37, 48, 0.6);
     border: 1px solid rgba(148, 163, 184, 0.2);
     border-radius: 0.75rem;
@@ -241,5 +241,125 @@
     .input-icon {
         left: 1rem;
         font-size: 1rem;
+    }
+}
+
+.editprofile-section {
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.editprofile-section:last-of-type {
+    border-bottom: none;
+}
+
+.editprofile-section .section-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.editprofile-section .section-title svg {
+    color: var(--color-accent-primary);
+}
+
+.section-desc {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1.25rem;
+}
+
+.location-section {
+    background: rgba(99, 102, 241, 0.05);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid rgba(99, 102, 241, 0.1);
+}
+
+.location-section .section-title {
+    color: var(--color-accent-primary);
+}
+
+.dietary-section {
+    background: rgba(16, 185, 129, 0.05);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin: 1rem 0;
+    border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.dietary-section .section-title {
+    color: var(--color-accent-success);
+}
+
+.dietary-section .section-title svg {
+    color: var(--color-accent-success);
+}
+
+.dietary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.75rem;
+}
+
+.dietary-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(30, 37, 48, 0.6);
+    border: 1px solid rgba(148, 163, 184, 0.2);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
+.dietary-chip:hover {
+    background: rgba(30, 37, 48, 0.8);
+    border-color: rgba(99, 102, 241, 0.3);
+    color: var(--color-text-primary);
+}
+
+.dietary-chip.active {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: var(--color-accent-success);
+    color: var(--color-accent-success);
+}
+
+
+
+
+
+.dietary-label {
+    flex: 1;
+    text-align: left;
+}
+
+.dietary-check {
+    color: var(--color-accent-success);
+    font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+    .dietary-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 400px) {
+    .dietary-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .dietary-chip {
+        padding: 0.625rem 0.875rem;
     }
 }

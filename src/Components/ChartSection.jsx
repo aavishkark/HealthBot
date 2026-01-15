@@ -14,6 +14,7 @@ import {
   Legend,
 } from 'chart.js';
 import { useState } from 'react';
+import eating2Gif from '../assets/eating2.gif';
 
 ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -117,6 +118,8 @@ const ChartSection = ({ calories }) => {
     },
   };
 
+  const isChartEmpty = weekdaySums[selectedMetric].every(val => val === 0);
+
   return (
     <Box my={4}>
       <Select
@@ -157,9 +160,39 @@ const ChartSection = ({ calories }) => {
           mx: 'auto',
           opacity: 0.9,
           backgroundColor: 'transparent',
-          boxShadow: 'none'
+          boxShadow: 'none',
+          minHeight: 300,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
         }}>
-        <Bar data={chartData} options={chartOptions} />
+        {isChartEmpty ? (
+          <div style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '1rem',
+            textAlign: 'center',
+            opacity: 0.8
+          }}>
+            <img
+              src={eating2Gif}
+              alt="No data yet"
+              style={{
+                width: '120px',
+                height: '120px',
+                objectFit: 'contain',
+                filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.2))'
+              }}
+            />
+            <div style={{ color: 'rgba(255,255,255,0.6)' }}>
+              <p style={{ margin: '0 0 0.25rem 0', fontWeight: 600 }}>No data for this week</p>
+              <p style={{ margin: 0, fontSize: '0.9rem' }}>Log your meals to see your progress!</p>
+            </div>
+          </div>
+        ) : (
+          <Bar data={chartData} options={chartOptions} />
+        )}
       </Paper>
     </Box>
   );

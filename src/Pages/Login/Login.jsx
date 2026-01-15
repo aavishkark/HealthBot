@@ -62,7 +62,6 @@ export const Login = () => {
                   Email Address
                 </label>
                 <div className="input-with-icon">
-                  <FaEnvelope className="input-icon" />
                   <input
                     id="email"
                     type="email"
@@ -80,7 +79,6 @@ export const Login = () => {
                   Password
                 </label>
                 <div className="input-with-icon">
-                  <FaLock className="input-icon" />
                   <input
                     id="password"
                     type="password"

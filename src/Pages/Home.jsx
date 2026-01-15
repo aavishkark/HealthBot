@@ -33,7 +33,7 @@ import AIAnalysisModal from '../Components/AIAnalysisModal';
 import VoiceInput from '../Components/VoiceInput';
 import MealRecommendations from '../Components/MealRecommendations';
 import heroImg from '../assets/illustrations/hero_illustration_1765284652849.png';
-import chatbotImg from '../assets/illustrations/ai_chatbot_illustration_1765284957931.png';
+import chatbotImg from '../assets/chatgpt.gif';
 import './home.css';
 
 
@@ -330,8 +330,8 @@ export const Home = () => {
                 <div className="chat-header">
                   <img src={chatbotImg} alt="AI Assistant" className="chatbot-avatar" />
                   <div>
-                    <h3 className="chat-title">AI Nutrition Assistant</h3>
-                    <p className="chat-subtitle">Ask me about any food item!</p>
+                    <h3 className="chat-title">Ask me about any food item!</h3>
+  
                   </div>
                 </div>
 
@@ -497,7 +497,7 @@ export const Home = () => {
                 </div>
 
                 <div className="voice-ai-text">
-                  <h2 className="voice-ai-title">AI Diet Companion</h2>
+                  <h2 className="voice-ai-title">Health Companion</h2>
                   <p className="voice-ai-description">
                     Have natural voice conversations about your health and nutrition goals.
                     Get personalized advice, meal planning, and support - all through voice.

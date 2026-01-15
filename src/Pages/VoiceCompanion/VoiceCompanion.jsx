@@ -216,8 +216,8 @@ export const VoiceCompanion = () => {
     };
 
     return (
-        <div className="voice-companion-container">
-            <Container maxWidth="lg">
+        <div className="page-container-glass">
+            <Container maxWidth="lg" className="glass-content-wrapper">
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -226,7 +226,7 @@ export const VoiceCompanion = () => {
                     <div className="header-content">
                         <h1 className="page-title">
                             <PhoneIcon className="title-icon" />
-                            Voice AI Health Companion
+                            Voice Health Companion
                         </h1>
                         <p className="page-subtitle">
                             Have a natural conversation about your health and nutrition goals

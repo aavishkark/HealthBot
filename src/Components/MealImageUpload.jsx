@@ -2,6 +2,7 @@ import { useState, useRef } from 'react';
 import { Upload, X, Sparkles, Image as ImageIcon } from 'lucide-react';
 import API from './api';
 import '../styles/meal-upload.css';
+import ricebowlGif from '../assets/ricebowl.gif';
 
 export const MealImageUpload = ({ onAnalysisComplete }) => {
     const [selectedImage, setSelectedImage] = useState(null);
@@ -125,7 +126,7 @@ export const MealImageUpload = ({ onAnalysisComplete }) => {
         <div className="meal-upload-container">
             {loading ? (
                 <div className="loading-container">
-                    <div className="loading-spinner"></div>
+                    <img src={ricebowlGif} alt="Analyzing..." className="loading-gif" />
                     <p className="loading-text">Analyzing your meal...</p>
                     <p className="loading-subtext">Our AI Agent is detecting food items and calculating nutrition</p>
                 </div>

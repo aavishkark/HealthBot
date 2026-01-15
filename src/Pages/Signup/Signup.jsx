@@ -100,9 +100,9 @@ export const Signup = () => {
                 {fields.map((f) => (
                   <div
                     key={f.name}
-                    className={`form-group ${f.name === "email" || f.name === "password" || f.name === "activity"
-                        ? "signup-grid-full"
-                        : ""
+                    className={`form-group ${f.name === "name" || f.name === "email" || f.name === "password" || f.name === "activity"
+                      ? "signup-grid-full"
+                      : ""
                       }`}
                   >
                     <label htmlFor={f.name} className="form-label">
@@ -125,7 +125,6 @@ export const Signup = () => {
                       </select>
                     ) : (
                       <div className="input-with-icon">
-                        {f.icon && <span className="input-icon">{f.icon}</span>}
                         <input
                           id={f.name}
                           name={f.name}

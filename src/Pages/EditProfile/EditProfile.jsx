@@ -1,14 +1,62 @@
 import { useEffect, useState } from "react";
-import { FaUser, FaBirthdayCake, FaRulerVertical, FaWeightHanging, FaVenusMars, FaEnvelope, FaDumbbell } from "react-icons/fa";
-import { ArrowRight } from "lucide-react";
+import { FaUser, FaBirthdayCake, FaRulerVertical, FaWeightHanging, FaVenusMars, FaEnvelope, FaDumbbell, FaGlobeAsia, FaCity, FaLeaf, FaCheck } from "react-icons/fa";
+import { ArrowRight, MapPin } from "lucide-react";
 import API from "../../Components/api";
 import { Snackbar, Alert } from "@mui/material";
 import LoadingSpinner from "../../Components/ui/LoadingSpinner";
 import "./editprofile.css";
 
+const COUNTRIES = [
+  { value: '', label: 'Select Country' },
+  { value: 'India', label: '🇮🇳 India' },
+  { value: 'USA', label: '🇺🇸 United States' },
+  { value: 'UK', label: '🇬🇧 United Kingdom' },
+  { value: 'Canada', label: '🇨🇦 Canada' },
+  { value: 'Australia', label: '🇦🇺 Australia' },
+  { value: 'UAE', label: '🇦🇪 UAE' },
+  { value: 'Saudi Arabia', label: '🇸🇦 Saudi Arabia' },
+  { value: 'Pakistan', label: '🇵🇰 Pakistan' },
+  { value: 'Bangladesh', label: '🇧🇩 Bangladesh' },
+  { value: 'Singapore', label: '🇸🇬 Singapore' },
+  { value: 'Malaysia', label: '🇲🇾 Malaysia' },
+  { value: 'Middle East', label: '🌍 Middle East (Other)' },
+  { value: 'Other', label: '🌐 Other' }
+];
+
+const REGIONS = {
+  'India': [
+    { value: '', label: 'Select Region (Optional)' },
+    { value: 'North', label: 'North India' },
+    { value: 'South', label: 'South India' },
+    { value: 'East', label: 'East India' },
+    { value: 'West', label: 'West India' }
+  ],
+  'USA': [
+    { value: '', label: 'Select Region (Optional)' },
+    { value: 'West Coast', label: 'West Coast' },
+    { value: 'East Coast', label: 'East Coast' },
+    { value: 'South', label: 'South' },
+    { value: 'Midwest', label: 'Midwest' },
+    { value: 'Northeast', label: 'Northeast' }
+  ]
+};
+
 export const EditProfile = () => {
   const [userProfile, setUserProfile] = useState({});
-  const [form, setForm] = useState({ name: "", age: "", height: "", weight: "", gender: "", email: "", activity: "" });
+  const [form, setForm] = useState({
+    name: "", age: "", height: "", weight: "", gender: "", email: "", activity: "",
+    country: "", city: "", region: ""
+  });
+  const [dietaryRestrictions, setDietaryRestrictions] = useState({
+    vegetarian: false,
+    vegan: false,
+    glutenFree: false,
+    dairyFree: false,
+    halal: false,
+    kosher: false,
+    noBeef: false,
+    noPork: false
+  });
   const [openalert, setOpenalert] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -26,36 +74,75 @@ export const EditProfile = () => {
         return API.get("/getProfile", { params: { email: userEmail } })
 
       }).then(res => {
-        setUserProfile(res.data.user);
+        const user = res.data.user;
+        setUserProfile(user);
         setForm({
-          name: res.data.user.name,
-          age: res.data.user.age,
-          height: res.data.user.height,
-          weight: res.data.user.weight,
-          gender: res.data.user.gender,
-          email: res.data.user.email,
-          activity: res.data.user.activitylevel
+          name: user.name || "",
+          age: user.age || "",
+          height: user.height || "",
+          weight: user.weight || "",
+          gender: user.gender || "",
+          email: user.email || "",
+          activity: user.activitylevel || "",
+          country: user.location?.country || "",
+          city: user.location?.city || "",
+          region: user.location?.region || ""
         });
+        if (user.dietaryRestrictions) {
+          setDietaryRestrictions({
+            vegetarian: user.dietaryRestrictions.vegetarian || false,
+            vegan: user.dietaryRestrictions.vegan || false,
+            glutenFree: user.dietaryRestrictions.glutenFree || false,
+            dairyFree: user.dietaryRestrictions.dairyFree || false,
+            halal: user.dietaryRestrictions.halal || false,
+            kosher: user.dietaryRestrictions.kosher || false,
+            noBeef: user.dietaryRestrictions.noBeef || false,
+            noPork: user.dietaryRestrictions.noPork || false
+          });
+        }
       });
   }, []);
 
   const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
+  const handleDietaryChange = (restriction) => {
+    setDietaryRestrictions(prev => ({
+      ...prev,
+      [restriction]: !prev[restriction]
+    }));
+  };
+
   const handleUpdate = e => {
     e.preventDefault();
     setLoading(true);
-    API.patch(`/updateProfile/${userProfile._id}`,
-      { ...userProfile, ...form }
-    ).then(() => {
-      setLoading(false);
-      handleOpenalert();
-    }).catch(err => {
-      console.error(err);
-      setLoading(false);
-    });
+
+    const updateData = {
+      ...userProfile,
+      name: form.name,
+      age: form.age,
+      height: form.height,
+      weight: form.weight,
+      gender: form.gender,
+      activitylevel: form.activity,
+      location: {
+        country: form.country,
+        city: form.city,
+        region: form.region
+      },
+      dietaryRestrictions: dietaryRestrictions
+    };
+
+    API.patch(`/updateProfile/${userProfile._id}`, updateData)
+      .then(() => {
+        setLoading(false);
+        handleOpenalert();
+      }).catch(err => {
+        console.error(err);
+        setLoading(false);
+      });
   };
 
-  const fields = [
+  const basicFields = [
     { name: "name", label: "Name", icon: <FaUser />, type: "text" },
     { name: "age", label: "Age", icon: <FaBirthdayCake />, type: "number" },
     { name: "height", label: "Height (cm)", icon: <FaRulerVertical />, type: "number" },
@@ -69,49 +156,142 @@ export const EditProfile = () => {
     }
   ];
 
+  const dietaryOptions = [
+    { key: 'vegetarian', label: 'Vegetarian', emoji: '🥬' },
+    { key: 'vegan', label: 'Vegan', emoji: '🌱' },
+    { key: 'halal', label: 'Halal', emoji: '☪️' },
+    { key: 'kosher', label: 'Kosher', emoji: '✡️' },
+    { key: 'noBeef', label: 'No Beef', emoji: '🐄' },
+    { key: 'noPork', label: 'No Pork', emoji: '🐷' },
+    { key: 'glutenFree', label: 'Gluten-Free', emoji: '🌾' },
+    { key: 'dairyFree', label: 'Dairy-Free', emoji: '🥛' }
+  ];
+
   return (
     <div className="editprofile-container">
       <div className="editprofile-card">
         <div className="editprofile-header">
           <h1 className="editprofile-title">Edit Profile</h1>
-          <p className="editprofile-subtitle">Update your health information</p>
         </div>
 
         <form onSubmit={handleUpdate} className="editprofile-form">
-          <div className="editprofile-grid">
-            {fields.map(f => (
-              <div key={f.name} className={`form-group ${f.name === 'email' || f.name === 'activity' ? 'editprofile-grid-full' : ''}`}>
-                <label htmlFor={f.name} className="form-label">{f.label}</label>
-                {f.type === "select" ? (
-                  <select
-                    id={f.name}
-                    name={f.name}
-                    value={form[f.name]}
-                    required
-                    onChange={handleChange}
-                    className="form-select"
-                  >
-                    {f.options.map((opt, i) => (
-                      <option key={opt} value={opt}>{f.optionLabels ? f.optionLabels[i] : opt}</option>
-                    ))}
-                  </select>
-                ) : (
-                  <div className="input-with-icon">
-                    {f.icon && <span className="input-icon">{f.icon}</span>}
-                    <input
+          <div className="editprofile-section">
+            <h3 className="section-title">Basic Information</h3>
+            <div className="editprofile-grid">
+              {basicFields.map(f => (
+                <div key={f.name} className={`form-group ${f.name === 'email' || f.name === 'activity' ? 'editprofile-grid-full' : ''}`}>
+                  <label htmlFor={f.name} className="form-label">{f.label}</label>
+                  {f.type === "select" ? (
+                    <select
                       id={f.name}
                       name={f.name}
-                      type={f.type}
                       value={form[f.name]}
                       required
                       onChange={handleChange}
-                      className="form-input"
-                      disabled={f.name === 'email'}
-                    />
-                  </div>
-                )}
+                      className="form-select"
+                    >
+                      {f.options.map((opt, i) => (
+                        <option key={opt} value={opt}>{f.optionLabels ? f.optionLabels[i] : opt}</option>
+                      ))}
+                    </select>
+                  ) : (
+                    <div className="input-with-icon">
+                      <input
+                        id={f.name}
+                        name={f.name}
+                        type={f.type}
+                        value={form[f.name]}
+                        required
+                        onChange={handleChange}
+                        className="form-input"
+                        disabled={f.name === 'email'}
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="editprofile-section location-section">
+            <h3 className="section-title">
+              <MapPin size={20} />
+              <span>Your Location</span>
+            </h3>
+            <p className="section-desc">Helps us suggest locally available and culturally appropriate meals</p>
+
+            <div className="editprofile-grid">
+              <div className="form-group">
+                <label htmlFor="country" className="form-label">Country</label>
+                <div className="input-with-icon">
+                  <select
+                    id="country"
+                    name="country"
+                    value={form.country}
+                    onChange={handleChange}
+                    className="form-select"
+                  >
+                    {COUNTRIES.map(c => (
+                      <option key={c.value} value={c.value}>{c.label}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            ))}
+
+              <div className="form-group">
+                <label htmlFor="city" className="form-label">City</label>
+                <div className="input-with-icon">
+                  <input
+                    id="city"
+                    name="city"
+                    type="text"
+                    value={form.city}
+                    onChange={handleChange}
+                    className="form-input"
+                    placeholder="e.g., Mumbai, New York"
+                  />
+                </div>
+              </div>
+
+              {REGIONS[form.country] && (
+                <div className="form-group editprofile-grid-full">
+                  <label htmlFor="region" className="form-label">Region (for more specific recommendations)</label>
+                  <select
+                    id="region"
+                    name="region"
+                    value={form.region}
+                    onChange={handleChange}
+                    className="form-select"
+                  >
+                    {REGIONS[form.country].map(r => (
+                      <option key={r.value} value={r.value}>{r.label}</option>
+                    ))}
+                  </select>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="editprofile-section dietary-section">
+            <h3 className="section-title">
+              <FaLeaf />
+              <span>Dietary Preferences</span>
+            </h3>
+            <p className="section-desc">Select any dietary restrictions or preferences</p>
+
+            <div className="dietary-grid">
+              {dietaryOptions.map(opt => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  className={`dietary-chip ${dietaryRestrictions[opt.key] ? 'active' : ''}`}
+                  onClick={() => handleDietaryChange(opt.key)}
+                >
+                  <span className="dietary-label">{opt.label}</span>
+                  {dietaryRestrictions[opt.key] && <FaCheck className="dietary-check" />}
+                </button>
+              ))}
+            </div>
           </div>
 
           <button
@@ -141,7 +321,7 @@ export const EditProfile = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
-           Profile Updated Successfully!
+          Profile Updated! Meal recommendations will now be personalized for your location.
         </Alert>
       </Snackbar>
     </div>

@@ -6,7 +6,13 @@ import {
   TableContainer, TableHead, TableRow, TablePagination
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { Edit, TrendingUp, Activity, Award, Lock, ChevronRight, Sparkles, BarChart3, CalendarDays, Brain } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import eating2Gif from '../assets/eating2.gif';
+import excerciseGif from '../assets/excercise.gif';
+import {
+  Edit, TrendingUp, Activity, Award, Lock, ChevronRight, Sparkles,
+  BarChart3, CalendarDays, Brain, Sun, Sunset, Moon, Coffee, Utensils
+} from 'lucide-react';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -22,6 +28,25 @@ import API from "../Components/api";
 import Card from "../Components/ui/Card";
 import ProgressRing from "../Components/ui/ProgressRing";
 import LoadingSpinner from "../Components/ui/LoadingSpinner";
+
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 300, damping: 24 }
+  }
+};
 
 export const Profile = () => {
   const [calories, setCalories] = useState([]);
@@ -126,7 +151,7 @@ export const Profile = () => {
       const carbCalories = 0.55 * tdee;
 
       const proteinGrams = proteinCalories / 4;
-      const fatGrams = fatCalories / 9;  
+      const fatGrams = fatCalories / 9;
       const carbGrams = carbCalories / 4;
 
       setRequiredProteins(proteinGrams.toFixed(0));
@@ -176,191 +201,290 @@ export const Profile = () => {
     return { text: 'Obese', color: '#ef4444' };
   };
 
+  const getTimeGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "Good morning";
+    if (hour < 18) return "Good afternoon";
+    return "Good evening";
+  };
+
+  const getEncouragement = () => {
+    if (!modeBasedEntries.length) return "Ready to fuel your day?";
+    if (todayTotals.calories > parseFloat(requiredCalories)) return "You've energized your body well!";
+    return "Keep up the great rhythm!";
+  };
+
+  const getMealIcon = (dateString) => {
+    const hour = new Date(dateString).getHours();
+    if (hour >= 5 && hour < 11) return <Coffee size={16} />;
+    if (hour >= 11 && hour < 16) return <Sun size={16} />;
+    if (hour >= 16 && hour < 21) return <Utensils size={16} />;
+    return <Moon size={16} />;
+  };
+
+  const getMealLabel = (dateString) => {
+    const hour = new Date(dateString).getHours();
+    if (hour >= 5 && hour < 11) return "Breakfast";
+    if (hour >= 11 && hour < 16) return "Lunch";
+    if (hour >= 16 && hour < 21) return "Dinner";
+    return "Late Snack";
+  };
+
   if (loading) return (
     <div className="profile-loading">
-      <LoadingSpinner size="large" />
-      <p>Loading your dashboard...</p>
+      <img src={excerciseGif} alt="Loading..." style={{ width: '120px', height: '120px', borderRadius: '20px', marginBottom: '1rem' }} />
+      <motion.p
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+      >
+        Getting your insights...
+      </motion.p>
     </div>
   );
 
   return (
     <>
       {authorized ? (
-        <div className="profile-container">
-          <div className="profile-header">
-            <div className="profile-header-content">
-              <div className="profile-avatar">
-                <span className="avatar-text">{userProfile.name.charAt(0).toUpperCase()}</span>
-              </div>
-              <div>
-                <h1 className="profile-name">Hello, {userProfile.name}! 👋</h1>
-                <p className="profile-subtitle">Here's your health summary</p>
-              </div>
+        <motion.div
+          className="profile-container"
+          initial="hidden"
+          animate="visible"
+          variants={containerVariants}
+        >
+          <motion.div className="profile-header-human" variants={itemVariants}>
+            <div className="header-greeting">
+              <span className="greeting-pill">{getTimeGreeting()}</span>
+              <h1 className="human-name">{userProfile.name}</h1>
             </div>
-            <button onClick={() => navigate('/editprofile')} className="btn-edit">
-              <Edit size={18} />
+
+            <button onClick={() => navigate('/editprofile')} className="btn-edit-minimal">
+              <Edit size={16} />
               <span>Edit Profile</span>
             </button>
-          </div>
+          </motion.div>
 
-          <div className="stats-grid">
-            <Card variant="glass" className="stat-card">
-              <div className="stat-icon stat-icon-primary">
-                <TrendingUp size={24} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-label">BMI</div>
-                <div className="stat-value">{userBmi}</div>
-                <div className="stat-badge" style={{ backgroundColor: getBMICategory(parseFloat(userBmi)).color }}>
-                  {getBMICategory(parseFloat(userBmi)).text}
+          <div className="wellness-pillars">
+            <motion.div variants={itemVariants}>
+              <Card variant="glass" className="pillar-card">
+                <div className="pillar-icon-wrapper primary">
+                  <TrendingUp size={20} />
                 </div>
-              </div>
-            </Card>
+                <div className="pillar-content">
+                  <span className="pillar-label">Body Harmony (BMI)</span>
+                  <div className="pillar-value-group">
+                    <span className="pillar-value">{userBmi}</span>
+                    <span className="pillar-badge" style={{ backgroundColor: getBMICategory(parseFloat(userBmi)).color }}>
+                      {getBMICategory(parseFloat(userBmi)).text}
+                    </span>
+                  </div>
+                  <p className="pillar-insight">Based on your height & weight</p>
+                </div>
+              </Card>
+            </motion.div>
 
-            <Card variant="glass" className="stat-card">
-              <div className="stat-icon stat-icon-secondary">
-                <Activity size={24} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-label">Daily Goal</div>
-                <div className="stat-value">{requiredCalories}</div>
-                <div className="stat-unit">kcal</div>
-              </div>
-            </Card>
+            <motion.div variants={itemVariants}>
+              <Card variant="glass" className="pillar-card">
+                <div className="pillar-icon-wrapper secondary">
+                  <div className="gif-icon-container">
+                    <img src={excerciseGif} alt="Exercise" className="pillar-gif-icon" />
+                  </div>
+                </div>
+                <div className="pillar-content">
+                  <span className="pillar-label">Daily Energy Target</span>
+                  <div className="pillar-value-group">
+                    <span className="pillar-value">{requiredCalories}</span>
+                    <span className="pillar-unit">kcal</span>
+                  </div>
+                  <p className="pillar-insight">Recommended for your goal</p>
+                </div>
+              </Card>
+            </motion.div>
 
-            <Card variant="glass" className="stat-card">
-              <div className="stat-icon stat-icon-accent">
-                <Award size={24} />
-              </div>
-              <div className="stat-content">
-                <div className="stat-label">Meals Logged</div>
-                <div className="stat-value">{modeBasedEntries.length}</div>
-                <div className="stat-unit">today</div>
-              </div>
-            </Card>
+            <motion.div variants={itemVariants}>
+              <Card variant="glass" className="pillar-card">
+                <div className="pillar-icon-wrapper accent">
+                  <CalendarDays size={20} />
+                </div>
+                <div className="pillar-content">
+                  <span className="pillar-label">Consistency</span>
+                  <div className="pillar-value-group">
+                    <span className="pillar-value">{modeBasedEntries.length}</span>
+                    <span className="pillar-unit">logs</span>
+                  </div>
+                  <p className="pillar-insight">Entries this period</p>
+                </div>
+              </Card>
+            </motion.div>
           </div>
 
-          <Card variant="glass" className="progress-card">
-            <h3 className="section-title">Today's Progress</h3>
-            <div className="progress-rings">
-              <ProgressRing
-                progress={Math.min(((todayTotals.calories / (parseFloat(requiredCalories) || 1)) * 100) || 0, 100)}
-                size={140}
-                strokeWidth={10}
-                label="Calories"
-                color="#60D5FA"
-                animated
-              />
-              <ProgressRing
-                progress={Math.min(((todayTotals.proteins / (parseFloat(requiredProteins) || 1)) * 100) || 0, 100)}
-                size={140}
-                strokeWidth={10}
-                label="Proteins"
-                color="#FF8A80"
-                animated
-              />
-              <ProgressRing
-                progress={Math.min(((todayTotals.fats / (parseFloat(requiredFats) || 1)) * 100) || 0, 100)}
-                size={140}
-                strokeWidth={10}
-                label="Fats"
-                color="#FFD54F"
-                animated
-              />
-            </div>
-            <div className="macro-details">
-              <div className="macro-item">
-                <span className="macro-label">Calories</span>
-                <span className="macro-value">{todayTotals.calories.toFixed(0)} / {requiredCalories} kcal</span>
-              </div>
-              <div className="macro-item">
-                <span className="macro-label">Proteins</span>
-                <span className="macro-value">{todayTotals.proteins.toFixed(1)} / {requiredProteins} g</span>
-              </div>
-              <div className="macro-item">
-                <span className="macro-label">Fats</span>
-                <span className="macro-value">{todayTotals.fats.toFixed(1)} / {requiredFats} g</span>
-              </div>
-            </div>
-          </Card>
-          <ChartSection calories={calories} />
+          <div className="dashboard-grid">
+            <motion.div variants={itemVariants}>
+              <Card variant="glass" className="nutrition-insight-card">
+                <div className="card-header-human">
+                  <h3>Today's Fuel Balance</h3>
+                  <p>Track your energy sources</p>
+                </div>
 
-          <Card variant="glass" className="history-card">
-            <div className="history-header">
-              <h3 className="section-title">Meal History</h3>
-              <Select
-                value={selectMode}
-                onChange={(e) => setSelectMode(e.target.value)}
-                size="small"
-                className="history-select"
-              >
-                <MenuItem value={0}>Today</MenuItem>
-                <MenuItem value={1}>This Week</MenuItem>
-                <MenuItem value={2}>This Month</MenuItem>
-                <MenuItem value={3}>All Time</MenuItem>
-              </Select>
-            </div>
+                <div className="progress-showcase">
+                  <div className="ring-group">
+                    <ProgressRing
+                      progress={Math.min(((todayTotals.calories / (parseFloat(requiredCalories) || 1)) * 100) || 0, 100)}
+                      size={120}
+                      strokeWidth={8}
+                      label="Energy"
+                      color="#6366f1"
+                      animated
+                    />
+                  </div>
+                  <div className="macro-bars">
+                    <div className="macro-bar-item">
+                      <div className="macro-info">
+                        <span className="macro-name">Protein (Muscle)</span>
+                        <span className="macro-stat">{todayTotals.proteins.toFixed(1)} / {requiredProteins}g</span>
+                      </div>
+                      <div className="bar-track">
+                        <div className="bar-fill protein" style={{ width: `${Math.min(((todayTotals.proteins / parseFloat(requiredProteins)) * 100) || 0, 100)}%` }}></div>
+                      </div>
+                    </div>
+                    <div className="macro-bar-item">
+                      <div className="macro-info">
+                        <span className="macro-name">Carbs (Energy)</span>
+                        <span className="macro-stat">{todayTotals.carbs.toFixed(1)} / {requiredCarbs}g</span>
+                      </div>
+                      <div className="bar-track">
+                        <div className="bar-fill carbs" style={{ width: `${Math.min(((todayTotals.carbs / parseFloat(requiredCarbs)) * 100) || 0, 100)}%` }}></div>
+                      </div>
+                    </div>
+                    <div className="macro-bar-item">
+                      <div className="macro-info">
+                        <span className="macro-name">Fats (Health)</span>
+                        <span className="macro-stat">{todayTotals.fats.toFixed(1)} / {requiredFats}g</span>
+                      </div>
+                      <div className="bar-track">
+                        <div className="bar-fill fats" style={{ width: `${Math.min(((todayTotals.fats / parseFloat(requiredFats)) * 100) || 0, 100)}%` }}></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
 
-            {modeBasedEntries.length === 0 ? (
-              <div className="empty-state">
-                <p>No meals logged for this period</p>
-              </div>
-            ) : (
-              <>
-                <TableContainer className="meal-table">
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Food Item</TableCell>
-                        <TableCell align="right">Amount</TableCell>
-                        <TableCell align="right">Calories</TableCell>
-                        <TableCell align="right">Proteins</TableCell>
-                        <TableCell align="right">Carbs</TableCell>
-                        <TableCell align="right">Fats</TableCell>
-                        <TableCell align="right">Date</TableCell>
-                      </TableRow>
-                    </TableHead>
-                    <TableBody>
-                      {idedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item) => (
-                        <TableRow key={item.id} className="meal-row">
-                          <TableCell>{item.foodItem}</TableCell>
-                          <TableCell align="right">{item.foodAmount}g</TableCell>
-                          <TableCell align="right" className="cal-cell">{item.calories}</TableCell>
-                          <TableCell align="right">{item.proteins}g</TableCell>
-                          <TableCell align="right">{item.carbs}g</TableCell>
-                          <TableCell align="right">{item.fats}g</TableCell>
-                          <TableCell align="right" className="date-cell">{item.timestamp}</TableCell>
-                        </TableRow>
+            <motion.div variants={itemVariants}>
+              <Card variant="glass" className="journal-card">
+                <div className="journal-header">
+                  <div>
+                    <h3 className="section-title-human">Nourishment Log</h3>
+                    <p className="journal-subtitle">Your food timeline</p>
+                  </div>
+                  <Select
+                    value={selectMode}
+                    onChange={(e) => setSelectMode(e.target.value)}
+                    size="small"
+                    variant="standard"
+                    disableUnderline
+                    className="human-select"
+                  >
+                    <MenuItem value={0}>Today</MenuItem>
+                    <MenuItem value={1}>This Week</MenuItem>
+                    <MenuItem value={2}>This Month</MenuItem>
+                    <MenuItem value={3}>All Time</MenuItem>
+                  </Select>
+                </div>
+
+                <div className="journal-list">
+                  {modeBasedEntries.length === 0 ? (
+                    <div className="journal-empty">
+                      <motion.div
+                        className="empty-gif-wrapper"
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ duration: 0.5 }}
+                      >
+                        <img src={eating2Gif} alt="Waiting for meal" className="empty-gif" />
+                      </motion.div>
+                      <p>No meals logged yet.</p>
+                      <span className="empty-hint">Time to eat something nutritious?</span>
+                      <button
+                        onClick={() => navigate('/')}
+                        className="btn-log-meal"
+                      >
+                        <Utensils size={14} />
+                        Log a Meal
+                      </button>
+                    </div>
+                  ) : (
+                    <AnimatePresence mode="popLayout">
+                      {idedRows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((item, index) => (
+                        <motion.div
+                          key={item.id}
+                          className="journal-entry"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                        >
+                          <div className="entry-time-line">
+                            <div className="time-icon-container">
+                              {getMealIcon(item.timestamp)}
+                            </div>
+                            <div className="time-line"></div>
+                          </div>
+                          <div className="entry-card">
+                            <div className="entry-main">
+                              <div className="entry-header-row">
+                                <span className="entry-label">{getMealLabel(item.timestamp)}</span>
+                                <span className="entry-time">{new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                              </div>
+                              <h4 className="entry-food">{item.foodItem}</h4>
+                              <div className="entry-macros">
+                                <span className="macro-tag cal">{item.calories} cal</span>
+                                <span className="macro-tag pro">{item.proteins}g P</span>
+                              </div>
+                            </div>
+                            <div className="entry-amount">
+                              {item.foodAmount}g
+                            </div>
+                          </div>
+                        </motion.div>
                       ))}
-                    </TableBody>
-                  </Table>
-                </TableContainer>
-                <TablePagination
-                  component="div"
-                  count={idedRows.length}
-                  page={page}
-                  onPageChange={handleChangePage}
-                  rowsPerPage={rowsPerPage}
-                  rowsPerPageOptions={[]}
-                  className="table-pagination"
-                />
-              </>
-            )}
-          </Card>
+                    </AnimatePresence>
+                  )}
+                </div>
 
-          <Card variant="glass" className="calendar-card">
-            <h3 className="section-title">Calendar View</h3>
-            <CalCalendar
-              selectedDayEntries={selectedDayEntries}
-              calories={calories}
-              requiredcalories={requiredCalories}
-              requiredProteins={requiredProteins}
-              requiredCarbs={requiredCarbs}
-              requiredFats={requiredFats}
-              onDateClick={(date) => setSelectedDate(date)}
-            />
-          </Card>
-        </div>
+                {modeBasedEntries.length > 0 && (
+                  <TablePagination
+                    component="div"
+                    count={idedRows.length}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    rowsPerPage={rowsPerPage}
+                    rowsPerPageOptions={[]}
+                    className="human-pagination"
+                  />
+                )}
+              </Card>
+            </motion.div>
+
+            <motion.div variants={itemVariants}>
+              <Card variant="glass" className="calendar-card-human">
+                <h3 className="section-title-human">Consistency Tracker</h3>
+                <CalCalendar
+                  selectedDayEntries={selectedDayEntries}
+                  calories={calories}
+                  requiredcalories={requiredCalories}
+                  requiredProteins={requiredProteins}
+                  requiredCarbs={requiredCarbs}
+                  requiredFats={requiredFats}
+                  onDateClick={(date) => setSelectedDate(date)}
+                />
+              </Card>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="chart-section-human">
+              <ChartSection calories={calories} />
+            </motion.div>
+          </div>
+        </motion.div>
       ) : (
         <div className="not-authorized">
           <div className="not-auth-content">
