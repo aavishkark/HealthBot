@@ -17,6 +17,7 @@ import {
     Phone as PhoneIcon,
     PhoneDisabled as PhoneDisabledIcon,
     History as HistoryIcon,
+    Close as CloseIcon,
 } from '@mui/icons-material';
 import Card from '../../Components/ui/Card';
 import './voiceCompanion.css';
@@ -216,7 +217,7 @@ export const VoiceCompanion = () => {
     };
 
     return (
-        <div className="page-container-glass">
+        <div className="page-container-glass voice-companion-container">
             <Container maxWidth="lg" className="glass-content-wrapper">
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
@@ -225,8 +226,7 @@ export const VoiceCompanion = () => {
                 >
                     <div className="header-content">
                         <h1 className="page-title">
-                            <PhoneIcon className="title-icon" />
-                            Voice Health Companion
+                            Health Companion
                         </h1>
                         <p className="page-subtitle">
                             Have a natural conversation about your health and nutrition goals
@@ -405,10 +405,8 @@ export const VoiceCompanion = () => {
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: idx * 0.1 }}
-                                            className={`history-item ${selectedSession === idx ? 'selected' : ''}`}
-                                            onClick={() =>
-                                                setSelectedSession(selectedSession === idx ? null : idx)
-                                            }
+                                            className={`history-item ${selectedSession === session ? 'selected' : ''}`}
+                                            onClick={() => setSelectedSession(session)}
                                         >
                                             <div className="history-item-header">
                                                 <span className="history-date">
@@ -423,23 +421,6 @@ export const VoiceCompanion = () => {
                                             <p className="history-preview">
                                                 {session.transcript[0]?.content.substring(0, 60)}...
                                             </p>
-
-                                            {selectedSession === idx && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, height: 0 }}
-                                                    animate={{ opacity: 1, height: 'auto' }}
-                                                    className="session-details"
-                                                >
-                                                    <div className="session-transcript">
-                                                        {session.transcript.map((msg, msgIdx) => (
-                                                            <div key={msgIdx} className={`session-message ${msg.role}`}>
-                                                                <strong>{msg.role === 'user' ? 'You' : 'Dr. Sarah'}:</strong>{' '}
-                                                                {msg.content}
-                                                            </div>
-                                                        ))}
-                                                    </div>
-                                                </motion.div>
-                                            )}
                                         </motion.div>
                                     ))}
                                 </div>
@@ -448,6 +429,53 @@ export const VoiceCompanion = () => {
                     </div>
                 </div>
             </Container>
+
+            <AnimatePresence>
+                {selectedSession && (
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="modal-overlay"
+                        onClick={() => setSelectedSession(null)}
+                    >
+                        <motion.div
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.95, opacity: 0 }}
+                            onClick={(e) => e.stopPropagation()}
+                            className="modal-content"
+                        >
+                            <div className="modal-header">
+                                <div className="modal-title-group">
+                                    <h3 className="modal-title">Conversation History</h3>
+                                    <span className="modal-subtitle">
+                                        {formatDate(selectedSession.session_date)} • {formatDuration(selectedSession.duration_seconds)}
+                                    </span>
+                                </div>
+                                <button
+                                    onClick={() => setSelectedSession(null)}
+                                    className="modal-close-btn"
+                                >
+                                    <CloseIcon />
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                {selectedSession.transcript.map((msg, idx) => (
+                                    <div key={idx} className={`message ${msg.role}`}>
+                                        <div className="message-content">
+                                            <span className="message-role">
+                                                {msg.role === 'user' ? 'You' : 'Dr. Sarah'}
+                                            </span>
+                                            <p>{msg.content}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
 
             <Snackbar
                 open={showAlert}

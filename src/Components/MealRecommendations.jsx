@@ -15,7 +15,8 @@ import {
     Sunrise,
     Sun,
     Moon,
-    Eye
+    Eye,
+    Scale
 } from 'lucide-react';
 import { Alert, Snackbar } from '@mui/material';
 import { useAuth } from './authContext';
@@ -23,6 +24,7 @@ import API from './api';
 import Card from './ui/Card';
 import LoadingSpinner from './ui/LoadingSpinner';
 import './meal-recommendations.css';
+import riceBowlGif from '../assets/ricebowl.gif';
 
 const getMealTypeIcon = (mealType) => {
     const icons = {
@@ -89,32 +91,6 @@ export const MealRecommendations = () => {
         return null;
     }
 
-    const handleQuickLog = async (meal) => {
-        try {
-            await API.post('/addcalories', {
-                calories: meal.calories,
-                proteins: meal.proteins,
-                carbs: meal.carbs,
-                fats: meal.fats,
-                foodAmount: meal.servingSize,
-                foodItem: meal.name
-            });
-
-            setAlertMessage(`✨ ${meal.name} added to your log!`);
-            setShowAlert(true);
-
-            setTimeout(() => fetchRecommendations(), 1000);
-        } catch (err) {
-            console.error('Error logging meal:', err);
-            setAlertMessage('Failed to log meal. Please try again.');
-            setShowAlert(true);
-        }
-    };
-
-    const toggleExpand = (index) => {
-        setExpandedIndex(expandedIndex === index ? null : index);
-    };
-
     if (loading && recommendations.length === 0) {
         return (
             <Card variant="glass" className="meal-recommendations-card">
@@ -123,8 +99,8 @@ export const MealRecommendations = () => {
                     <h3>AI Meal Suggestions</h3>
                 </div>
                 <div className="loading-container">
-                    <LoadingSpinner size="large" />
-                    <p>Generating personalized meal suggestions...</p>
+                    <img src={riceBowlGif} alt="Cooking up recommendations..." className="loading-gif" />
+                    <p>Cooking up personalized meal suggestions...</p>
                 </div>
             </Card>
         );
@@ -149,107 +125,109 @@ export const MealRecommendations = () => {
     }
 
     return (
-        <div className="page-container-glass">
-            <div className="glass-content-wrapper">
-                <Card variant="glass" className="meal-recommendations-card">
-                    <div className="meal-rec-header">
-                        <div className="meal-recommendations-heading">
-                            <h2>Personalized Meal Suggestions</h2>
-                            <p>Based on your log history</p>
-                        </div>
-                        <button
-                            onClick={() => fetchRecommendations()}
-                            className="btn-refresh"
-                            disabled={loading}
-                        >
-                            <RefreshCw size={18} className={loading ? 'spinning' : ''} />
-                        </button>
+        <div className="glass-content-wrapper">
+            <Card variant="glass" className="meal-recommendations-card">
+                <div className="meal-rec-header">
+                    <div className="meal-recommendations-heading">
+                        <h2>Personalized Meal Suggestions</h2>
+                        <p>Based on your log history</p>
                     </div>
-
-                    <div className="recommendations-list">
-                        <AnimatePresence mode="popLayout">
-                            {recommendations.map((meal, index) => (
-                                <motion.div
-                                    key={index}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, scale: 0.9 }}
-                                    transition={{ duration: 0.3, delay: index * 0.1 }}
-                                    className="meal-card"
-                                >
-                                    <div className="meal-card-header">
-                                        <h4 className="meal-name">{meal.name}</h4>
-                                    </div>
-
-                                    <p className="meal-description">{meal.description}</p>
-
-                                    <div className="meal-nutrition">
-                                        <div className="nutrition-item">
-                                            <Flame size={16} className="nutrition-icon" />
-                                            <span className="nutrition-value">{meal.calories}</span>
-                                            <span className="nutrition-unit">cal</span>
-                                        </div>
-                                        <div className="nutrition-item">
-                                            <Beef size={16} className="nutrition-icon" />
-                                            <span className="nutrition-value">{meal.proteins}</span>
-                                            <span className="nutrition-unit">g protein</span>
-                                        </div>
-                                        <div className="nutrition-item">
-                                            <Cookie size={16} className="nutrition-icon" />
-                                            <span className="nutrition-value">{meal.carbs}</span>
-                                            <span className="nutrition-unit">g carbs</span>
-                                        </div>
-                                        <div className="nutrition-item">
-                                            <Droplet size={16} className="nutrition-icon" />
-                                            <span className="nutrition-value">{meal.fats}</span>
-                                            <span className="nutrition-unit">g fat</span>
-                                        </div>
-                                    </div>
-
-                                    <div className="meal-meta">
-                                        <div className="meta-item">
-                                            <Clock size={14} />
-                                            <span>{meal.prepTime}</span>
-                                        </div>
-                                        <div className="meal-tags">
-                                            {meal.tags?.slice(0, 2).map((tag, idx) => (
-                                                <span key={idx} className="tag">{tag}</span>
-                                            ))}
-                                        </div>
-                                    </div>
-
-
-
-                                    <div className="meal-card-actions">
-                                        <button
-                                            onClick={() => handleViewDetails(meal, index)}
-                                            className="btn-view-details"
-                                        >
-                                            <Eye size={16} />
-                                            View Details
-                                        </button>
-                                    </div>
-                                </motion.div>
-                            ))}
-                        </AnimatePresence>
-                    </div>
-                </Card>
-
-                <Snackbar
-                    open={showAlert}
-                    autoHideDuration={3000}
-                    onClose={() => setShowAlert(false)}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                >
-                    <Alert
-                        onClose={() => setShowAlert(false)}
-                        severity="success"
-                        sx={{ width: '100%' }}
+                    <button
+                        onClick={() => fetchRecommendations()}
+                        className="btn-refresh"
+                        disabled={loading}
                     >
-                        {alertMessage}
-                    </Alert>
-                </Snackbar>
-            </div>
+                        <RefreshCw size={18} className={loading ? 'spinning' : ''} />
+                    </button>
+                </div>
+
+                <div className="recommendations-list">
+                    <AnimatePresence mode="popLayout">
+                        {recommendations.map((meal, index) => (
+                            <motion.div
+                                key={index}
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, scale: 0.9 }}
+                                transition={{ duration: 0.3, delay: index * 0.1 }}
+                                className="meal-card"
+                            >
+                                <div className="meal-card-header">
+                                    <h4 className="meal-name">{meal.name}</h4>
+                                </div>
+
+                                <p className="meal-description">{meal.description}</p>
+
+                                <div className="meal-nutrition">
+                                    <div className="nutrition-item">
+                                        <Flame size={16} className="nutrition-icon" />
+                                        <span className="nutrition-value">{meal.calories}</span>
+                                        <span className="nutrition-unit">cal</span>
+                                    </div>
+                                    <div className="nutrition-item">
+                                        <Beef size={16} className="nutrition-icon" />
+                                        <span className="nutrition-value">{meal.proteins}</span>
+                                        <span className="nutrition-unit">protein</span>
+                                    </div>
+                                    <div className="nutrition-item">
+                                        <Cookie size={16} className="nutrition-icon" />
+                                        <span className="nutrition-value">{meal.carbs}</span>
+                                        <span className="nutrition-unit">carbs</span>
+                                    </div>
+                                    <div className="nutrition-item">
+                                        <Droplet size={16} className="nutrition-icon" />
+                                        <span className="nutrition-value">{meal.fats}</span>
+                                        <span className="nutrition-unit">fat</span>
+                                    </div>
+                                </div>
+
+                                <div className="meal-meta-row">
+                                    <div className="meta-item">
+                                        <Clock size={14} />
+                                        <span>{meal.prepTime}</span>
+                                    </div>
+                                    {meal.totalWeight && (
+                                        <>
+                                            <div className="meta-divider">•</div>
+                                            <div className="meta-item">
+                                                <Scale size={14} />
+                                                <span>{meal.totalWeight}</span>
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+
+
+
+                                <div className="meal-card-actions">
+                                    <button
+                                        onClick={() => handleViewDetails(meal, index)}
+                                        className="btn-view-details"
+                                    >
+                                        <Eye size={16} />
+                                        View Details
+                                    </button>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </AnimatePresence>
+                </div>
+            </Card>
+
+            <Snackbar
+                open={showAlert}
+                autoHideDuration={3000}
+                onClose={() => setShowAlert(false)}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert
+                    onClose={() => setShowAlert(false)}
+                    severity="success"
+                    sx={{ width: '100%' }}
+                >
+                    {alertMessage}
+                </Alert>
+            </Snackbar>
         </div>
     );
 };

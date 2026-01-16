@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import {
     ArrowLeft,
     Clock,
@@ -8,17 +8,14 @@ import {
     ChefHat,
     Plus,
     Check,
-    Play,
-    Pause,
     RotateCcw,
-    Share2,
-    Bookmark,
-    Zap
+    Scale
 } from 'lucide-react';
 import { Alert, Snackbar } from '@mui/material';
 import { useAuth } from '../Components/authContext';
 import API from '../Components/api';
 import LoadingSpinner from '../Components/ui/LoadingSpinner';
+import foodLoader from '../assets/illustrations/foodbyjag.gif';
 import './MealDetail.css';
 
 export const MealDetail = () => {
@@ -34,8 +31,6 @@ export const MealDetail = () => {
 
     const [checkedIngredients, setCheckedIngredients] = useState({});
     const [completedSteps, setCompletedSteps] = useState({});
-    const [currentStep, setCurrentStep] = useState(0);
-    const [saved, setSaved] = useState(false);
 
     useEffect(() => {
         if (location.state?.meal) {
@@ -138,17 +133,6 @@ export const MealDetail = () => {
                         <button className="btn-back" onClick={() => navigate(-1)}>
                             <ArrowLeft size={20} />
                         </button>
-                        <div className="meal-hero-actions">
-                            <button
-                                className={`btn-icon ${saved ? 'saved' : ''}`}
-                                onClick={() => setSaved(!saved)}
-                            >
-                                <Bookmark size={20} fill={saved ? 'currentColor' : 'none'} />
-                            </button>
-                            <button className="btn-icon">
-                                <Share2 size={20} />
-                            </button>
-                        </div>
                     </nav>
 
                     <div className="meal-hero-content">
@@ -167,6 +151,12 @@ export const MealDetail = () => {
                                 <span><ChefHat size={16} /> {detailedRecipe?.difficulty || 'Medium'}</span>
                                 <span>•</span>
                                 <span><Flame size={16} /> {meal.calories} cal</span>
+                                {meal.totalWeight && (
+                                    <>
+                                        <span>•</span>
+                                        <span><Scale size={16} /> {meal.totalWeight}</span>
+                                    </>
+                                )}
                             </div>
                         </motion.div>
                     </div>
@@ -265,7 +255,7 @@ export const MealDetail = () => {
 
                         {loading ? (
                             <div className="loading-state">
-                                <LoadingSpinner size="medium" />
+                                <img src={foodLoader} alt="Cooking..." className="recipe-loader-gif" />
                                 <p>Getting your recipe ready...</p>
                             </div>
                         ) : (
@@ -305,11 +295,10 @@ export const MealDetail = () => {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.6 }}
                         >
-                            <h2>Pro Tips</h2>
+                            <h2>Chef's Tips</h2>
                             <div className="tips-list">
-                                {detailedRecipe.tips.map((tip, idx) => (
+                                {detailedRecipe.tips.slice(0, 2).map((tip, idx) => (
                                     <div key={idx} className="tip">
-                                        <Zap size={16} />
                                         <span>{tip}</span>
                                     </div>
                                 ))}
@@ -322,7 +311,7 @@ export const MealDetail = () => {
                     <div className="action-content">
                         <div className="action-info">
                             <span className="action-cal">{meal.calories} cal</span>
-                            <span className="action-serving">{meal.servingSize || '1 serving'}</span>
+                            <span className="action-serving">1 Serving</span>
                         </div>
                         <button
                             className="btn-log"

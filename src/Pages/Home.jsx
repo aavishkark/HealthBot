@@ -2,24 +2,12 @@ import { useState } from 'react';
 import { useAuth } from '../Components/authContext';
 import {
   TextField,
-  Modal,
-  Box,
-  Grid,
   Alert,
   Snackbar,
-  Typography,
   Container,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Chip,
 } from '@mui/material';
 import {
   SwapHoriz as SwapHorizIcon,
-  CheckCircle as CheckCircleIcon,
-  Cancel as CancelIcon,
   Send as SendIcon,
   Lock as LockIcon,
 } from '@mui/icons-material';
@@ -30,9 +18,10 @@ import Card from '../Components/ui/Card';
 import LoadingSpinner from '../Components/ui/LoadingSpinner';
 import MealImageUpload from '../Components/MealImageUpload';
 import AIAnalysisModal from '../Components/AIAnalysisModal';
+import NutritionalBreakdownModal from '../Components/NutritionalBreakdownModal';
 import VoiceInput from '../Components/VoiceInput';
 import MealRecommendations from '../Components/MealRecommendations';
-import heroImg from '../assets/illustrations/hero_illustration_1765284652849.png';
+import heroImg from '../assets/illustrations/eating.gif';
 import chatbotImg from '../assets/chatgpt.gif';
 import './home.css';
 
@@ -50,15 +39,6 @@ const modalStyle = {
   width: '90%',
   border: '1px solid var(--color-border)',
 };
-
-const popularFoods = [
-  '100g Chicken Breast',
-  '1 Banana',
-  '200g Brown Rice',
-  '2 Boiled Eggs',
-  '100g Oatmeal',
-  '1 Apple'
-];
 
 export const Home = () => {
   const [input, setInput] = useState('');
@@ -125,15 +105,43 @@ export const Home = () => {
   }
 
   const resArray = response.split(' ');
-  const cal = resArray[0];
-  const pro = resArray[1];
-  const carb = resArray[2];
-  const fat = resArray[3];
-  const amount = resArray[4];
-  let item = '';
-  for (let i = 5; i <= resArray.length - 1; i++) {
-    item += resArray[i] + ' ';
+  const isError = resArray[0] === 'NO!';
+
+  let breakdownData = null;
+  if (response) {
+    if (isError) {
+      breakdownData = { error: response };
+    } else if (resArray.length >= 7) {
+      const cal = resArray[0];
+      const pro = resArray[1];
+      const carb = resArray[2];
+      const fat = resArray[3];
+      const fiber = resArray[4];
+      const sugar = resArray[5];
+      const amount = resArray[6];
+      let item = '';
+      for (let i = 7; i <= resArray.length - 1; i++) {
+        item += resArray[i] + ' ';
+      }
+      breakdownData = {
+        calories: cal,
+        proteins: pro,
+        carbs: carb,
+        fats: fat,
+        fiber: fiber,
+        sugar: sugar,
+        amount: amount,
+        item: item.trim()
+      };
+    }
   }
+
+  const cal = breakdownData?.calories;
+  const pro = breakdownData?.proteins;
+  const carb = breakdownData?.carbs;
+  const fat = breakdownData?.fats;
+  const amount = breakdownData?.amount;
+  const item = breakdownData?.item || '';
 
   async function addCalories(e) {
     e.preventDefault();
@@ -240,8 +248,7 @@ export const Home = () => {
               transition={{ duration: 0.6 }}
             >
               <div className="hero-badge animate-fade-in-down">
-                <Sparkles size={16} className="badge-icon" />
-                <span>AI-Powered Nutrition Tracking</span>
+                <span>Easy Nutrition Tracking</span>
               </div>
 
               <h1 className="hero-title">
@@ -251,7 +258,7 @@ export const Home = () => {
               </h1>
 
               <p className="hero-description">
-                Get instant nutritional insights with our AI chatbot or log meals manually.
+                Get instant nutritional insights with our chatbot or log meals manually.
                 Track calories, macros, and achieve your health goals.
               </p>
 
@@ -295,7 +302,7 @@ export const Home = () => {
                 <button onClick={switchMode} className="mode-switcher">
                   <SwapHorizIcon className="switch-icon" />
                   <span>
-                    Switch to {mode === 'bot' ? 'Manual' : mode === 'manual' ? 'AI Scan' : 'Bot'} Mode
+                    Switch to {mode === 'bot' ? 'Manual' : mode === 'manual' ? 'Image' : 'GPT'} Mode
                   </span>
                 </button>
               ) : (
@@ -304,7 +311,7 @@ export const Home = () => {
                     <LockIcon className="lock-icon" />
                     <div className="login-prompt-text">
                       <span className="login-prompt-title">Manual Mode</span>
-                      <span className="login-prompt-subtitle">Login to unlock manual entry</span>
+                      <span className="login-prompt-subtitle"></span>
                     </div>
                   </div>
                   <a href='/login' className="login-prompt-link">
@@ -331,7 +338,7 @@ export const Home = () => {
                   <img src={chatbotImg} alt="AI Assistant" className="chatbot-avatar" />
                   <div>
                     <h3 className="chat-title">Ask me about any food item!</h3>
-  
+
                   </div>
                 </div>
 
@@ -464,8 +471,8 @@ export const Home = () => {
                 className="ai-scan-interface"
               >
                 <div className="manual-header">
-                  <h3 className="manual-title">AI Meal Scanner</h3>
-                  <p className="manual-subtitle">Upload a photo and let AI analyze the nutrition</p>
+                  <h3 className="manual-title">Meal Scanner</h3>
+                  <p className="manual-subtitle">Upload a photo and let us analyze the nutrition</p>
                 </div>
 
                 <MealImageUpload onAnalysisComplete={handleAIAnalysisComplete} />
@@ -535,69 +542,12 @@ export const Home = () => {
       </div>
 
 
-      <Modal open={open} onClose={handleClose}>
-        <Box sx={modalStyle}>
-          <Grid container spacing={2} justifyContent="center">
-            <Grid item xs={12}>
-              {resArray[0] === 'NO!' ? (
-                <div className="modal-error">
-                  <CancelIcon className="modal-icon-error" />
-                  <Typography variant="h6" color="error" className="modal-error-text">
-                    {response}
-                  </Typography>
-                </div>
-              ) : (
-                <>
-                  <div className="modal-success-header">
-                    <CheckCircleIcon className="modal-icon-success" />
-                    <Typography variant="h5" fontWeight="bold" className="gradient-text">
-                      Nutritional Breakdown
-                    </Typography>
-                  </div>
-                  <TableContainer component={Box} className="nutrition-table">
-                    <Table size="small">
-                      <TableBody>
-                        <TableRow>
-                          <TableCell><strong>Food Item</strong></TableCell>
-                          <TableCell>{item.trim()}</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell><strong>Amount</strong></TableCell>
-                          <TableCell>{amount} g</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell><strong>Calories</strong></TableCell>
-                          <TableCell className="highlight-cal">{cal} kcal</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell><strong>Proteins</strong></TableCell>
-                          <TableCell>{pro} g</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell><strong>Carbs</strong></TableCell>
-                          <TableCell>{carb} g</TableCell>
-                        </TableRow>
-                        <TableRow>
-                          <TableCell><strong>Fats</strong></TableCell>
-                          <TableCell>{fat} g</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </>
-              )}
-            </Grid>
-            <Grid container spacing={2} justifyContent="center" className="modal-actions">
-              <button
-                onClick={resArray[0] === 'NO!' ? handleClose : addCalories}
-                className="btn-modal gradient-primary"
-              >
-                {resArray[0] === 'NO!' ? 'Okay' : 'Add Meal to Log'}
-              </button>
-            </Grid>
-          </Grid>
-        </Box>
-      </Modal>
+      <NutritionalBreakdownModal
+        open={open}
+        onClose={handleClose}
+        data={breakdownData}
+        onAdd={addCalories}
+      />
 
       <Snackbar
         open={openalert}
@@ -606,7 +556,7 @@ export const Home = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
         <Alert onClose={handleClosealert} severity="success" sx={{ width: '100%' }}>
-          ✨ Meal logged successfully!
+          Meal logged successfully!
         </Alert>
       </Snackbar>
 

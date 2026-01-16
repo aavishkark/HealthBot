@@ -1,8 +1,8 @@
-
 .meal-page {
     min-height: 100vh;
     background: #0c0c10;
     color: #fff;
+    margin-top: 60px;
 }
 
 .page-loader {
@@ -14,6 +14,7 @@
 .page-scroll {
     padding-bottom: 100px;
 }
+
 .cooking-mode-bar {
     position: fixed;
     top: 0;
@@ -394,12 +395,17 @@
 }
 
 .loading-state {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
     padding: 3rem;
     color: rgba(255, 255, 255, 0.5);
 }
 
 .loading-state p {
+    display: flex;
     margin-top: 1rem;
 }
 
@@ -639,4 +645,13 @@
         animation: none !important;
         transition: none !important;
     }
+}
+
+.recipe-loader-gif {
+    width: 150px;
+    height: 150px;
+    object-fit: contain;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+    pointer-events: none;
 }

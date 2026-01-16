@@ -176,7 +176,7 @@ const VoiceInput = ({ onTranscript, disabled = false }) => {
 
             {!isListening && !error && (
                 <div className="voice-hint">
-                    <span>Click mic to use voice input</span>
+                    <span>Click for Voice Input</span>
                 </div>
             )}
 

@@ -20,6 +20,7 @@
     padding: 0 var(--space-4, 16px);
     margin: 0 auto var(--space-8, 32px) auto;
     max-width: 1400px;
+    margin-top: 30px;
 }
 
 .meal-recommendations-heading {
@@ -94,6 +95,7 @@
 .spinning {
     animation: spin 1s linear infinite;
 }
+
 .meal-recommendations-container {
     width: 100%;
 }
@@ -269,6 +271,7 @@
 
     display: -webkit-box;
     -webkit-line-clamp: 3;
+    line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -487,24 +490,37 @@
     font-weight: var(--font-weight-medium, 500);
 }
 
-.meal-meta {
+.meal-meta-stacked {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: var(--space-4, 16px);
+}
+
+.meal-meta-row {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: var(--space-3, 12px);
+    gap: var(--space-3, 12px);
+    justify-content: center;
+}
+
+.meal-tags-row {
+    display: flex;
+    gap: var(--space-2, 8px);
+}
+
+.meta-divider {
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 8px;
 }
 
 .meta-item {
     display: flex;
     align-items: center;
-    gap: var(--space-2, 8px);
-    font-size: var(--font-size-sm, 14px);
-    color: var(--color-text-tertiary, rgba(255, 255, 255, 0.6));
-}
-
-.meal-tags {
-    display: flex;
-    gap: var(--space-2, 8px);
+    gap: var(--space-2, 6px);
+    font-size: var(--font-size-sm, 13px);
+    color: var(--color-text-tertiary, rgba(255, 255, 255, 0.5));
+    font-weight: 500;
 }
 
 .tag {
@@ -548,5 +564,77 @@
         flex-direction: column;
         align-items: flex-start;
         gap: var(--space-2, 8px);
+    }
+}
+
+/* Loading State Styles */
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    text-align: center;
+    min-height: 300px;
+}
+
+.loading-gif {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+    margin-bottom: 1.5rem;
+    filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.3));
+    border-radius: 20px;
+    /* Optional: adds soft corners if the gif has background */
+}
+
+.loading-container p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.1rem;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+@media (max-width: 500px) {
+    .meal-recommendations-card {
+        padding: 1rem;
+        margin: 1rem auto;
+        width: 95%;
+    }
+
+    .recommendations-grid,
+    .recommendations-list {
+        grid-template-columns: 1fr;
+    }
+
+    .meal-nutrition {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.5rem;
+        padding: 0.75rem;
+    }
+
+    .meal-card-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+
+    .meal-card-actions {
+        flex-direction: column;
+    }
+
+    .meal-recommendations-heading h2 {
+        font-size: 1.5rem;
     }
 }
