@@ -51,6 +51,31 @@ export const VoiceCompanion = () => {
         transcriptEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages]);
 
+    const loadUserContext = useCallback(async () => {
+        try {
+            const res = await API.get('/getVoiceContext', {
+                params: { email },
+            });
+            setUserContext(res.data.context || '');
+            setPastSessions(res.data.pastSessions || []);
+        } catch (error) {
+        }
+    }, [email]);
+
+    const saveVoiceSession = useCallback(async (transcript, duration) => {
+        try {
+            await API.post('/saveVoiceSession', {
+                email,
+                transcript,
+                duration,
+            });
+            console.log('Voice session saved successfully');
+        } catch (error) {
+            console.error('Error saving voice session:', error);
+            showNotification('Failed to save transcript', 'error');
+        }
+    }, [email]);
+
     useEffect(() => {
         if (loggedIn && email) {
             loadUserContext();
@@ -134,30 +159,7 @@ export const VoiceCompanion = () => {
         };
     }, [callStartTime, email, loadUserContext, saveVoiceSession]);
 
-    const loadUserContext = useCallback(async () => {
-        try {
-            const res = await API.get('/getVoiceContext', {
-                params: { email },
-            });
-            setUserContext(res.data.context || '');
-            setPastSessions(res.data.pastSessions || []);
-        } catch (error) {
-        }
-    }, [email]);
 
-    const saveVoiceSession = useCallback(async (transcript, duration) => {
-        try {
-            await API.post('/saveVoiceSession', {
-                email,
-                transcript,
-                duration,
-            });
-            console.log('Voice session saved successfully');
-        } catch (error) {
-            console.error('Error saving voice session:', error);
-            showNotification('Failed to save transcript', 'error');
-        }
-    }, [email]);
 
     const handleStartCall = async () => {
 

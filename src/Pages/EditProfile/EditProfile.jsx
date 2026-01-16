@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FaUser, FaBirthdayCake, FaRulerVertical, FaWeightHanging, FaVenusMars, FaEnvelope, FaDumbbell, FaGlobeAsia, FaCity, FaLeaf, FaCheck } from "react-icons/fa";
+import { FaUser, FaBirthdayCake, FaRulerVertical, FaWeightHanging, FaVenusMars, FaEnvelope, FaDumbbell, FaLeaf, FaCheck } from "react-icons/fa";
 import { ArrowRight, MapPin } from "lucide-react";
 import API from "../../Components/api";
 import { Snackbar, Alert } from "@mui/material";

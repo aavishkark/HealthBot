@@ -40,12 +40,9 @@ export const MealRecommendations = () => {
     const { email } = useAuth();
     const navigate = useNavigate();
     const [recommendations, setRecommendations] = useState([]);
-    const [mealType, setMealType] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
-    const [expandedIndex, setExpandedIndex] = useState(null);
-    const [showAlert, setShowAlert] = useState(false);
-    const [alertMessage, setAlertMessage] = useState('');
+
 
     const handleViewDetails = (meal, index) => {
         navigate(`/meal/${index}`, { state: { meal } });
@@ -69,7 +66,6 @@ export const MealRecommendations = () => {
 
             if (response.data.success) {
                 setRecommendations(response.data.recommendations);
-                setMealType(response.data.mealType);
             } else {
                 setError('Failed to fetch recommendations');
             }
@@ -214,20 +210,7 @@ export const MealRecommendations = () => {
                 </div>
             </Card>
 
-            <Snackbar
-                open={showAlert}
-                autoHideDuration={3000}
-                onClose={() => setShowAlert(false)}
-                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-            >
-                <Alert
-                    onClose={() => setShowAlert(false)}
-                    severity="success"
-                    sx={{ width: '100%' }}
-                >
-                    {alertMessage}
-                </Alert>
-            </Snackbar>
+
         </div>
     );
 };

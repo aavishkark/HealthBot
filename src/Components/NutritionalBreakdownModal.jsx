@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Box, LinearProgress } from '@mui/material';
+import { Modal, Box } from '@mui/material';
 import {
     Flame,
     Beef,

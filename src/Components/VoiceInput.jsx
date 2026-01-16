@@ -86,12 +86,13 @@ const VoiceInput = ({ onTranscript, disabled = false }) => {
 
         recognitionRef.current = recognition;
 
+        const currentTimeout = timeoutRef.current;
         return () => {
             if (recognitionRef.current) {
                 recognitionRef.current.stop();
             }
-            if (timeoutRef.current) {
-                clearTimeout(timeoutRef.current);
+            if (currentTimeout) {
+                clearTimeout(currentTimeout);
             }
         };
     }, [transcript, onTranscript]);
