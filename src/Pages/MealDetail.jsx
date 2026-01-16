@@ -33,46 +33,46 @@ export const MealDetail = () => {
     const [completedSteps, setCompletedSteps] = useState({});
 
     useEffect(() => {
+        const fetchDetailedRecipe = async (mealData) => {
+            setLoading(true);
+            try {
+                const response = await API.post('/meal-detail', {
+                    email,
+                    meal: mealData
+                });
+                if (response.data.success) {
+                    setDetailedRecipe(response.data.details);
+                }
+            } catch (error) {
+                setDetailedRecipe({
+                    instructions: [
+                        `First, let's gather everything: ${mealData.ingredients?.join(', ')}`,
+                        'Give your veggies a good wash - nobody wants gritty greens!',
+                        'Heat up your pan to medium. Patience here means better flavor.',
+                        'Time for the main event - cook until it smells amazing.',
+                        'Taste as you go. Trust your instincts!',
+                        'Plate it up beautifully. We eat with our eyes first!'
+                    ],
+                    tips: [
+                        'Mise en place is your best friend - prep everything before you start',
+                        "If you're unsure, err on the side of undercooking. You can always cook more!"
+                    ],
+                    servings: 1,
+                    difficulty: 'Medium',
+                    chefNote: "Remember, cooking is about having fun. Don't stress about perfection!"
+                });
+            } finally {
+                setLoading(false);
+            }
+        };
+
         if (location.state?.meal) {
             setMeal(location.state.meal);
             fetchDetailedRecipe(location.state.meal);
         } else {
             navigate('/');
         }
-    }, [location.state, navigate]);
-
-    const fetchDetailedRecipe = async (mealData) => {
-        setLoading(true);
-        try {
-            const response = await API.post('/meal-detail', {
-                email,
-                meal: mealData
-            });
-            if (response.data.success) {
-                setDetailedRecipe(response.data.details);
-            }
-        } catch (error) {
-            setDetailedRecipe({
-                instructions: [
-                    `First, let's gather everything: ${mealData.ingredients?.join(', ')}`,
-                    'Give your veggies a good wash - nobody wants gritty greens!',
-                    'Heat up your pan to medium. Patience here means better flavor.',
-                    'Time for the main event - cook until it smells amazing.',
-                    'Taste as you go. Trust your instincts!',
-                    'Plate it up beautifully. We eat with our eyes first!'
-                ],
-                tips: [
-                    'Mise en place is your best friend - prep everything before you start',
-                    "If you're unsure, err on the side of undercooking. You can always cook more!"
-                ],
-                servings: 1,
-                difficulty: 'Medium',
-                chefNote: "Remember, cooking is about having fun. Don't stress about perfection!"
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, [location.state, navigate, email]);
 
     const handleAddToLog = async () => {
         if (!meal) return;
@@ -110,8 +110,6 @@ export const MealDetail = () => {
         (Object.values(checkedIngredients).filter(Boolean).length / meal.ingredients.length) * 100 : 0;
 
     const instructions = detailedRecipe?.instructions || [];
-    const stepsProgress = instructions.length > 0 ?
-        (Object.values(completedSteps).filter(Boolean).length / instructions.length) * 100 : 0;
 
     if (!meal) {
         return (

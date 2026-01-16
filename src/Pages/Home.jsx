@@ -11,7 +11,6 @@ import {
   Send as SendIcon,
   Lock as LockIcon,
 } from '@mui/icons-material';
-import { Sparkles } from 'lucide-react';
 import { motion } from 'framer-motion';
 import API from '../Components/api';
 import Card from '../Components/ui/Card';
@@ -26,19 +25,7 @@ import chatbotImg from '../assets/chatgpt.gif';
 import './home.css';
 
 
-const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  bgcolor: 'var(--color-surface)',
-  boxShadow: 'var(--shadow-2xl)',
-  p: 4,
-  borderRadius: 'var(--radius-xl)',
-  maxWidth: 500,
-  width: '90%',
-  border: '1px solid var(--color-border)',
-};
+
 
 export const Home = () => {
   const [input, setInput] = useState('');
@@ -232,9 +219,7 @@ export const Home = () => {
   };
 
 
-  const handleQuickFood = (food) => {
-    setInput(food);
-  };
+
 
   return (
     <div className="home-container">

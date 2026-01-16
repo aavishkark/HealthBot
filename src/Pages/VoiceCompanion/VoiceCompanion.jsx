@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useAuth } from '../../Components/authContext';
 import { vapi } from '../../lib/vapi.sdk';
 import { configureHealthAssistant } from '../../lib/voiceConfig';
@@ -55,7 +55,7 @@ export const VoiceCompanion = () => {
         if (loggedIn && email) {
             loadUserContext();
         }
-    }, [loggedIn, email]);
+    }, [loggedIn, email, loadUserContext]);
 
     useEffect(() => {
         const onCallStart = () => {
@@ -132,9 +132,9 @@ export const VoiceCompanion = () => {
             vapi.off('speech-end', onSpeechEnd);
             vapi.off('error', onError);
         };
-    }, [callStartTime, email]);
+    }, [callStartTime, email, loadUserContext, saveVoiceSession]);
 
-    const loadUserContext = async () => {
+    const loadUserContext = useCallback(async () => {
         try {
             const res = await API.get('/getVoiceContext', {
                 params: { email },
@@ -143,9 +143,9 @@ export const VoiceCompanion = () => {
             setPastSessions(res.data.pastSessions || []);
         } catch (error) {
         }
-    };
+    }, [email]);
 
-    const saveVoiceSession = async (transcript, duration) => {
+    const saveVoiceSession = useCallback(async (transcript, duration) => {
         try {
             await API.post('/saveVoiceSession', {
                 email,
@@ -157,7 +157,7 @@ export const VoiceCompanion = () => {
             console.error('Error saving voice session:', error);
             showNotification('Failed to save transcript', 'error');
         }
-    };
+    }, [email]);
 
     const handleStartCall = async () => {
 

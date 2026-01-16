@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../Components/authContext";
 import { useNavigate } from "react-router-dom";
-import { FaEnvelope, FaLock } from "react-icons/fa";
 import API from "../../Components/api";
 import { Snackbar, Alert } from "@mui/material";
 import { ArrowRight, Sparkles } from "lucide-react";

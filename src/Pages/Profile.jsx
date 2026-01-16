@@ -54,7 +54,7 @@ export const Profile = () => {
   const [modeBasedEntries, setModeBasedEntries] = useState([]);
   const [userProfile, setUserProfile] = useState();
   const [userBmi, setUserBmi] = useState();
-  const [email, setemail] = useState('');
+  const [email] = useState('');
   const [requiredCalories, setRequiredCalories] = useState('');
   const [requiredProteins, setRequiredProteins] = useState('');
   const [requiredCarbs, setRequiredCarbs] = useState('');
