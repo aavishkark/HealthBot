@@ -128,7 +128,7 @@ const ChartSection = ({ calories }) => {
         size="small"
         sx={{
           mb: 2,
-          minWidth: 180,
+          minWidth: { xs: '120px', sm: 180 },
           backgroundColor: 'rgba(30, 37, 48, 0.8)',
           color: '#e6e8eb',
           borderRadius: '0.75rem',

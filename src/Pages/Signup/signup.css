@@ -4,7 +4,7 @@
     align-items: center;
     justify-content: center;
     background: var(--color-bg-primary);
-    padding: var(--space-xl);
+    padding: 7rem var(--space-xl) var(--space-xl);
     position: relative;
     overflow: hidden;
 }

@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 import './profile.css';
 import CalCalendar from "../Components/CaloriesCalender/CalCalender";
 import {
-  MenuItem, Select, Table, TableBody, TableCell,
-  TableContainer, TableHead, TableRow, TablePagination
+  MenuItem, Select, TablePagination
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from 'framer-motion';
 import eating2Gif from '../assets/eating2.gif';
 import excerciseGif from '../assets/excercise.gif';
 import {
-  Edit, TrendingUp, Activity, Award, Lock, ChevronRight, Sparkles,
-  BarChart3, CalendarDays, Brain, Sun, Sunset, Moon, Coffee, Utensils
+  Edit, TrendingUp, ChevronRight, Lock,
+  CalendarDays, Sun, Moon, Coffee, Utensils
 } from 'lucide-react';
 import {
   Chart as ChartJS,
@@ -27,7 +26,6 @@ import ChartSection from "../Components/ChartSection";
 import API from "../Components/api";
 import Card from "../Components/ui/Card";
 import ProgressRing from "../Components/ui/ProgressRing";
-import LoadingSpinner from "../Components/ui/LoadingSpinner";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -160,7 +158,16 @@ export const Profile = () => {
     }
   }, [userProfile]);
 
-  const todayTotals = modeBasedEntries.reduce((acc, entry) => ({
+
+  const todaysEntries = calories.filter((entry) => {
+    const entryDate = new Date(entry.timestamp);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    entryDate.setHours(0, 0, 0, 0);
+    return entryDate.getTime() === today.getTime();
+  });
+
+  const todaysFixedTotals = todaysEntries.reduce((acc, entry) => ({
     calories: acc.calories + parseFloat(entry.calories || 0),
     proteins: acc.proteins + parseFloat(entry.proteins || 0),
     carbs: acc.carbs + parseFloat(entry.carbs || 0),
@@ -206,12 +213,6 @@ export const Profile = () => {
     if (hour < 12) return "Good morning";
     if (hour < 18) return "Good afternoon";
     return "Good evening";
-  };
-
-  const getEncouragement = () => {
-    if (!modeBasedEntries.length) return "Ready to fuel your day?";
-    if (todayTotals.calories > parseFloat(requiredCalories)) return "You've energized your body well!";
-    return "Keep up the great rhythm!";
   };
 
   const getMealIcon = (dateString) => {
@@ -322,51 +323,65 @@ export const Profile = () => {
             <motion.div variants={itemVariants}>
               <Card variant="glass" className="nutrition-insight-card">
                 <div className="card-header-human">
-                  <h3>Today's Fuel Balance</h3>
-                  <p>Track your energy sources</p>
+                  <h3>Today's Micros Intake</h3>
                 </div>
 
-                <div className="progress-showcase">
-                  <div className="ring-group">
-                    <ProgressRing
-                      progress={Math.min(((todayTotals.calories / (parseFloat(requiredCalories) || 1)) * 100) || 0, 100)}
-                      size={120}
-                      strokeWidth={8}
-                      label="Energy"
-                      color="#6366f1"
-                      animated
-                    />
+                {todaysEntries.length === 0 ? (
+                  <div className="journal-empty" style={{ padding: '2rem' }}>
+                    <motion.div
+                      className="empty-gif-wrapper"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      <img src={eating2Gif} alt="Waiting for meal" className="empty-gif" />
+                    </motion.div>
+                    <p>No meals logged today.</p>
+                    <span className="empty-hint">Eat to fill your rings!</span>
                   </div>
-                  <div className="macro-bars">
-                    <div className="macro-bar-item">
-                      <div className="macro-info">
-                        <span className="macro-name">Protein (Muscle)</span>
-                        <span className="macro-stat">{todayTotals.proteins.toFixed(1)} / {requiredProteins}g</span>
-                      </div>
-                      <div className="bar-track">
-                        <div className="bar-fill protein" style={{ width: `${Math.min(((todayTotals.proteins / parseFloat(requiredProteins)) * 100) || 0, 100)}%` }}></div>
-                      </div>
+                ) : (
+                  <div className="progress-showcase">
+                    <div className="ring-group">
+                      <ProgressRing
+                        progress={Math.min(((todaysFixedTotals.calories / (parseFloat(requiredCalories) || 1)) * 100) || 0, 100)}
+                        size={120}
+                        strokeWidth={8}
+                        label="Energy"
+                        color="#6366f1"
+                        animated
+                      />
                     </div>
-                    <div className="macro-bar-item">
-                      <div className="macro-info">
-                        <span className="macro-name">Carbs (Energy)</span>
-                        <span className="macro-stat">{todayTotals.carbs.toFixed(1)} / {requiredCarbs}g</span>
+                    <div className="macro-bars">
+                      <div className="macro-bar-item">
+                        <div className="macro-info">
+                          <span className="macro-name">Protein</span>
+                          <span className="macro-stat">{todaysFixedTotals.proteins.toFixed(1)} / {requiredProteins}g</span>
+                        </div>
+                        <div className="bar-track">
+                          <div className="bar-fill protein" style={{ width: `${Math.min(((todaysFixedTotals.proteins / parseFloat(requiredProteins)) * 100) || 0, 100)}%` }}></div>
+                        </div>
                       </div>
-                      <div className="bar-track">
-                        <div className="bar-fill carbs" style={{ width: `${Math.min(((todayTotals.carbs / parseFloat(requiredCarbs)) * 100) || 0, 100)}%` }}></div>
+                      <div className="macro-bar-item">
+                        <div className="macro-info">
+                          <span className="macro-name">Carbs</span>
+                          <span className="macro-stat">{todaysFixedTotals.carbs.toFixed(1)} / {requiredCarbs}g</span>
+                        </div>
+                        <div className="bar-track">
+                          <div className="bar-fill carbs" style={{ width: `${Math.min(((todaysFixedTotals.carbs / parseFloat(requiredCarbs)) * 100) || 0, 100)}%` }}></div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="macro-bar-item">
-                      <div className="macro-info">
-                        <span className="macro-name">Fats (Health)</span>
-                        <span className="macro-stat">{todayTotals.fats.toFixed(1)} / {requiredFats}g</span>
-                      </div>
-                      <div className="bar-track">
-                        <div className="bar-fill fats" style={{ width: `${Math.min(((todayTotals.fats / parseFloat(requiredFats)) * 100) || 0, 100)}%` }}></div>
+                      <div className="macro-bar-item">
+                        <div className="macro-info">
+                          <span className="macro-name">Fats</span>
+                          <span className="macro-stat">{todaysFixedTotals.fats.toFixed(1)} / {requiredFats}g</span>
+                        </div>
+                        <div className="bar-track">
+                          <div className="bar-fill fats" style={{ width: `${Math.min(((todaysFixedTotals.fats / parseFloat(requiredFats)) * 100) || 0, 100)}%` }}></div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
+                )}
               </Card>
             </motion.div>
 
@@ -374,8 +389,7 @@ export const Profile = () => {
               <Card variant="glass" className="journal-card">
                 <div className="journal-header">
                   <div>
-                    <h3 className="section-title-human">Nourishment Log</h3>
-                    <p className="journal-subtitle">Your food timeline</p>
+                    <h3 className="section-title-human">Your Log</h3>
                   </div>
                   <Select
                     value={selectMode}
@@ -432,13 +446,20 @@ export const Profile = () => {
                           <div className="entry-card">
                             <div className="entry-main">
                               <div className="entry-header-row">
-                                <span className="entry-label">{getMealLabel(item.timestamp)}</span>
+                                <span className="entry-label">
+                                  {new Date(item.timestamp).toLocaleDateString([], { month: 'short', day: 'numeric' })} • {getMealLabel(item.timestamp)}
+                                </span>
                                 <span className="entry-time">{new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                               </div>
                               <h4 className="entry-food">{item.foodItem}</h4>
-                              <div className="entry-macros">
-                                <span className="macro-tag cal">{item.calories} cal</span>
-                                <span className="macro-tag pro">{item.proteins}g P</span>
+                              <div className="entry-infos">
+                                <div className="entry-macros">
+                                  <span className="macro-tag cal">{item.calories} kcal</span>
+                                  <span className="macro-divider">|</span>
+                                  <span className="macro-tag pro">{item.proteins}g Protein</span>
+                                  <span className="macro-tag carbs">{item.carbs}g Carbs</span>
+                                  <span className="macro-tag fats">{item.fats}g Fats</span>
+                                </div>
                               </div>
                             </div>
                             <div className="entry-amount">
@@ -486,64 +507,38 @@ export const Profile = () => {
           </div>
         </motion.div>
       ) : (
-        <div className="not-authorized">
-          <div className="not-auth-content">
-            <div className="lock-animation">
-              <Lock className="lock-icon" size={64} />
-              <div className="lock-glow"></div>
-            </div>
-
-            <div className="not-auth-header">
-              <h1 className="not-auth-title">Access Your Health Dashboard</h1>
-              <p className="not-auth-subtitle">
-                Sign in to unlock your personalized nutrition tracking and AI-powered health insights
-              </p>
-            </div>
-
-            <div className="features-grid">
-              <div className="feature-card">
-                <div className="feature-icon feature-icon-primary">
-                  <BarChart3 size={24} />
-                </div>
-                <h3 className="feature-title">Track Progress</h3>
-                <p className="feature-desc">Monitor calories, macros, and achieve your health goals</p>
+        <div className="profile-container not-authorized-container">
+          <Card variant="glass" className="not-auth-card minimal">
+            <div className="not-auth-content minimal">
+              <div className="lock-icon-minimal">
+                <Lock size={32} />
               </div>
 
-              <div className="feature-card">
-                <div className="feature-icon feature-icon-secondary">
-                  <Brain size={24} />
-                </div>
-                <h3 className="feature-title">AI Companion</h3>
-                <p className="feature-desc">Get personalized advice from your voice AI health assistant</p>
+              <div className="not-auth-header">
+                <h1 className="not-auth-title">Sign In Required</h1>
+                <p className="not-auth-subtitle">
+                  Please log in to view specific details about your profile and stats.
+                </p>
               </div>
 
-              <div className="feature-card">
-                <div className="feature-icon feature-icon-accent">
-                  <CalendarDays size={24} />
-                </div>
-                <h3 className="feature-title">Daily Insights</h3>
-                <p className="feature-desc">Visualize your nutrition journey with interactive charts</p>
+              <div className="auth-actions-row">
+                <button
+                  onClick={() => navigate('/login')}
+                  className="btn-login-large gradient-primary">
+                  <span>Sign In</span>
+                  <ChevronRight size={20} />
+                </button>
+
+                <button
+                  onClick={() => navigate('/signup')}
+                  className="btn-signup-outline"
+                >
+                  Create Account
+                </button>
               </div>
+
             </div>
-
-            <button
-              onClick={() => navigate('/login')}
-              className="btn-login gradient-primary">
-              <Sparkles size={20} />
-              <span>Sign In to Get Started</span>
-              <ChevronRight size={20} />
-            </button>
-
-            <p className="signup-prompt">
-              Don't have an account?{' '}
-              <button
-                onClick={() => navigate('/signup')}
-                className="signup-link"
-              >
-                Create one for free
-              </button>
-            </p>
-          </div>
+          </Card>
         </div>
       )}
     </>

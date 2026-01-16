@@ -1,6 +1,4 @@
-/* DietLog Global Styles */
 
-/* Import Fonts */
 @import '@fontsource/inter/400.css';
 @import '@fontsource/inter/500.css';
 @import '@fontsource/inter/600.css';
@@ -10,6 +8,19 @@
 @import '@fontsource/jetbrains-mono/600.css';
 
 @import './animations.css';
+
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.03);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --glass-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+
+    --color-surface: rgba(22, 22, 24, 0.6);
+    --color-border: rgba(255, 255, 255, 0.08);
+    --radius-lg: 16px;
+    --space-6: 24px;
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
 
 *,
 *::before,

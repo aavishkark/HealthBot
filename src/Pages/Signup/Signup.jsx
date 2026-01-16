@@ -10,10 +10,10 @@ import {
   FaLock,
   FaDumbbell,
 } from "react-icons/fa";
-import { ArrowRight, Sparkles, CheckCircle } from "lucide-react";
+import { ArrowRight, CheckCircle } from "lucide-react";
 import API from "../../Components/api";
 import LoadingSpinner from "../../Components/ui/LoadingSpinner";
-import loginImg from "../../assets/illustrations/login.png";
+import loginImg from "../../assets/illustrations/excercise2.gif";
 import "../Login/login.css";
 
 export const Signup = () => {
@@ -43,7 +43,7 @@ export const Signup = () => {
         if (res.data.msg === "User already registered") {
           alert("Email already registered. Please try again using a different email.");
         } else {
-          alert("✨ Signup successful! Please login to continue.");
+          alert("Signup successful! Please login to continue.");
           navigate("/login");
         }
       })

@@ -1,7 +1,7 @@
 .editprofile-container {
     min-height: 100vh;
     background: var(--color-bg-primary);
-    padding: 3rem 2rem 5rem;
+    padding: 7rem 2rem 5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -213,7 +213,7 @@
 
 @media (max-width: 768px) {
     .editprofile-container {
-        padding: 2rem 1.5rem;
+        padding: 5rem 1.5rem;
     }
 
     .editprofile-card {

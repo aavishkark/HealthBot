@@ -6,7 +6,7 @@ import API from "../../Components/api";
 import { Snackbar, Alert } from "@mui/material";
 import { ArrowRight, Sparkles } from "lucide-react";
 import LoadingSpinner from "../../Components/ui/LoadingSpinner";
-import loginImg from "../../assets/illustrations/login.png";
+import loginImg from "../../assets/illustrations/excercise2.gif";
 import "./login.css";
 
 export const Login = () => {

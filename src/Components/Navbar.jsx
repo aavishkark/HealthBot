@@ -1,5 +1,5 @@
 import { useAuth } from './authContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import API from './api';
 import './navbar.css';
 import { useNavigate, Link } from 'react-router-dom';
@@ -13,6 +13,23 @@ export const Navbar = () => {
     const handleOpenalert = () => setOpenalert(true);
     const { loggedIn, logout, loading } = useAuth();
     const navigate = useNavigate();
+
+    const [scrolled, setScrolled] = useState(false);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            const isScrolled = window.scrollY > 20;
+            if (isScrolled !== scrolled) {
+                setScrolled(isScrolled);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, [scrolled]);
 
     const handleLogout = () => {
         API.post('/logout', {}, { withCredentials: true })
@@ -34,7 +51,7 @@ export const Navbar = () => {
 
     return (
         <>
-            <nav className="navbar-modern">
+            <nav className={`navbar-modern ${scrolled ? 'scrolled' : ''}`}>
                 <div className="navbar-container">
                     <div className="navbar-logo">
                         <Link to='/' style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
@@ -64,11 +81,7 @@ export const Navbar = () => {
                         ) : loggedIn ? (
                             <li>
                                 <button onClick={handleLogout} className="btn-logout">
-                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                                        <polyline points="16 17 21 12 16 7"></polyline>
-                                        <line x1="21" y1="12" x2="9" y2="12"></line>
-                                    </svg>
+
                                     <span>Logout</span>
                                 </button>
                             </li>
