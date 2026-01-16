@@ -210,6 +210,27 @@
     }
 }
 
+@media (max-width: 768px) {
+    .avatar-image {
+        box-shadow: none !important;
+        /* Remove heavy shadows */
+        animation: none !important;
+        /* Disable pulsing animations */
+        border-width: 2px !important;
+    }
+
+    .status-icon.active {
+        animation: none;
+        /* Disable icon pulse */
+        opacity: 1;
+    }
+
+    .modal-overlay {
+        backdrop-filter: none;
+        background: rgba(0, 0, 0, 0.85);
+    }
+}
+
 .avatar-status {
     font-size: 1rem;
     font-weight: 600;

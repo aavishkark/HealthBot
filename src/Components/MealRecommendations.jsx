@@ -9,32 +9,14 @@ import {
     Cookie,
     Droplet,
     RefreshCw,
-    Plus,
-    ChevronDown,
-    ChevronUp,
-    Sunrise,
-    Sun,
-    Moon,
     Eye,
     Scale
 } from 'lucide-react';
-import { Alert, Snackbar } from '@mui/material';
 import { useAuth } from './authContext';
 import API from './api';
 import Card from './ui/Card';
-import LoadingSpinner from './ui/LoadingSpinner';
 import './meal-recommendations.css';
 import riceBowlGif from '../assets/ricebowl.gif';
-
-const getMealTypeIcon = (mealType) => {
-    const icons = {
-        breakfast: <Sunrise size={20} />,
-        lunch: <Sun size={20} />,
-        dinner: <Moon size={20} />,
-        snack: <Cookie size={20} />
-    };
-    return icons[mealType] || <Sparkles size={20} />;
-};
 
 export const MealRecommendations = () => {
     const { email } = useAuth();

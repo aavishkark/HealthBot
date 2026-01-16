@@ -1,4 +1,3 @@
-
 @import '@fontsource/inter/400.css';
 @import '@fontsource/inter/500.css';
 @import '@fontsource/inter/600.css';
@@ -115,12 +114,29 @@ code {
     box-shadow: var(--glass-shadow);
 }
 
+@media (max-width: 768px) {
+    .glass {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(22, 22, 24, 0.9);
+        /* More opaque background for legibility */
+    }
+}
+
 .glass-strong {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
+}
+
+@media (max-width: 768px) {
+    .glass-strong {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(22, 22, 24, 0.95);
+    }
 }
 
 .gradient-primary {
@@ -167,6 +183,14 @@ code {
     border-radius: var(--radius-lg);
     padding: var(--space-6);
     box-shadow: var(--glass-shadow);
+}
+
+@media (max-width: 768px) {
+    .card-glass {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(22, 22, 24, 0.85);
+    }
 }
 
 .container {

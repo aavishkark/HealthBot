@@ -48,6 +48,18 @@
   z-index: 0;
 }
 
+@media (max-width: 768px) {
+
+  .hero-section::before,
+  .hero-section::after {
+    filter: blur(30px);
+    /* Reduce blur radius */
+    animation: none;
+    /* Disable complex background animations on mobile */
+    opacity: 0.5;
+  }
+}
+
 .hero-content {
   display: flex;
   flex-direction: row;
@@ -206,6 +218,20 @@
 .hero-img:hover {
   filter: drop-shadow(0 30px 80px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 60px rgba(99, 102, 241, 0.6));
   transform: rotateY(-5deg) rotateX(5deg) scale(1.05);
+}
+
+@media (max-width: 768px) {
+  .hero-img {
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+    /* Simpler shadow */
+    transition: none;
+    /* Disable 3D tilt on mobile */
+  }
+
+  .hero-img:hover {
+    transform: none;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+  }
 }
 
 .two-column-layout {
